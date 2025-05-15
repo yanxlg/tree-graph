@@ -28,9 +28,11 @@ export function register(config: ReactShapeConfig, graphScope?: string) {
 
   const actualShape = getScopeShape(shape, graphScope); // 创建私有化 scope 前缀
 
-  shapeMaps[actualShape] = {
-    component,
-    effect,
+  if (component) {
+    shapeMaps[actualShape] = {
+      component,
+      effect,
+    }
   }
 
   Graph.registerNode(
@@ -43,9 +45,9 @@ export function register(config: ReactShapeConfig, graphScope?: string) {
   )
 }
 
-export function unRegister(shape:string, graphScope: string){
+export function unRegister(shape: string, graphScope: string) {
   const actualShape = getScopeShape(shape, graphScope);
-  if(shapeMaps[actualShape]){
+  if (shapeMaps[actualShape]) {
     delete shapeMaps[actualShape];
     Graph.unregisterNode(actualShape);
   }

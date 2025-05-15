@@ -8,6 +8,12 @@ export default function NodeRender(
     node: Node;
     graph: Graph;
   }) {
-  console.log(node, graph); // node 是节点的配置
-  return <div>1111</div>;
+  const render = node.getProp('render');
+  if (render) {
+    return render({
+      node,
+      graph
+    });
+  }
+  return <div>not found render</div>;
 }

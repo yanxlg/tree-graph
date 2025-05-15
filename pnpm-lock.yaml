@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@antv/hierarchy': 0.6.14
   '@antv/x6': 2.18.1
   '@antv/x6-plugin-clipboard': 2.1.6
   '@antv/x6-plugin-history': 2.2.4
@@ -23,6 +24,7 @@ specifiers:
   uuid: ^11.1.0
 
 dependencies:
+  '@antv/hierarchy': 0.6.14
   '@antv/x6': 2.18.1
   '@antv/x6-plugin-clipboard': 2.1.6_@antv+x6@2.18.1
   '@antv/x6-plugin-history': 2.2.4_@antv+x6@2.18.1
@@ -70,6 +72,10 @@ packages:
   /@antfu/utils/0.7.10:
     resolution: {integrity: sha512-+562v9k4aI80m1+VuMHehNJWLOFjBnXn3tdOitzD0il5b7smkSBal4+a3oKiQTbrwMmN/TBUMDvbdoWDehgOww==}
     dev: true
+
+  /@antv/hierarchy/0.6.14:
+    resolution: {integrity: sha512-V3uknf7bhynOqQDw2sg+9r9DwZ9pc6k/EcqyTFdfXB1+ydr7urisP0MipIuimucvQKN+Qkd+d6w601r1UIroqQ==}
+    dev: false
 
   /@antv/x6-common/2.0.17:
     resolution: {integrity: sha512-37g7vmRkNdYzZPdwjaMSZEGv/MMH0S4r70/Jwoab1mioycmuIBN73iyziX8m56BvJSDucZ3J/6DU07otWqzS6A==}
