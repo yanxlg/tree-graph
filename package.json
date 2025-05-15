@@ -1,0 +1,50 @@
+{
+  "name": "@shuhe/tree-graph",
+  "version": "0.0.1",
+  "description": "树结构图组件库",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "dumi dev",
+    "build": "dumi build",
+    "preview": "dumi preview",
+    "prepare": "husky install && dumi setup"
+  },
+  "authors": [
+    "yanxianliang@lattebank.com"
+  ],
+  "license": "MIT",
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --write --no-error-on-unmatched-pattern"
+    ]
+  },
+  "dependencies": {
+    "uuid": "^11.1.0",
+    "@antv/x6": "2.18.1",
+    "@antv/x6-plugin-stencil": "2.1.5",
+    "@antv/x6-plugin-transform": "2.1.8",
+    "@antv/x6-plugin-selection": "2.2.2",
+    "@antv/x6-plugin-snapline": "2.1.7",
+    "@antv/x6-plugin-keyboard": "2.2.3",
+    "@antv/x6-plugin-clipboard": "2.1.6",
+    "@antv/x6-plugin-history": "2.2.4",
+    "ahooks": "3.8.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "dumi": "^2.4.13",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5"
+  }
+}
