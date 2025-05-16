@@ -3,7 +3,7 @@ import NodeRender from "./NodeRender";
 import {useEffect, useRef} from "react";
 import {useGraph} from './hooks/useGraph';
 import {Options, Graph} from "@antv/x6";
-import './nodeTypes/base';
+import './nodeTypes';
 import {BaseTreeGraphProps, MindMapData, RefMap} from './types';
 import Manual = Options.Manual;
 import {toHierarchyCells} from "./utils/toHierarchyCells";

@@ -1,11 +1,12 @@
 import {useCallback, useEffect, useMemo, useRef} from "react";
 import {Graph} from "@antv/x6";
 import {useProtal, register as globalRegister, unRegister as globalUnRegister, ReactShapeConfig} from "../react-shape";
-import {v4 as uuidv4} from 'uuid';
 import {BaseTreeGraphProps, MindMapData, RefMap} from "../types";
 import {useLatest} from 'ahooks';
 import {toHierarchyCells} from "../utils/toHierarchyCells";
 import {NodeView} from "@antv/x6/src/view/node";
+import {CollapsedRect} from "../nodeTypes/CollapsedRect";
+import {StringExt} from "@antv/x6-common";
 
 
 export function useGraph(
@@ -21,17 +22,17 @@ export function useGraph(
   const clickListener = useLatest(onNodeClick);
 
   const graphScope = useMemo(() => {
-    return uuidv4();
+    return StringExt.uuid();
   }, []);
 
 
-  const initGraph = useCallback((graph: Graph)=>{
-    if(initialState){
+  const initGraph = useCallback((graph: Graph) => {
+    if (initialState) {
       const {cells, $ref} = toHierarchyCells(initialState);
       $nodeRef.current = $ref;
       graph.resetCells(cells);
     }
-  },[]);
+  }, []);
 
 
   useEffect(() => {
@@ -63,10 +64,17 @@ export function useGraph(
       disconnect
     }
     graphRef.current = graph;
-    initGraph(graph);
-    graph.zoomToFit({padding: 10, maxScale: 1}); // zommToFit 方法使用
 
-    graph.on('node:click', (eventArg: NodeView.EventArgs['node:click']) => {
+    // graph.on('node:added', ({node}: { node: CollapsedRect }) => {
+    //   console.log('node:added');
+    // })
+
+    // TODO 希望能够将事件放在内层
+    graph.on('topic:collapse', ({node}: { node: CollapsedRect }) => {
+      node.toggleCollapse();
+    })
+
+    graph.on('topic:click', (eventArg: NodeView.EventArgs['node:click']) => {
       const {node} = eventArg;
       const id = node.id;
       const nodeRef = $nodeRef.current?.[id];
@@ -76,6 +84,10 @@ export function useGraph(
         eventArg,
       });
     });
+
+
+    initGraph(graph);
+    graph.zoomToFit({padding: 10, maxScale: 1}); // zommToFit 方法使用
 
     return () => {
       graph.dispose(true);

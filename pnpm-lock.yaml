@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@antv/hierarchy': 0.6.14
   '@antv/x6': 2.18.1
+  '@antv/x6-common': ^2.0.17
   '@antv/x6-plugin-clipboard': 2.1.6
   '@antv/x6-plugin-history': 2.2.4
   '@antv/x6-plugin-keyboard': 2.2.3
@@ -12,20 +13,22 @@ specifiers:
   '@antv/x6-plugin-transform': 2.1.8
   '@commitlint/cli': ^17.1.2
   '@commitlint/config-conventional': ^17.1.0
+  '@types/lodash': ^4.17.16
   '@types/react': ^19.1.4
   '@types/react-dom': ^19.1.5
   ahooks: 3.8.4
   dumi: ^2.4.13
   husky: ^8.0.1
   lint-staged: ^13.0.3
+  lodash: ^4.17.21
   prettier: ^2.7.1
   react: '>=16.0.0'
   react-dom: '>=16.0.0'
-  uuid: ^11.1.0
 
 dependencies:
   '@antv/hierarchy': 0.6.14
   '@antv/x6': 2.18.1
+  '@antv/x6-common': 2.0.17
   '@antv/x6-plugin-clipboard': 2.1.6_@antv+x6@2.18.1
   '@antv/x6-plugin-history': 2.2.4_@antv+x6@2.18.1
   '@antv/x6-plugin-keyboard': 2.2.3_@antv+x6@2.18.1
@@ -34,11 +37,12 @@ dependencies:
   '@antv/x6-plugin-stencil': 2.1.5_@antv+x6@2.18.1
   '@antv/x6-plugin-transform': 2.1.8_@antv+x6@2.18.1
   ahooks: 3.8.4_react@18.3.1
-  uuid: 11.1.0
+  lodash: 4.17.21
 
 devDependencies:
   '@commitlint/cli': 17.8.1
   '@commitlint/config-conventional': 17.8.1
+  '@types/lodash': 4.17.16
   '@types/react': 19.1.4
   '@types/react-dom': 19.1.5_@types+react@19.1.4
   dumi: 2.4.21_57c3651db5ba5d5fe55e0eb339c3fdaf
@@ -2342,6 +2346,10 @@ packages:
     resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
     dependencies:
       '@types/node': 22.15.17
+    dev: true
+
+  /@types/lodash/4.17.16:
+    resolution: {integrity: sha512-HX7Em5NYQAXKW+1T+FiuG27NGwzJfCX3s1GjOa7ujxZa52kjJLOr4FUxT+giF6Tgxv1e+/czV/iTtBw27WTU9g==}
     dev: true
 
   /@types/mdast/3.0.15:
@@ -11239,11 +11247,6 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
     dev: true
-
-  /uuid/11.1.0:
-    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
-    hasBin: true
-    dev: false
 
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}

@@ -6,7 +6,7 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import {Edge, Node, Cell} from "@antv/x6";
+import {Edge, Node, Cell, Graph} from "@antv/x6";
 import {HierarchyResult, MindMapData, RefMap} from "../types";
 
 
@@ -41,7 +41,6 @@ export const traverse = (
         height: data.height,
         label: data.label,
         type: data.type,
-        data: {}, // 会全部进行 clone 吗？？
       }),
     )
     if (children) {
