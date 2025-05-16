@@ -29,6 +29,7 @@ export type MindMapData = {
   width: number;
   height: number;
   children?: MindMapData[];
+  expanded?: boolean; // 控制默认展开状态
 };
 
 export interface HierarchyResult {

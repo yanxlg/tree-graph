@@ -71,7 +71,7 @@ export function useGraph(
 
     // TODO 希望能够将事件放在内层
     graph.on('topic:collapse', ({node}: { node: CollapsedRect }) => {
-      node.toggleCollapse();
+      node.toggleExpanded();
     })
 
     graph.on('topic:click', (eventArg: NodeView.EventArgs['node:click']) => {

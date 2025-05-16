@@ -11,8 +11,9 @@ import {Cell, Shape} from '@antv/x6';
 import {merge} from "lodash";
 import {Node} from "@antv/x6/src/model/node";
 
+
 export class CollapsedRect extends Shape.Rect {
-  static defaults = merge({},Shape.Rect.defaults, {
+  static defaults = merge({}, Shape.Rect.defaults, {
     markup: [
       {
         tagName: 'rect',
@@ -55,9 +56,8 @@ export class CollapsedRect extends Shape.Rect {
         refY: '50%',
         height: 18,
         textAnchor: 'start',
-        x: 0,
-        y: -22,
-        text: '120', // 文字
+        x: 2,
+        y: -20,
         fill: '#333', // 文字颜色
       },
       collapseBtn: {
@@ -86,36 +86,53 @@ export class CollapsedRect extends Shape.Rect {
     zIndex: 2
   });
 
-  private collapsed: boolean = false;
+  constructor(metadata: Node.Metadata = {}) {
+    super(metadata);
+  }
 
-  // constructor(metadata: Node.Metadata = {}) {
-  //   super(metadata);
-  //   // this.on('chan')
-  //   console.log(this.model);
-  //   this.on('added', ({ cell, index, options }) => {
-  //     console.log('cell:added')
-  //   })
-  // }
+  protected setup() {
+    super.setup();
 
-  // 动态样式，可以实现 hover效果
+    // 创建事件监听, 元数据发生改变，需要更新视图View
+    this.store.on('change:*', (metadata) => {
+      console.log('change', metadata);
+    });
+  }
+
+  // 初始化
+  init() {
+    super.init();
+    this.updateChildCount();
+    this.toggleExpanded(this.isExpanded());
+  }
+
+  private updateChildCount() {
+    const childCount = this.store.get('childrenCount') as number;
+    this.attr('collapseBtn/display', childCount ? 'block' : 'none');
+    this.attr('childrenCount/display', childCount ? 'block' : 'none');
+    if (childCount) {
+      this.setAttrByPath('childrenCount/text', childCount);
+    }
+  }
+
+
   protected postprocess() {
-    this.toggleCollapse(false);
   }
 
-
-  isCollapsed() {
-    return this.collapsed
+  isExpanded(): boolean {
+    return this.store.get('expanded') ?? false;
   }
 
-  private updateCollapseState(node: Cell){
-    const collapsed = this.collapsed;
+  // 递归更新 visible 状态
+  private updateCollapseState(node: Cell = this) {
+    const expanded = this.isExpanded();
     const graph = this.model?.graph;
-    if(graph){
-      const targets = graph.getSuccessors(node, { distance: 1 });
+    if (graph) {
+      const targets = graph.getSuccessors(node, {distance: 1});
       if (targets) {
         targets.forEach((node) => {
-          node.toggleVisible(!collapsed)
-          if (node instanceof this.constructor && !(node as CollapsedRect).isCollapsed()) {
+          node.toggleVisible(expanded);
+          if (node instanceof this.constructor && (node as CollapsedRect).isExpanded()) { // 后面所有的节点都需要隐藏
             this.updateCollapseState(node);
           }
         })
@@ -123,9 +140,9 @@ export class CollapsedRect extends Shape.Rect {
     }
   }
 
-  toggleCollapse(collapsed?: boolean) {
-    const target = collapsed == null ? !this.collapsed : collapsed;
-    if (!target) {
+  toggleExpanded(expanded?: boolean) {
+    const newExpanded = expanded === undefined ? !this.isExpanded() : expanded;
+    if (!newExpanded) {
       this.attr('collapseIcon', {
         d: 'M 1 5 9 5 M 5 1 5 9',
         strokeWidth: 1.6,
@@ -136,7 +153,10 @@ export class CollapsedRect extends Shape.Rect {
         strokeWidth: 1.8,
       })
     }
-    this.collapsed = target;
-    this.updateCollapseState(this);
+    this.store.set('expanded', newExpanded, {
+      silent: true,
+    }); // 不触发事件
+    console.log(newExpanded, this.store);
+    this.updateCollapseState();
   }
 }

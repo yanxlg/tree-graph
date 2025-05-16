@@ -19,6 +19,7 @@ class TopicNode extends CollapsedRect {
           stroke: '#5F95FF',
           fill: '#EFF4FF',
           strokeWidth: 1,
+          cursor: 'pointer',
           event: 'topic:click',
         },
         label: {
