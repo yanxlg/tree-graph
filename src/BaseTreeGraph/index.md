@@ -4,54 +4,17 @@ group: 组件
 ---
 
 
-## 何时使用
-需要用户触发动作时使用，支持主按钮、默认按钮等多种类型。
+## 使用场景
 
-不知道什么情况啊，为什么不显示
+当需要使用简单的树视图来描述数据关联关系时，使用 BaseTreeGraph 能够快速构建基础的树状节点视图。
 
-```tsx
-import React from 'react';
-import {BaseTreeGraph, MindMapData} from '@shuhe/tree-graph';
+## 使用示例
 
-const data: MindMapData = {
-  id: '1',
-  type: 'topic',
-  label: '中心主题',
-  width: 160,
-  height: 50,
-  children: [
-    {
-      id: '1-1',
-      type: 'topic-branch',
-      label: '分支主题1',
-      width: 100,
-      height: 40,
-      children: [
-        {
-          id: '1-1-1',
-          type: 'topic-child',
-          label: '子主题1',
-          width: 60,
-          height: 30,
-        },
-        {
-          id: '1-1-2',
-          type: 'topic-child',
-          label: '子主题2',
-          width: 60,
-          height: 30,
-        },
-      ],
-    },
-    {
-      id: '1-2',
-      type: 'topic-branch',
-      label: '分支主题2',
-      width: 100,
-      height: 40,
-    },
-  ],
-}
+<code src="./demos/basic/index.tsx"></code>
 
-export default () => <BaseTreeGraph treeData={data} onNodeClick={(event)=>{console.log(event)}}/>;
-```
+
+增量更新优化策略：
+graph.freeze();
+diff.added.forEach(node => graph.addNode(node));
+diff.removed.forEach(id => graph.removeNode(id));
+graph.unfreeze();

@@ -8,6 +8,7 @@ import {BaseTreeGraphProps, MindMapData, RefMap} from './types';
 import Manual = Options.Manual;
 import {toHierarchyCells} from "./utils/toHierarchyCells";
 import './edgeTypes';
+import './index.less';
 
 
 // 支持 svg 节点注册，svg性能会好些，没有 react 开销

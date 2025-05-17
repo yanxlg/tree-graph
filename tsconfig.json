@@ -6,7 +6,8 @@
     "baseUrl": "./",
     "jsx": "react-jsx",
     "paths": {
-      "@@/*": [".dumi/tmp/*"]
+      "@@/*": [".dumi/tmp/*"],
+      "@shuhe/tree-graph": ["./src"]
     }
   },
   "include": [".dumirc.ts"]

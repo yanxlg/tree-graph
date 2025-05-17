@@ -1,12 +1,13 @@
 import {useCallback, useEffect, useMemo, useRef} from "react";
 import {Graph} from "@antv/x6";
 import {useProtal, register as globalRegister, unRegister as globalUnRegister, ReactShapeConfig} from "../react-shape";
-import {BaseTreeGraphProps, MindMapData, RefMap} from "../types";
-import {useLatest} from 'ahooks';
+import {BaseTreeGraphProps, IHoverActiveNode, MindMapData, RefMap} from "../types";
+import {useLatest, useMemoizedFn, useUpdateEffect} from 'ahooks';
 import {toHierarchyCells} from "../utils/toHierarchyCells";
 import {NodeView} from "@antv/x6/src/view/node";
 import {CollapsedRect} from "../nodeTypes/CollapsedRect";
 import {StringExt} from "@antv/x6-common";
+import {selectionPlugin} from "../plugins/selection";
 
 
 export function useGraph(
@@ -26,14 +27,20 @@ export function useGraph(
   }, []);
 
 
-  const initGraph = useCallback((graph: Graph) => {
+
+  const initGraphWithTreeData = useMemoizedFn(()=>{
     if (initialState) {
+      const graph = graphRef.current!;
       const {cells, $ref} = toHierarchyCells(initialState);
       $nodeRef.current = $ref;
+      graph.model.getLastCell()?.removeZIndex(); // TODO 清除 zIndex 缓存，还是 edge 生成，否则 resetCells 调用时对应未设置 zIndex 的会从当前 zIndex 重新计算
       graph.resetCells(cells);
     }
-  }, []);
+  });
 
+  useUpdateEffect(() => {
+    initGraphWithTreeData();
+  },[initialState])
 
   useEffect(() => {
     const graph = new Graph({
@@ -58,12 +65,37 @@ export function useGraph(
       },
       interacting: graphOptions?.interacting ?? false,
     });
+    graph.use(selectionPlugin);
     graph.id = graphScope;
     graph.portal = {
       connect,
       disconnect
     }
     graphRef.current = graph;
+
+    // 定义 filter
+    graph.defineFilter({
+      id: 'topic-hover-shadow',
+      name: 'highlight',
+      args: {
+        width: 2,
+        blur: 3,
+        opacity: 0.2,
+        color: '#5F95FF'
+      },
+    });
+
+    graph.defineFilter({
+      id: 'sub-topic-hover-shadow',
+      name: 'dropShadow',
+      args: {
+        dx: 0,
+        dy: 0,
+        blur: 2,
+        opacity: 0.7,
+        color: '#5F95FF'
+      },
+    });
 
     // graph.on('node:added', ({node}: { node: CollapsedRect }) => {
     //   console.log('node:added');
@@ -74,19 +106,51 @@ export function useGraph(
       node.toggleExpanded();
     })
 
+    // 全局事件处理
+    // graph.container.addEventListener('mouseover', (e)=>{
+    //   const target = e.target as SVGElement;
+    //   const hoverable = target.getAttribute('hoverable');
+    //   if(hoverable){
+    //     target.setAttribute('filter', hoverable);
+    //   }
+    // })
+    //
+    // graph.container.addEventListener('mouseout', (e)=>{
+    //   const target = e.target as SVGElement;
+    //   const hoverable = target.getAttribute('hoverable');
+    //   if(hoverable){
+    //     target.setAttribute('filter', 'none');
+    //   }
+    // })
+    graph.on('node:mouseover',({e, node})=>{
+      const target = e.target as SVGElement;
+      const hoverable = target.getAttribute('hoverable');
+      console.log(hoverable, typeof hoverable);
+      if(hoverable === 'true'){
+        (node as unknown as IHoverActiveNode).onMouseOver?.();
+      }
+    })
+
+    graph.on('node:mouseout',({e, node})=>{
+      const target = e.target as SVGElement;
+      const hoverable = target.getAttribute('hoverable');
+      if(hoverable === 'true'){
+        (node as unknown as IHoverActiveNode).onMouseOut?.();
+      }
+    })
+
     graph.on('topic:click', (eventArg: NodeView.EventArgs['node:click']) => {
       const {node} = eventArg;
       const id = node.id;
       const nodeRef = $nodeRef.current?.[id];
       clickListener.current?.({
-        parents: nodeRef?.parents,
-        children: nodeRef?.children,
+        parents: nodeRef?.parents || [],
+        children: nodeRef?.children || [],
         eventArg,
       });
     });
 
-
-    initGraph(graph);
+    initGraphWithTreeData();
     graph.zoomToFit({padding: 10, maxScale: 1}); // zommToFit 方法使用
 
     return () => {

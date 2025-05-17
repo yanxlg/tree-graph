@@ -52,8 +52,8 @@ export type BaseTreeGraphProps = {
   treeData: MindMapData; // 所有节点
   onNodeClick?: (
     eventData: {
-      parents?: MindMapData[];
-      children?: MindMapData[];
+      parents: MindMapData[];
+      children: MindMapData[];
       eventArg: NodeView.EventArgs['node:click']
     }) => void;
 };
@@ -65,3 +65,9 @@ export type RefMap = {
     children?: MindMapData[]
   }
 };
+
+
+export interface IHoverActiveNode {
+  onMouseOver: () => void;
+  onMouseOut: () => void;
+}

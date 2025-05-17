@@ -55,6 +55,7 @@ export const traverse = (
             shape: 'base-edge',
             source: hierarchyItem.id,
             target: item.id,
+            zIndex: 0, // edge 默认显示在最底层
           }),
         )
         traverse(item, cells, $ref, [...parents, data], visible ? expended : visible)

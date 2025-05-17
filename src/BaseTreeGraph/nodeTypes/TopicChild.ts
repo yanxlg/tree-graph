@@ -7,8 +7,9 @@
  */
 import {Graph, Shape} from "@antv/x6";
 import {merge} from "lodash";
+import {IHoverActiveNode} from "../types";
 
-class TopicChildNode extends Shape.Rect {
+class TopicChildNode extends Shape.Rect implements IHoverActiveNode{
   static defaults = merge(
     {},
     Shape.Rect.defaults,
@@ -23,31 +24,47 @@ class TopicChildNode extends Shape.Rect {
           selector: 'label',
         },
         {
-          tagName: 'path',
+          tagName: 'rect',
           selector: 'line',
         },
       ],
       attrs: {
         body: {
+          refY: '-50%',
           fill: 'transparent',
           strokeWidth: 0,
-          stroke: '#5F95FF',
+          event: 'topic:click',
+          cursor: 'pointer',
+          hoverable: true,
         },
         label: {
           fontSize: 14,
           fill: '#262626',
           textVerticalAnchor: 'bottom',
-          event: 'link:click'
+          'pointer-events': 'none',
         },
         line: {
-          stroke: '#5F95FF',
-          strokeWidth: 2,
-          d: 'M 0 15 L 60 15',
+          refWidth: '100%',
+          fill: '#5F95FF',
+          refY: '50%',
+          refY2: -1,
+          strokeWidth: 0,
+          height: 2,
+          'pointer-events': 'none',
+          class: 'x6-selected-line'
         }
       },
     }, {
       shape: 'topic-child'
     })
+
+  onMouseOver(){
+    this.attr('line/filter', 'url(#sub-topic-hover-shadow)');
+  }
+
+  onMouseOut(){
+    this.attr('line/filter', 'none');
+  }
 }
 
 Graph.registerNode('topic-child', TopicChildNode, true);

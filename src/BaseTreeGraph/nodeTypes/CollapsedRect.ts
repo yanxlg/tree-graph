@@ -94,9 +94,9 @@ export class CollapsedRect extends Shape.Rect {
     super.setup();
 
     // 创建事件监听, 元数据发生改变，需要更新视图View
-    this.store.on('change:*', (metadata) => {
-      console.log('change', metadata);
-    });
+    // this.store.on('change:*', (metadata) => {
+    //   console.log('change', metadata);
+    // });
   }
 
   // 初始化
@@ -156,7 +156,6 @@ export class CollapsedRect extends Shape.Rect {
     this.store.set('expanded', newExpanded, {
       silent: true,
     }); // 不触发事件
-    console.log(newExpanded, this.store);
     this.updateCollapseState();
   }
 }

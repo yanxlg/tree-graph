@@ -38,6 +38,7 @@
     "ahooks": "3.8.4"
   },
   "devDependencies": {
+    "antd": "^5.25.1",
     "@types/lodash": "^4.17.16",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
