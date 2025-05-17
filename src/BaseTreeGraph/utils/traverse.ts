@@ -33,6 +33,7 @@ export const traverse = (
       children: data.children
     };
     const expended = data.expanded ?? false; // 默认只展开一级，不自动向下展开
+    const {height,} = data;
     cells.push(
       Node.create({
         id: data.id,
@@ -40,7 +41,9 @@ export const traverse = (
         x: hierarchyItem.x,
         y: hierarchyItem.y,
         width: data.width,
-        height: data.height,
+        ...'height' in data ?{
+          height,
+        }:{},
         label: data.label,
         type: data.type,
         expanded: expended, // 默认的展开状态

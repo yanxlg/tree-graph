@@ -8,13 +8,11 @@ import {NodeView} from "@antv/x6/src/view/node";
 import {CollapsedRect} from "../nodeTypes/CollapsedRect";
 import {StringExt} from "@antv/x6-common";
 import {selectionPlugin} from "../plugins/selection";
+import {getTheme} from "../utils/theme";
 
 
-export function useGraph(
-  graphOptions: BaseTreeGraphProps['graph'],
-  onNodeClick: BaseTreeGraphProps['onNodeClick'],
-  initialState?: MindMapData, // 暂时只支持树类型，后续可扩展不同类型的初始化值及内部默认处理逻辑
-) {
+export function useGraph(graphConfig: BaseTreeGraphProps) {
+  const {onNodeClick, treeData, graph: graphOptions, theme} = graphConfig;
   const graphContainerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<Graph>(undefined);
   const {portals, connect, disconnect} = useProtal();
@@ -27,11 +25,10 @@ export function useGraph(
   }, []);
 
 
-
-  const initGraphWithTreeData = useMemoizedFn(()=>{
-    if (initialState) {
+  const initGraphWithTreeData = useMemoizedFn(() => {
+    if (treeData) {
       const graph = graphRef.current!;
-      const {cells, $ref} = toHierarchyCells(initialState);
+      const {cells, $ref} = toHierarchyCells(treeData, graphScope);
       $nodeRef.current = $ref;
       graph.model.getLastCell()?.removeZIndex(); // TODO 清除 zIndex 缓存，还是 edge 生成，否则 resetCells 调用时对应未设置 zIndex 的会从当前 zIndex 重新计算
       graph.resetCells(cells);
@@ -40,9 +37,10 @@ export function useGraph(
 
   useUpdateEffect(() => {
     initGraphWithTreeData();
-  },[initialState])
+  }, [treeData])
 
   useEffect(() => {
+    const themeConfig = getTheme(theme);
     const graph = new Graph({
       ...graphOptions,
       // 画布拖拽
@@ -81,7 +79,7 @@ export function useGraph(
         width: 2,
         blur: 3,
         opacity: 0.2,
-        color: '#5F95FF'
+        color: themeConfig.primaryColor
       },
     });
 
@@ -93,9 +91,10 @@ export function useGraph(
         dy: 0,
         blur: 2,
         opacity: 0.7,
-        color: '#5F95FF'
+        color: themeConfig.primaryColor
       },
     });
+
 
     // graph.on('node:added', ({node}: { node: CollapsedRect }) => {
     //   console.log('node:added');
@@ -122,19 +121,18 @@ export function useGraph(
     //     target.setAttribute('filter', 'none');
     //   }
     // })
-    graph.on('node:mouseover',({e, node})=>{
+    graph.on('node:mouseover', ({e, node}) => {
       const target = e.target as SVGElement;
       const hoverable = target.getAttribute('hoverable');
-      console.log(hoverable, typeof hoverable);
-      if(hoverable === 'true'){
+      if (hoverable === 'true') {
         (node as unknown as IHoverActiveNode).onMouseOver?.();
       }
     })
 
-    graph.on('node:mouseout',({e, node})=>{
+    graph.on('node:mouseout', ({e, node}) => {
       const target = e.target as SVGElement;
       const hoverable = target.getAttribute('hoverable');
-      if(hoverable === 'true'){
+      if (hoverable === 'true') {
         (node as unknown as IHoverActiveNode).onMouseOut?.();
       }
     })

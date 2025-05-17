@@ -27,7 +27,10 @@ export type MindMapData = {
   type: 'topic' | 'topic-branch' | 'topic-child';
   label: string;
   width: number;
-  height: number;
+  /**
+   * 节点高度，支持外部自定义，不同节点类型有不同的默认高度，通常不需要配置
+   */
+  height?: number;
   children?: MindMapData[];
   expanded?: boolean; // 控制默认展开状态
 };
@@ -42,6 +45,9 @@ export interface HierarchyResult {
 
 
 export type BaseTreeGraphProps = {
+  /**
+   * @description graph配置
+   */
   graph?: {
     background?: Options.Manual['background'];
     grid?: Options.Manual['grid'];
@@ -49,7 +55,34 @@ export type BaseTreeGraphProps = {
     interacting?: boolean;
     virtual?: boolean;
   };
-  treeData: MindMapData; // 所有节点
+  /**
+   * @description 主题配置
+   */
+  theme?: {
+    /**
+     * @description 字体大小配置
+     * @default 14px
+     */
+    fontSize?: number;
+    /**
+     * @description 字体家族配置
+     * @default Arial, helvetica, sans-serif
+     */
+    fontFamily?: string;
+
+    /**
+     * @description 主题色
+     * @default #5F95FF
+     */
+    primaryColor?: string;
+  };
+  /**
+   * @description 树结构数据源
+   */
+  treeData: MindMapData;
+  /**
+   * @description 节点点击回调
+   */
   onNodeClick?: (
     eventData: {
       parents: MindMapData[];

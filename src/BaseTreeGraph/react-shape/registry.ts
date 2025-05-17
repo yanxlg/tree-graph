@@ -45,6 +45,13 @@ export function register(config: ReactShapeConfig, graphScope?: string) {
   )
 }
 
+
+export function getRegisteredNodeClass(shape: string, graphScope?: string){
+  const actualShape = getScopeShape(shape, graphScope);
+  return Node.registry.get(actualShape) || Node.registry.get(shape);
+}
+
+
 export function unRegister(shape: string, graphScope: string) {
   const actualShape = getScopeShape(shape, graphScope);
   if (shapeMaps[actualShape]) {

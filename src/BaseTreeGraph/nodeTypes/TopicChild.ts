@@ -8,8 +8,9 @@
 import {Graph, Shape} from "@antv/x6";
 import {merge} from "lodash";
 import {IHoverActiveNode} from "../types";
+import {RectWidthDefaultConfig} from "./RectWidthDefaultConfig";
 
-class TopicChildNode extends Shape.Rect implements IHoverActiveNode{
+class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode {
   static defaults = merge(
     {},
     Shape.Rect.defaults,
@@ -54,15 +55,17 @@ class TopicChildNode extends Shape.Rect implements IHoverActiveNode{
           class: 'x6-selected-line'
         }
       },
-    }, {
-      shape: 'topic-child'
+      size: {
+        width: 60,
+        height: 30
+      }
     })
 
-  onMouseOver(){
+  onMouseOver() {
     this.attr('line/filter', 'url(#sub-topic-hover-shadow)');
   }
 
-  onMouseOut(){
+  onMouseOut() {
     this.attr('line/filter', 'none');
   }
 }

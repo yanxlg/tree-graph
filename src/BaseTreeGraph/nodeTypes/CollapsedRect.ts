@@ -10,9 +10,10 @@
 import {Cell, Shape} from '@antv/x6';
 import {merge} from "lodash";
 import {Node} from "@antv/x6/src/model/node";
+import {RectWidthDefaultConfig} from "./RectWidthDefaultConfig";
 
 
-export class CollapsedRect extends Shape.Rect {
+export class CollapsedRect extends RectWidthDefaultConfig {
   static defaults = merge({}, Shape.Rect.defaults, {
     markup: [
       {

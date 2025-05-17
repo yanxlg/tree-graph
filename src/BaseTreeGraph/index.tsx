@@ -19,7 +19,7 @@ import './index.less';
 //})
 
 export default function BaseTreeGraph(props: BaseTreeGraphProps) {
-  const {treeData, graph, onNodeClick} = props;
+  const {treeData, graph, theme, onNodeClick} = props;
 
   const {GraphView, register, unRegister, getGraph} = useGraph(
     graph,

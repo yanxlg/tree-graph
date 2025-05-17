@@ -5,12 +5,12 @@
  *
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
-import {Graph, Model} from "@antv/x6";
+import {Cell, Graph, Node} from "@antv/x6";
 import {CollapsedRect} from "./CollapsedRect";
 import {merge} from "lodash";
 import {IHoverActiveNode} from "../types";
 
-class TopicNode extends CollapsedRect implements IHoverActiveNode{
+export class TopicNode extends CollapsedRect implements IHoverActiveNode {
   static defaults =
     merge({}, CollapsedRect.defaults, {
       attrs: {
@@ -31,8 +31,8 @@ class TopicNode extends CollapsedRect implements IHoverActiveNode{
           'pointer-events': 'none',
         },
       },
-    }, {shape: 'topic'})
-
+      size: {width: 160, height: 50},
+    })
 
   init() {
     super.init();
@@ -40,12 +40,11 @@ class TopicNode extends CollapsedRect implements IHoverActiveNode{
     // mouse 事件应该绑定在 body 元素上，不应该监听全局的
   }
 
-  onMouseOver(){
-    console.log('sssss');
+  onMouseOver() {
     this.attr('body/filter', 'url(#topic-hover-shadow)');
   }
 
-  onMouseOut(){
+  onMouseOut() {
     this.attr('body/filter', 'none');
   }
 }

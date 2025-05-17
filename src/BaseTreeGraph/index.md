@@ -12,6 +12,10 @@ group: 组件
 
 <code src="./demos/basic/index.tsx"></code>
 
+## 文档
+
+<API id="BaseTreeGraph"></API>
+
 
 增量更新优化策略：
 graph.freeze();
