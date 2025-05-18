@@ -5,7 +5,7 @@
 
 
 import React from 'react';
-import {BaseTreeGraph, MindMapData} from '@shuhe/tree-graph';
+import {BaseTreeGraph, MindMapData} from 'tree-graph';
 import {message} from 'antd';
 
 const data: MindMapData = {
