@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
-import {Cell, Graph, Node} from "@antv/x6";
+import {Graph} from "@antv/x6";
 import {CollapsedRect} from "./CollapsedRect";
 import {merge} from "lodash";
 import {IHoverActiveNode} from "../types";

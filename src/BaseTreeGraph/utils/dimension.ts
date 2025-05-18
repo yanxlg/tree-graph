@@ -12,7 +12,7 @@ import {Node} from "@antv/x6";
 import {measureTextWidth} from "./measureText";
 
 
-const defaultTextMargin = 16;
+export const defaultTextMargin = 16;
 
 function calcAutoWidth(label: string, themeConfig: ThemeConfig) {
   const fontStyle = `${themeConfig.fontSize}px ${themeConfig.fontFamily}`;

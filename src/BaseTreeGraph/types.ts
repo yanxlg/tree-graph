@@ -62,7 +62,7 @@ export type NodeConfig = {
   /**
    * @description 是否自动溢出显示，溢出配置后会自动 Tooltip 显示完整内容。自动计算？？？
    */
-  ellipsis?: boolean;
+  ellipsis?: boolean | 'multiLine';
 }
 
 export type ThemeConfig = {

@@ -38,6 +38,7 @@ const traverseLoop = (
         type: data.type,
         expanded: expended, // 默认的展开状态
         visible: visible,
+        ellipsis: data.ellipsis,
         data: {
           childrenCount: data.children?.length ?? 0, // 子节点数量
           ...themeConfig

@@ -17,4 +17,4 @@ class TopicBranchNode extends TopicNode {
     })
 }
 
-Graph.registerNode('topic-branch', TopicNode, true);
+Graph.registerNode('topic-branch', TopicBranchNode, true);

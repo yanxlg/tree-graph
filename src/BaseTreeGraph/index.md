@@ -11,6 +11,8 @@ group: 组件
 ## 使用示例
 
 <code src="./demos/basic/index.tsx"></code>
+<code src="./demos/autoWidth/index.tsx"></code>
+<code src="./demos/singleLineEllipsis/index.tsx"></code>
 
 ## 文档
 
