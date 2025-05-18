@@ -1,5 +1,5 @@
 /**
- * title: 单行溢出
+ * title: 多行溢出
  * description: 设置宽度，当文本超过该宽度时自动溢出显示
  */
 
@@ -20,7 +20,7 @@ const data: MindMapData = {
       type: 'topic-branch',
       label: '分支主题1分支主题1分支主题1分支主题1',
       width: 90,
-      ellipsis: true,
+      ellipsis: 'multiLine',
       children: [
         {
           id: '1-1-1',

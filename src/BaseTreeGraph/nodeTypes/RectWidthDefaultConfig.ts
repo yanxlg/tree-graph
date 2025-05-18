@@ -11,7 +11,6 @@ import {defaultTextMargin} from "../utils/dimension";
 
 
 export class RectWidthDefaultConfig extends Shape.Rect {
-
   protected preprocess(metadata: Node.Metadata, ignoreIdCheck?: boolean): Node.Properties {
     const {width, height, label, ellipsis} = metadata;
     const ctr = this.constructor as Node.Definition;
@@ -40,13 +39,6 @@ export class RectWidthDefaultConfig extends Shape.Rect {
       width: width ?? defaults.size?.width ?? 1,
       height: height ?? defaults.size?.height ?? 1,
     }, ignoreIdCheck);
-  }
-
-  setLabel(label?: string | null, options?: Node.SetOptions) {
-    super.setLabel(label, options);
-    console.log(this.prop('ellipsis'));
-    // 支持溢出显示。
-    return this;
   }
 }
 

@@ -13,6 +13,7 @@ group: 组件
 <code src="./demos/basic/index.tsx"></code>
 <code src="./demos/autoWidth/index.tsx"></code>
 <code src="./demos/singleLineEllipsis/index.tsx"></code>
+<code src="./demos/multiLineEllipsis/index.tsx"></code>
 
 ## 文档
 
