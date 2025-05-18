@@ -12,11 +12,12 @@ import {getTheme} from "../utils/theme";
 
 
 export function useGraph(graphConfig: BaseTreeGraphProps) {
-  const {onNodeClick, treeData, graph: graphOptions, theme} = graphConfig;
+  const {onNodeClick, treeData, graph: graphOptions, theme, nodeConfig} = graphConfig;
   const graphContainerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<Graph>(undefined);
   const {portals, connect, disconnect} = useProtal();
   const $nodeRef = useRef<RefMap>(undefined);
+  const themeConfig = useRef(getTheme(theme)).current;
 
   const clickListener = useLatest(onNodeClick);
 
@@ -28,9 +29,12 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
   const initGraphWithTreeData = useMemoizedFn(() => {
     if (treeData) {
       const graph = graphRef.current!;
-      const {cells, $ref} = toHierarchyCells(treeData, graphScope);
+      const {cells, $ref} = toHierarchyCells(treeData, graphScope, {
+        themeConfig,
+        nodeConfig
+      });
       $nodeRef.current = $ref;
-      graph.model.getLastCell()?.removeZIndex(); // TODO 清除 zIndex 缓存，还是 edge 生成，否则 resetCells 调用时对应未设置 zIndex 的会从当前 zIndex 重新计算
+      graph.model.getLastCell()?.removeZIndex();
       graph.resetCells(cells);
     }
   });
@@ -40,7 +44,6 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
   }, [treeData])
 
   useEffect(() => {
-    const themeConfig = getTheme(theme);
     const graph = new Graph({
       ...graphOptions,
       // 画布拖拽
@@ -100,7 +103,6 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
     //   console.log('node:added');
     // })
 
-    // TODO 希望能够将事件放在内层
     graph.on('topic:collapse', ({node}: { node: CollapsedRect }) => {
       node.toggleExpanded();
     })

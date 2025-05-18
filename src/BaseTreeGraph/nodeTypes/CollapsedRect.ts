@@ -11,6 +11,7 @@ import {Cell, Shape} from '@antv/x6';
 import {merge} from "lodash";
 import {Node} from "@antv/x6/src/model/node";
 import {RectWidthDefaultConfig} from "./RectWidthDefaultConfig";
+import {ThemeConfig} from "../types";
 
 
 export class CollapsedRect extends RectWidthDefaultConfig {
@@ -69,6 +70,7 @@ export class CollapsedRect extends RectWidthDefaultConfig {
       collapseRect: {
         fill: '#fff',
         stroke: '#d9d9d9',
+        strokeWidth: 1,
         x: 1,
         y: -9,
         height: 18,
@@ -93,22 +95,28 @@ export class CollapsedRect extends RectWidthDefaultConfig {
 
   protected setup() {
     super.setup();
-
-    // 创建事件监听, 元数据发生改变，需要更新视图View
-    // this.store.on('change:*', (metadata) => {
-    //   console.log('change', metadata);
-    // });
   }
 
   // 初始化
   init() {
     super.init();
+    this.initTheme();
     this.updateChildCount();
     this.toggleExpanded(this.isExpanded());
   }
 
+  private initTheme() {
+    const {fontSize, fontFamily, primaryColor} = this.getData() as ThemeConfig;
+    fontSize && this.attr('label/fontSize', fontSize);
+    fontFamily && this.attr('label/fontFamily', fontFamily);
+    if(primaryColor){
+      this.attr('body/stroke', primaryColor);
+      this.attr('collapseIcon/stroke', primaryColor);
+    }
+  }
+
   private updateChildCount() {
-    const childCount = this.store.get('childrenCount') as number;
+    const childCount = this.getData()?.childrenCount as number;
     this.attr('collapseBtn/display', childCount ? 'block' : 'none');
     this.attr('childrenCount/display', childCount ? 'block' : 'none');
     if (childCount) {

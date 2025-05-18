@@ -19,4 +19,12 @@ export class RectWidthDefaultConfig extends Shape.Rect {
       height: height ?? defaults.size?.height ?? 1,
     }, ignoreIdCheck);
   }
+
+  setLabel(label?: string | null, options?: Node.SetOptions) {
+    super.setLabel(label, options);
+
+    // 支持溢出显示。
+
+    return this;
+  }
 }

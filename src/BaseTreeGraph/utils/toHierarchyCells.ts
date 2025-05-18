@@ -1,23 +1,22 @@
-// @ts-ignore
 import Hierarchy from '@antv/hierarchy';
-import {HierarchyResult, MindMapData} from "../types";
+import {HierarchyResult, MindMapData, NodeConfig, ThemeConfig} from "../types";
 import {traverse} from "./traverse";
-import {getRegisteredNodeClass} from "../react-shape";
-import {Node} from "@antv/x6";
+import {getNodeHeight, getNodeWidth} from "./dimension";
 
 
-export function toHierarchyCells(data: MindMapData, graphScope?: string) {
-  const result: HierarchyResult = Hierarchy.mindmap(data, {
+export function toHierarchyCells(data: MindMapData, graphScope: string, configs: {
+  nodeConfig?: NodeConfig;
+  themeConfig: ThemeConfig;
+}) {
+  const nodeConfig = configs?.nodeConfig;
+  const themeConfig = configs?.themeConfig;
+  const result = Hierarchy.mindmap(data, {
     direction: 'H',
     getHeight(d: MindMapData) {
-      const {type} = d;
-      const ctr = getRegisteredNodeClass(type, graphScope);
-      // 取不同节点的默认值
-      const defaults = ctr?.getDefaults() as Node.Defaults;
-      return d.height ?? defaults?.size?.height;
+      return getNodeHeight(d, themeConfig, nodeConfig, graphScope);
     },
     getWidth(d: MindMapData) {
-      return d.width; // TODO 需要支持自动计算宽度
+      return getNodeWidth(d, themeConfig, nodeConfig, graphScope); // 需要修改节点的 width
     },
     getHGap() {
       return 40
@@ -28,6 +27,6 @@ export function toHierarchyCells(data: MindMapData, graphScope?: string) {
     getSide: () => {
       return 'right'
     },
-  });
-  return traverse(result);
+  }) as HierarchyResult;
+  return traverse(result, themeConfig);
 }

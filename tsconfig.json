@@ -10,5 +10,5 @@
       "@shuhe/tree-graph": ["./src"]
     }
   },
-  "include": [".dumirc.ts"]
+  "include": [".dumirc.ts", "./typings.d.ts"]
 }

@@ -16,8 +16,8 @@ import {Button, message} from 'antd';
 const data1: MindMapData = {
   id: '1',
   type: 'topic',
-  label: '中心主题',
-  width: 160,
+  label: '中心主题中心主题中心主题中心主题中心主题',
+  width: 'auto',
   children: [
     {
       id: '1-1',

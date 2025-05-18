@@ -1,12 +1,6 @@
-import {register} from './react-shape';
-import NodeRender from "./NodeRender";
-import {useEffect, useRef} from "react";
 import {useGraph} from './hooks/useGraph';
-import {Options, Graph} from "@antv/x6";
 import './nodeTypes';
-import {BaseTreeGraphProps, MindMapData, RefMap} from './types';
-import Manual = Options.Manual;
-import {toHierarchyCells} from "./utils/toHierarchyCells";
+import {BaseTreeGraphProps} from './types';
 import './edgeTypes';
 import './index.less';
 
@@ -19,13 +13,7 @@ import './index.less';
 //})
 
 export default function BaseTreeGraph(props: BaseTreeGraphProps) {
-  const {treeData, graph, theme, onNodeClick} = props;
-
-  const {GraphView, register, unRegister, getGraph} = useGraph(
-    graph,
-    onNodeClick,
-    treeData,
-  ); // 使用的地方直接使用一个hooks 即可
+  const {GraphView, register, unRegister, getGraph} = useGraph(props); // 使用的地方直接使用一个hooks 即可
 
   return GraphView;
 }

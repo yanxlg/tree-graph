@@ -22,25 +22,66 @@ export type GraphNode = {
   component: NodeRenderComponent;
 }
 
-export type MindMapData = {
+export type MindMapData = NodeConfig & {
   id: string; // 需要唯一 id，否则不好增量更新
   type: 'topic' | 'topic-branch' | 'topic-child';
   label: string;
-  width: number;
-  /**
-   * 节点高度，支持外部自定义，不同节点类型有不同的默认高度，通常不需要配置
-   */
-  height?: number;
   children?: MindMapData[];
   expanded?: boolean; // 控制默认展开状态
 };
 
-export interface HierarchyResult {
+export interface HierarchyResult extends MindMapData {
   id: string
   x: number
   y: number
   data: MindMapData;
-  children?: HierarchyResult[]
+  children?: HierarchyResult[];
+  height: number;
+  width: number;
+}
+
+export type NodeConfig = {
+  /**
+   * @description 节点默认宽度，当节点数据中未配置宽度时，使用全局默认宽度，不配置则使用对应节点类型内置的宽度
+   */
+  width?: number | 'auto';
+
+  /**
+   * @description 节点高度，当节点数据中未配置宽度时，使用全局默认宽度，不配置则使用对应节点类型内置的宽度
+   */
+  height?: number;
+  /**
+   * @description 最小宽度限制
+   */
+  minWidth?: number;
+  /**
+   * @description 最大宽度限制
+   */
+  maxWidth?: number;
+
+  /**
+   * @description 是否自动溢出显示，溢出配置后会自动 Tooltip 显示完整内容。自动计算？？？
+   */
+  ellipsis?: boolean;
+}
+
+export type ThemeConfig = {
+  /**
+   * @description 字体大小配置
+   * @default 14
+   */
+  fontSize?: number;
+  /**
+   * @description 字体家族配置
+   * @default "Arial, helvetica, sans-serif"
+   */
+  fontFamily?: string;
+
+  /**
+   * @description 主题色
+   * @default "#5F95FF"
+   */
+  primaryColor?: string;
 }
 
 
@@ -58,28 +99,16 @@ export type BaseTreeGraphProps = {
   /**
    * @description 主题配置
    */
-  theme?: {
-    /**
-     * @description 字体大小配置
-     * @default 14px
-     */
-    fontSize?: number;
-    /**
-     * @description 字体家族配置
-     * @default Arial, helvetica, sans-serif
-     */
-    fontFamily?: string;
-
-    /**
-     * @description 主题色
-     * @default #5F95FF
-     */
-    primaryColor?: string;
-  };
+  theme?: ThemeConfig;
   /**
    * @description 树结构数据源
    */
   treeData: MindMapData;
+
+  /**
+   * @description 节点默认参数配置
+   */
+  nodeConfig?: NodeConfig;
   /**
    * @description 节点点击回调
    */
