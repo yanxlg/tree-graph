@@ -1,15 +1,19 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef} from "react";
 import {Graph} from "@antv/x6";
-import {useProtal, register as globalRegister, unRegister as globalUnRegister, ReactShapeConfig} from "../react-shape";
-import {BaseTreeGraphProps, IHoverActiveNode, MindMapData, RefMap} from "../types";
-import {useLatest, useMemoizedFn, useUpdateEffect} from 'ahooks';
+import {
+  register as globalRegister,
+  unRegister as globalUnRegister,
+  ReactShapeConfig,
+  usePortal
+} from "../react-shape";
+import {BaseTreeGraphProps, IHoverActiveNode, RefMap} from "../types";
+import {useLatest, useMemoizedFn} from 'ahooks';
 import {toHierarchyCells} from "../utils/toHierarchyCells";
 import {NodeView} from "@antv/x6/src/view/node";
 import {CollapsedRect} from "../nodeTypes/CollapsedRect";
 import {StringExt} from "@antv/x6-common";
 import {selectionPlugin} from "../plugins/selection";
 import {getTheme} from "../utils/theme";
-import {Tooltip} from "antd";
 import NodeTooltip from "../NodeTooltip";
 
 
@@ -221,10 +225,10 @@ function createGraphContainer() {
 }
 
 export function useGraph(graphConfig: BaseTreeGraphProps) {
-  const {onNodeClick, treeData, graph: graphOptions, theme, nodeConfig} = graphConfig;
+  const {onNodeClick, treeData, graph: graphOptions, theme, nodeConfig, width = '100%', height = '100%'} = graphConfig;
   const fragmentRef = useRef<HTMLDivElement>(null);
 
-  const {portals, connect, disconnect} = useProtal();
+  const {portals, connect, disconnect} = usePortal();
 
   const $nodeRef = useRef<RefMap>(undefined);
   const themeConfig = useRef(getTheme(theme)).current;
@@ -366,12 +370,11 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
 
   const getGraph = useCallback(() => graph, []);
 
-
   const GraphView = useMemo(() => {
     return (
       <>
         {portals}
-        <div ref={fragmentRef} style={{width: '100%', height: 600, position: 'relative'}}/>
+        <div ref={fragmentRef} style={{width: width, height: height, position: 'relative'}}/>
         <NodeTooltip graph={graph}/>
       </>
     )

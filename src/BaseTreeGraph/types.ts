@@ -27,6 +27,7 @@ export type MindMapData = NodeConfig & {
   type: 'topic' | 'topic-branch' | 'topic-child';
   label: string;
   children?: MindMapData[];
+  childCount?: number; // 外部传入的 count数量
   expanded?: boolean; // 控制默认展开状态
 };
 
@@ -60,7 +61,7 @@ export type NodeConfig = {
   maxWidth?: number;
 
   /**
-   * @description 是否自动溢出显示，溢出配置后会自动 Tooltip 显示完整内容。自动计算？？？
+   * @description 是否自动溢出显示，溢出配置后会自动 Tooltip 显示完整内容。
    */
   ellipsis?: boolean | 'multiLine';
 }
@@ -86,6 +87,15 @@ export type ThemeConfig = {
 
 
 export type BaseTreeGraphProps = {
+  /**
+   * @description graph 宽度
+   */
+  width?: string | number;
+
+  /**
+   * @description graph 高度
+   */
+  height?: string | number;
   /**
    * @description graph配置
    */

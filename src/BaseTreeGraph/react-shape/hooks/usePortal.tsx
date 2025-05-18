@@ -37,7 +37,7 @@ const reducer = (state: Payload[], action: Action) => {
   return state
 }
 
-export function useProtal(){
+export function usePortal(){
   const [items, mutate] = useReducer(reducer, []);
 
   const portals = useMemo(()=>{

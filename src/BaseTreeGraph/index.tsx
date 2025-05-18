@@ -14,6 +14,5 @@ import './index.less';
 
 export default function BaseTreeGraph(props: BaseTreeGraphProps) {
   const {GraphView, register, unRegister, getGraph} = useGraph(props); // 使用的地方直接使用一个hooks 即可
-
   return GraphView;
 }

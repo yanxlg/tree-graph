@@ -48,11 +48,11 @@ export class CollapsedRect extends RectWidthDefaultConfig {
       },
       {
         tagName: 'text',
-        selector: 'childrenCount',
+        selector: 'childCount',
       }
     ],
     attrs: {
-      childrenCount: {
+      childCount: {
         ref: 'body',
         refX: '100%',
         refY: '50%',
@@ -116,11 +116,11 @@ export class CollapsedRect extends RectWidthDefaultConfig {
   }
 
   private updateChildCount() {
-    const childCount = this.getData()?.childrenCount as number;
+    const childCount = this.getData()?.childCount as number;
     this.attr('collapseBtn/display', childCount ? 'block' : 'none');
-    this.attr('childrenCount/display', childCount ? 'block' : 'none');
+    this.attr('childCount/display', childCount ? 'block' : 'none');
     if (childCount) {
-      this.setAttrByPath('childrenCount/text', childCount);
+      this.setAttrByPath('childCount/text', childCount);
     }
   }
 

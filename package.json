@@ -1,5 +1,5 @@
 {
-  "name": "@shuhe/tree-graph",
+  "name": "tree-graph",
   "version": "0.0.1",
   "description": "树结构图组件库",
   "scripts": {

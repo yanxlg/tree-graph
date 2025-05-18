@@ -40,7 +40,7 @@ const traverseLoop = (
         visible: visible,
         ellipsis: data.ellipsis,
         data: {
-          childrenCount: data.children?.length ?? 0, // 子节点数量
+          childCount: data.childCount ?? data.children?.length ?? 0, // 子节点数量
           ...themeConfig
         },
       }),

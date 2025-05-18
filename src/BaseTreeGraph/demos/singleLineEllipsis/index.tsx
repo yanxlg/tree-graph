@@ -48,7 +48,7 @@ const data: MindMapData = {
 const Page = ()=>{
   return (
     <>
-      <BaseTreeGraph treeData={data} onNodeClick={(event)=>{
+      <BaseTreeGraph height={600} treeData={data} onNodeClick={(event)=>{
         const {parents, children, eventArg} = event;
         message.info(`父节点数量：${parents?.length};子节点数量：${children.length};当前节点 id：${eventArg.node.id}`);
       }}/>
