@@ -5,10 +5,14 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "dumi dev",
+    "build:lib": "father build",
     "build": "dumi build",
     "preview": "dumi preview",
     "prepare": "husky install && dumi setup"
   },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "typings": "./dist/esm/index.d.ts",
   "authors": [
     "yanxianliang@lattebank.com"
   ],
@@ -38,6 +42,7 @@
     "ahooks": "3.8.4"
   },
   "devDependencies": {
+    "father": "4.5.5",
     "antd": "^5.25.1",
     "@types/lodash": "^4.17.16",
     "@commitlint/cli": "^17.1.2",

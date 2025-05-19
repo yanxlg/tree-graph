@@ -5,10 +5,19 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "jsx": "react-jsx",
+    "declaration": true,
     "paths": {
-      "@@/*": [".dumi/tmp/*"],
-      "@shuhe/tree-graph": ["./src"]
+      "@@/*": [
+        ".dumi/tmp/*"
+      ],
+      "@shuhe/tree-graph": [
+        "./src"
+      ]
     }
   },
-  "include": [".dumirc.ts", "./typings.d.ts"]
+  "include": [
+    "src",
+    ".dumirc.ts",
+    "./typings.d.ts"
+  ]
 }
