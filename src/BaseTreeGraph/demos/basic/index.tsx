@@ -4,7 +4,7 @@
  */
 
 import React, {useState} from 'react';
-import {BaseTreeGraph, MindMapData} from 'tree-graph';
+import {BaseTreeGraph, MindMapData} from '@gx6/tree-graph';
 import {Button, message} from 'antd';
 
 const data1: MindMapData = {
