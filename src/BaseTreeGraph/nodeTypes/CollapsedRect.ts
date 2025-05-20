@@ -37,6 +37,10 @@ export class CollapsedRect extends RectWidthDefaultConfig {
             },
           },
           {
+            tagName: 'text',
+            selector: 'childCount',
+          },
+          {
             tagName: 'path',
             selector: 'collapseIcon',
             attrs: {
@@ -46,26 +50,13 @@ export class CollapsedRect extends RectWidthDefaultConfig {
           },
         ],
       },
-      {
-        tagName: 'text',
-        selector: 'childCount',
-      }
     ],
     attrs: {
-      childCount: {
-        ref: 'body',
-        refX: '100%',
-        refY: '50%',
-        height: 18,
-        textAnchor: 'start',
-        x: 2,
-        y: -20,
-        fill: '#333', // 文字颜色
-      },
       collapseBtn: {
         ref: 'body',
         refX: '100%',
         refY: '50%',
+        display: 'none',
       },
       collapseRect: {
         fill: '#fff',
@@ -75,8 +66,17 @@ export class CollapsedRect extends RectWidthDefaultConfig {
         y: -9,
         height: 18,
         width: 18,
+        rx: 9,
+        ry: 9,
         cursor: 'pointer',
         event: 'topic:collapse',
+      },
+      childCount: {
+        refX: 26,
+        refY: 0,
+        fontSize: 12,
+        fill: '#333',
+        display: 'none',
       },
       collapseIcon: {
         refX: 5,
@@ -101,27 +101,27 @@ export class CollapsedRect extends RectWidthDefaultConfig {
   init() {
     super.init();
     this.initTheme();
-    this.updateChildCount();
-    this.toggleExpanded(this.isExpanded());
+    const childCount = this.getData()?.childCount as number;
+    if(childCount){
+      this.updateChildCount(childCount);
+      this.toggleExpanded(this.isExpanded());
+    }
   }
 
   private initTheme() {
     const {fontSize, fontFamily, primaryColor} = this.getData() as ThemeConfig;
     fontSize && this.attr('label/fontSize', fontSize);
     fontFamily && this.attr('label/fontFamily', fontFamily);
-    if(primaryColor){
+    if (primaryColor) {
       this.attr('body/stroke', primaryColor);
       this.attr('collapseIcon/stroke', primaryColor);
     }
   }
 
-  private updateChildCount() {
-    const childCount = this.getData()?.childCount as number;
-    this.attr('collapseBtn/display', childCount ? 'block' : 'none');
-    this.attr('childCount/display', childCount ? 'block' : 'none');
-    if (childCount) {
-      this.setAttrByPath('childCount/text', childCount);
-    }
+  private updateChildCount(childCount: number) {
+    this.attr('collapseBtn/display', 'block');
+    this.attr('childCount/display', 'block');
+    this.setAttrByPath('childCount/text', childCount);
   }
 
 
@@ -155,12 +155,14 @@ export class CollapsedRect extends RectWidthDefaultConfig {
       this.attr('collapseIcon', {
         d: 'M 1 5 9 5 M 5 1 5 9',
         strokeWidth: 1.6,
-      })
+      });
+      this.attr('childCount/display', 'block');
     } else {
       this.attr('collapseIcon', {
         d: 'M 2 5 8 5',
         strokeWidth: 1.8,
-      })
+      });
+      this.attr('childCount/display', 'none');
     }
     this.store.set('expanded', newExpanded, {
       silent: true,
