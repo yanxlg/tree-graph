@@ -39,8 +39,8 @@ jobs:
 
       - name: Install & Build
         run: |
-          npm install
-          npm run build # 假设你的构建命令是 build:docs[1](@ref)
+          yarn install
+          yarn build # 假设你的构建命令是 build:docs[1](@ref)
           touch docs-dist/.nojekyll # 防止GitHub忽略下划线文件[5](@ref)
 
       - name: Deploy to GitHub Pages
