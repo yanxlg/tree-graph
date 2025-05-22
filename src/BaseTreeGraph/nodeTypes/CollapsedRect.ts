@@ -104,7 +104,7 @@ export class CollapsedRect extends RectWidthDefaultConfig {
     const childCount = this.getData()?.childCount as number;
     if(childCount){
       this.updateChildCount(childCount);
-      this.toggleExpanded(this.isExpanded());
+      this.renderCollapsedState();
     }
   }
 
@@ -128,30 +128,35 @@ export class CollapsedRect extends RectWidthDefaultConfig {
   protected postprocess() {
   }
 
-  isExpanded(): boolean {
-    return this.store.get('expanded') ?? false;
+  public isCollapsed(){
+    return this.store.get('collapsed') ?? true; // 默认是收起
   }
 
-  // 递归更新 visible 状态
-  private updateCollapseState(node: Cell = this) {
-    const expanded = this.isExpanded();
-    const graph = this.model?.graph;
-    if (graph) {
-      const targets = graph.getSuccessors(node, {distance: 1});
-      if (targets) {
-        targets.forEach((node) => {
-          node.toggleVisible(expanded);
-          if (node instanceof this.constructor && (node as CollapsedRect).isExpanded()) { // 后面所有的节点都需要隐藏
-            this.updateCollapseState(node);
-          }
-        })
-      }
-    }
+  public toggleCollapsed(){
+    this.store.set('collapsed', !this.isCollapsed());
+    this.renderCollapsedState();
   }
 
-  toggleExpanded(expanded?: boolean) {
-    const newExpanded = expanded === undefined ? !this.isExpanded() : expanded;
-    if (!newExpanded) {
+  // // 递归更新 visible 状态
+  // private updateCollapseState(node: Cell = this) {
+  //   const expanded = this.isExpanded();
+  //   const graph = this.model?.graph;
+  //   if (graph) {
+  //     const targets = graph.getSuccessors(node, {distance: 1});
+  //     if (targets) {
+  //       targets.forEach((node) => {
+  //         node.toggleVisible(expanded);
+  //         if (node instanceof this.constructor && (node as CollapsedRect).isExpanded()) { // 后面所有的节点都需要隐藏
+  //           this.updateCollapseState(node);
+  //         }
+  //       })
+  //     }
+  //   }
+  // }
+
+  renderCollapsedState() {
+    const collapsed = this.isCollapsed();
+    if (collapsed) {
       this.attr('collapseIcon', {
         d: 'M 1 5 9 5 M 5 1 5 9',
         strokeWidth: 1.6,
@@ -164,9 +169,9 @@ export class CollapsedRect extends RectWidthDefaultConfig {
       });
       this.attr('childCount/display', 'none');
     }
-    this.store.set('expanded', newExpanded, {
-      silent: true,
-    }); // 不触发事件
-    this.updateCollapseState();
+    // this.store.set('expanded', newExpanded, {
+    //   silent: true,
+    // }); // 不触发事件
+    // this.updateCollapseState();
   }
 }

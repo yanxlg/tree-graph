@@ -28,7 +28,7 @@ export type MindMapData = NodeConfig & {
   label: string;
   children?: MindMapData[];
   childCount?: number; // 外部传入的 count数量
-  expanded?: boolean; // 控制默认展开状态
+  collapsed?: boolean; // 控制折叠状态
 };
 
 export interface HierarchyResult extends MindMapData {
@@ -39,6 +39,7 @@ export interface HierarchyResult extends MindMapData {
   children?: HierarchyResult[];
   height: number;
   width: number;
+  parent?: HierarchyResult;
 }
 
 export type NodeConfig = {
@@ -114,6 +115,11 @@ export type BaseTreeGraphProps = {
    * @description 树结构数据源
    */
   treeData: MindMapData;
+
+  /**
+   * 渲染策略，不同的策略
+   */
+  strategy?: 'cache-diff' | 'cache-all' | 'cache-control' | 'dynamic-calc';
 
   /**
    * @description 节点默认参数配置

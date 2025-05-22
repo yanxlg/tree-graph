@@ -52,7 +52,7 @@ export function getRegisteredNodeClass(shape: string, graphScope?: string){
 }
 
 
-export function unRegister(shape: string, graphScope: string) {
+export function unRegister(shape: string, graphScope?: string) {
   const actualShape = getScopeShape(shape, graphScope);
   if (shapeMaps[actualShape]) {
     delete shapeMaps[actualShape];
