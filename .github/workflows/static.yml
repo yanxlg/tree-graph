@@ -4,7 +4,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["master"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,12 +36,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20' # 指定Node版本[5,8](@ref)
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: yarn install
 
-      - name: Install & Build
-        run: |
-          yarn install
-          yarn build # 假设你的构建命令是 build:docs[1](@ref)
-          touch docs-dist/.nojekyll # 防止GitHub忽略下划线文件[5](@ref)
+      - name: Build docs
+        run: yarn build
 
       - name: Deploy to GitHub Pages
         id: deployment
