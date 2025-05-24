@@ -42,12 +42,17 @@ jobs:
 
       - name: Build docs
         run: yarn build
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: docs-dist
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
         with:
           branch: gh-pages   # 部署目标分支[2,6](@ref)
-          folder: docs-dist  # 文档生成目录[3,7](@ref)
+          folder: .  # 文档生成目录[3,7](@ref)
           clean: true        # 清理旧文件[5](@ref)
           token: ${{ secrets.DEPLOY_TOKEN }} # 仓库访问令牌[2,4](@ref)
