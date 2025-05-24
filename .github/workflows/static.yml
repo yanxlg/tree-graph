@@ -36,7 +36,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20' # 指定Node版本[5,8](@ref)
-          cache: 'npm'
           
       - name: Install dependencies
         run: yarn install
