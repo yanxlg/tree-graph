@@ -55,4 +55,4 @@ jobs:
           branch: gh-pages   # 部署目标分支[2,6](@ref)
           folder: .  # 文档生成目录[3,7](@ref)
           clean: true        # 清理旧文件[5](@ref)
-          token: ${{ secrets.DEPLOY_TOKEN }} # 仓库访问令牌[2,4](@ref)
+          token: ${{ secrets.GITHUB_TOKEN }} # 仓库访问令牌[2,4](@ref)
