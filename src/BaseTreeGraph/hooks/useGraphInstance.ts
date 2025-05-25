@@ -9,7 +9,7 @@
  */
 
 import {Graph} from "@antv/x6";
-import {BaseTreeGraphProps, IHoverActiveNode, IPopoverNode, TooltipState} from "@gx6/tree-graph";
+import {BaseTreeGraphProps, TooltipState} from "@gx6/tree-graph";
 import {useMemo, useState} from "react";
 import {StringExt} from "@antv/x6-common";
 import {usePortal} from "../react-shape";
@@ -72,26 +72,10 @@ export const useGraphInstance = (
       disconnect
     }
 
-
-
-    // tooltip 逻辑，Popover 逻辑
-
-    // 显示悬浮提示
-    instance.showTooltip = (target: HTMLElement, title: string) => {
-      setTooltip({
-        title,
-        target,
-      });
-    }
-    instance.hideTooltip = () => {
-      setTooltip(undefined);
-    }
-
-
     instance.on('node:mouseenter', ({e, node}) => {
       const target = e.target as HTMLElement;
-      (node as unknown as IHoverActiveNode).onMouseOver?.();
-      const tooltip = (node as unknown as IPopoverNode).getTooltip?.();
+      node.onMouseEnter?.();
+      const tooltip = node.getTooltip?.();
       if (tooltip) {
         setTooltip({
           title: tooltip,
@@ -101,7 +85,7 @@ export const useGraphInstance = (
     })
 
     instance.on('node:mouseleave', ({node}) => {
-      (node as unknown as IHoverActiveNode).onMouseOut?.();
+      node.onMouseLeave?.();
       setTooltip(undefined);
     })
 

@@ -7,10 +7,9 @@
  */
 import {Graph, Shape} from "@antv/x6";
 import {merge} from "lodash";
-import {IHoverActiveNode, IPopoverNode} from "../types";
 import {RectWidthDefaultConfig} from "./RectWidthDefaultConfig";
 
-class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode, IPopoverNode {
+class TopicChildNode extends RectWidthDefaultConfig {
   static defaults = merge(
     {},
     Shape.Rect.defaults,
@@ -61,7 +60,7 @@ class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode,
       }
     })
 
-  onMouseOver() {
+  onMouseEnter() {
     const primaryColor = this.getData().primaryColor;
     this.attr('line/filter', {
       name: 'dropShadow',
@@ -75,7 +74,7 @@ class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode,
     })
   }
 
-  onMouseOut() {
+  onMouseLeave() {
     this.attr('line/filter', 'none');
   }
 

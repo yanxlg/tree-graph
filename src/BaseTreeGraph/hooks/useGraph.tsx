@@ -4,8 +4,8 @@ import {
   unRegister as globalUnRegister,
   ReactShapeConfig,
 } from "../react-shape";
-import {BaseTreeGraphProps, IHoverActiveNode, RefMap} from "../types";
-import {useLatest, useMemoizedFn} from 'ahooks';
+import {BaseTreeGraphProps} from "../types";
+import {useLatest} from 'ahooks';
 import {NodeView} from "@antv/x6/src/view/node";
 import {CollapsedRect} from "../nodeTypes/CollapsedRect";
 import {getTheme} from "../utils/theme";
@@ -59,7 +59,6 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
         collapseNode(node.id);
       }
     })
-
 
     graph.on('topic:click', (eventArg: NodeView.EventArgs['node:click']) => {
       const {node} = eventArg;

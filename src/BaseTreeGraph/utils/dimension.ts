@@ -65,7 +65,7 @@ export function getNodeHeight(
   const {type} = node;
   const ctr = getRegisteredNodeClass(type, graphScope);
   const defaults = ctr?.getDefaults() as Node.Defaults;
-  const getNodeHeight = ctr?.getNodeHeight; // 支持通过getNodeHeight 动态计算节点实际高度
+  const getNodeHeight = ctr?.getNodeHeight;
   const absHeight = getNodeHeight ? getNodeHeight.call(ctr, node) : node.height ?? nodeConfig?.height ?? defaults?.size?.height;
   node.height = absHeight;
   return absHeight;

@@ -2,6 +2,32 @@ import {Graph, Node, Options} from "@antv/x6";
 import type React from "react";
 import {NodeView} from "@antv/x6/src/view/node";
 
+// 扩展内置属性
+declare module '@antv/x6' {
+  namespace Node {
+    interface Definition {
+      getNodeHeight?: (meta: MindMapData) => number;
+    }
+  }
+
+  // Node 扩展方法
+  interface Node {
+    onMouseEnter(): void;
+
+    onMouseLeave(): void;
+
+    getTooltip(): string | undefined;
+  }
+
+  interface Graph {
+    id?: string;
+    portal?: {
+      disconnect: (id: string)=>void;
+      connect: (id: string, portal: React.ReactPortal)=>void;
+    }
+  }
+}
+
 export type NodeRenderProps = {
   node: Node;
   graph: Graph;
@@ -143,17 +169,6 @@ export type RefMap = {
     children?: MindMapData[]
   }
 };
-
-
-export interface IHoverActiveNode {
-  onMouseOver: () => void;
-  onMouseOut: () => void;
-}
-
-export interface IPopoverNode {
-  getTooltip: () => string | undefined;
-}
-
 
 export type BloodlineEvent = {
   id: string;

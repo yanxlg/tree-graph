@@ -5,20 +5,6 @@ import { shapeMaps } from './registry'
 import {getScopeShape} from "./utils/register";
 import {NodeRenderNode} from "../types";
 
-
-declare module '@antv/x6'{
-  /**
-   * 扩展 Graph 实例 id 属性，用于是有Shape 实现
-   */
-  interface Graph {
-    id?: string;
-    portal?: {
-      disconnect: (id: string)=>void;
-      connect: (id: string, portal: React.ReactPortal)=>void;
-    }
-  }
-}
-
 export class Wrap extends React.PureComponent<Wrap.Props, Wrap.State> {
   constructor(props: Wrap.Props) {
     super(props)

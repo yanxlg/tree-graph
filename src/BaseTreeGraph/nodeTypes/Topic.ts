@@ -8,9 +8,8 @@
 import {Graph} from "@antv/x6";
 import {CollapsedRect} from "./CollapsedRect";
 import {merge} from "lodash";
-import {IHoverActiveNode, IPopoverNode} from "../types";
 
-export class TopicNode extends CollapsedRect implements IHoverActiveNode, IPopoverNode {
+export class TopicNode extends CollapsedRect {
   static defaults =
     merge({}, CollapsedRect.defaults, {
       attrs: {
@@ -34,7 +33,7 @@ export class TopicNode extends CollapsedRect implements IHoverActiveNode, IPopov
       size: {width: 160, height: 50},
     })
 
-  onMouseOver() {
+  onMouseEnter() {
     const primaryColor = this.getData().primaryColor;
     this.attr('body/filter', {
       name: 'highlight',
@@ -47,7 +46,7 @@ export class TopicNode extends CollapsedRect implements IHoverActiveNode, IPopov
     })
   }
 
-  onMouseOut() {
+  onMouseLeave() {
     this.attr('body/filter', 'none');
   }
 

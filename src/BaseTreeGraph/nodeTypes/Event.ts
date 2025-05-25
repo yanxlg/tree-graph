@@ -7,14 +7,14 @@
  */
 import {CollapsedRect} from "./CollapsedRect";
 import {omit} from "lodash";
-import {BloodlineEvent, IHoverActiveNode} from "../types";
+import {BloodlineEvent} from "../types";
 import {Graph, Markup, Node, ObjectExt, Shape} from "@antv/x6";
 import Defaults = Node.Defaults;
 
 const lineWidth = 6;
 
 
-export class EventNode extends CollapsedRect implements IHoverActiveNode {
+export class EventNode extends CollapsedRect {
   public static getNodeHeight(eventData: BloodlineEvent) {
     // 根据节点属性，动态计算节点高度，支持根据内容构建 layout
     const {descriptions = []} = eventData;
@@ -146,7 +146,7 @@ export class EventNode extends CollapsedRect implements IHoverActiveNode {
     }
   }
 
-  onMouseOver() {
+  onMouseEnter() {
     const color = this.getData().color;
     this.attr('body/filter', {
       name: 'highlight',
@@ -159,7 +159,7 @@ export class EventNode extends CollapsedRect implements IHoverActiveNode {
     })
   }
 
-  onMouseOut() {
+  onMouseLeave() {
     this.attr('body/filter', 'none');
   }
 }
