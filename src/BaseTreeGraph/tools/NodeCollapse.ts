@@ -82,8 +82,10 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
 
   onRender(){
     super.onRender(); // hack 处理，也可以防止触发 node:mouseenter
-    this.parent.svgContainer.removeAttribute('data-cell-id');
+    this.parent.svgContainer.removeAttribute('data-cell-id'); // hack
     this.container.removeAttribute('data-cell-id');
+    this.parent.svgContainer.setAttribute('data-node-id', this.cell.id); // hack
+    this.container.setAttribute('data-node-id', this.cell.id);
   }
 }
 

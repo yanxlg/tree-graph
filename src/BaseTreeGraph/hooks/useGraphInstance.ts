@@ -65,7 +65,6 @@ export const useGraphInstance = (
         nodeMovable: false,
         edgeMovable: false,
       },
-      // guard // TODO 过滤掉折叠工具
     });
     instance.id = id;
     instance.portal = {
@@ -73,7 +72,6 @@ export const useGraphInstance = (
       disconnect
     }
 
-    // instance.on('')
 
 
     // tooltip 逻辑，Popover 逻辑
