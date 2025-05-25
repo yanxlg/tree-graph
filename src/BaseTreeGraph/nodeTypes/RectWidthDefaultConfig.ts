@@ -9,7 +9,6 @@
 import {Node, Shape} from "@antv/x6";
 import {defaultTextMargin} from "../utils/dimension";
 
-
 export class RectWidthDefaultConfig extends Shape.Rect {
   protected preprocess(metadata: Node.Metadata, ignoreIdCheck?: boolean): Node.Properties {
     const {width, height, label, ellipsis} = metadata;

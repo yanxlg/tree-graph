@@ -7,16 +7,11 @@
  *
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
-import {Cell, Shape} from '@antv/x6';
-import {merge} from "lodash";
-import {Node} from "@antv/x6/src/model/node";
+import {Cell} from '@antv/x6';
 import {RectWidthDefaultConfig} from "./RectWidthDefaultConfig";
 import {ICollapseNode, ThemeConfig} from "../types";
 
 export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNode {
-  static defaults = merge({}, Shape.Rect.defaults, {
-    zIndex: 2
-  }) as Node.Defaults;
 
   init() {
     super.init();
@@ -76,3 +71,7 @@ export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNo
     })
   }
 }
+
+CollapsedRect.config({
+  zIndex: 2,
+})

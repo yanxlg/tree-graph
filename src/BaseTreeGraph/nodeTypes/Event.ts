@@ -160,4 +160,4 @@ export class EventNode extends CollapsedRect {
   }
 }
 
-Graph.registerNode('event', EventNode, true);
+Graph.registerNode('event', EventNode as Node.Definition, true);

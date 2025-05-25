@@ -8,13 +8,13 @@
 
 import {TopicNode} from "./Topic";
 import {Graph} from "@antv/x6";
-import {merge} from "lodash";
 
 class TopicBranchNode extends TopicNode {
-  static defaults =
-    merge({}, TopicNode.defaults, {
-      size: {width: 100, height: 40},
-    })
+
 }
+
+TopicBranchNode.config({
+  size: {width: 100, height: 40},
+})
 
 Graph.registerNode('topic-branch', TopicBranchNode, true);

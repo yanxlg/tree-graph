@@ -2,6 +2,8 @@ import {Graph, Node, Options} from "@antv/x6";
 import type React from "react";
 import {NodeView} from "@antv/x6/src/view/node";
 
+
+
 // 扩展内置属性
 declare module '@antv/x6' {
   namespace Node {
@@ -25,6 +27,11 @@ declare module '@antv/x6' {
       disconnect: (id: string)=>void;
       connect: (id: string, portal: React.ReactPortal)=>void;
     }
+    /**
+     * 扩展 Graph Tooltip api
+     */
+    showTooltip: (target: HTMLElement, title: string) => void;
+    hideTooltip: () => void;
   }
 }
 

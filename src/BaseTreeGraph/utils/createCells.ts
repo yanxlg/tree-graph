@@ -29,7 +29,7 @@ export function createCells(
 
   const _visible = strategy !== 'cache-all' || getNodeVisible(node, visible);
 
-  if (!ignoreRoot) {
+  if (!ignoreRoot) { // 不同的节点类型需要定义不同的属性处理逻辑
     const cell = Node.create({
       id: data.id,
       shape: data.type,
@@ -38,7 +38,6 @@ export function createCells(
       width: width as number,
       height,
       label: data.label,
-      // type: data.type,
       collapsed,
       visible: _visible,
       ellipsis: data.ellipsis,

@@ -14,17 +14,6 @@ import {useMemo, useState} from "react";
 import {StringExt} from "@antv/x6-common";
 import {usePortal} from "../react-shape";
 
-declare module '@antv/x6' {
-
-  interface Graph {
-    /**
-     * 扩展 Graph Tooltip api
-     */
-    showTooltip: (target: HTMLElement, title: string) => void;
-    hideTooltip: () => void;
-  }
-}
-
 function createGraphContainer() {
   const el = document.createElement('div');
   el.className = 'graph-root';
@@ -70,6 +59,17 @@ export const useGraphInstance = (
     instance.portal = {
       connect,
       disconnect
+    }
+
+    instance.showTooltip = (target: HTMLElement, title: string)=>{
+      setTooltip({
+        title: title,
+        target
+      })
+    }
+
+    instance.hideTooltip = ()=>{
+      setTooltip(undefined);
     }
 
     instance.on('node:mouseenter', ({e, node}) => {

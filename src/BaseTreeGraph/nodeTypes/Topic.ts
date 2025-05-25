@@ -7,30 +7,8 @@
  */
 import {Graph} from "@antv/x6";
 import {CollapsedRect} from "./CollapsedRect";
-import {merge} from "lodash";
 
 export class TopicNode extends CollapsedRect {
-  static defaults =
-    merge({}, CollapsedRect.defaults, {
-      attrs: {
-        body: {
-          rx: 6,
-          ry: 6,
-          stroke: '#5F95FF', //  TODO 应该换成主题色
-          fill: '#EFF4FF',
-          strokeWidth: 1,
-          cursor: 'pointer',
-          class: 'x6-selected-rect'
-        },
-        label: {
-          fontSize: 14,
-          fill: '#262626',
-          'pointer-events': 'none',
-        },
-      },
-      size: {width: 160, height: 50},
-    })
-
   onMouseEnter() {
     const primaryColor = this.getData().primaryColor;
     this.attr('body/filter', {
@@ -64,5 +42,25 @@ export class TopicNode extends CollapsedRect {
     return undefined;
   }
 }
+
+TopicNode.config({
+  attrs: {
+    body: {
+      rx: 6,
+      ry: 6,
+      stroke: '#5F95FF', //  TODO 应该换成主题色
+      fill: '#EFF4FF',
+      strokeWidth: 1,
+      cursor: 'pointer',
+      class: 'x6-selected-rect'
+    },
+    label: {
+      fontSize: 14,
+      fill: '#262626',
+      'pointer-events': 'none',
+    },
+  },
+  size: {width: 160, height: 50},
+})
 
 Graph.registerNode('topic', TopicNode, true);
