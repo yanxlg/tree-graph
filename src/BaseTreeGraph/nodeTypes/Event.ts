@@ -53,8 +53,6 @@ export class EventNode extends CollapsedRect {
         ry: 0,
         fill: 'transparent',
         cursor: 'pointer',
-        event: 'event:click',
-        nodeBody: true, // 节点的
         class: 'x6-selected-rect'
       },
       line: {
@@ -70,7 +68,6 @@ export class EventNode extends CollapsedRect {
   } as Defaults
 
   init() {
-    console.log(this);
     // 构建 markup 和 attrs
     const markup = [...this.markup as Array<Markup>];
     const attrs = this.attrs!;

@@ -42,6 +42,7 @@
     "ahooks": "3.8.4"
   },
   "devDependencies": {
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "father": "4.5.5",
     "antd": "^5.25.1",
     "@types/lodash": "^4.17.16",

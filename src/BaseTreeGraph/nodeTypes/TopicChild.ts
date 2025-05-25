@@ -33,9 +33,7 @@ class TopicChildNode extends RectWidthDefaultConfig {
           refY: '-50%',
           fill: 'transparent',
           strokeWidth: 0,
-          event: 'topic:click',
           cursor: 'pointer',
-          nodeBody: true
         },
         label: {
           fontSize: 14,

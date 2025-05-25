@@ -20,8 +20,6 @@ export class TopicNode extends CollapsedRect {
           fill: '#EFF4FF',
           strokeWidth: 1,
           cursor: 'pointer',
-          event: 'topic:click',
-          nodeBody: true,
           class: 'x6-selected-rect'
         },
         label: {

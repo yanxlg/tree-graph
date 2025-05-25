@@ -60,7 +60,7 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
       }
     })
 
-    graph.on('topic:click', (eventArg: NodeView.EventArgs['node:click']) => {
+    graph.on('node:click', (eventArg: NodeView.EventArgs['node:click']) => {
       const {node} = eventArg;
       const id = node.id;
       const parents = getParents(registry.getNode(id)!);
