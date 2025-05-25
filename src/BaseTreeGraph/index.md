@@ -22,7 +22,7 @@ group: 组件
 | height |             `string \| number`             |  graph 高度   | false  | `'100%'` |
 | graph  |        [GraphConfig](#GraphConfig)         | graph 初始化配置 | false  |   `--`   |
 | theme  |        [ThemeConfig](#ThemeConfig)         |  主题配置 | false  |   `--`   |
-| treeData  |           [TreeItem](#TreeItem)            |  树结构数据源 | `(必选)` |   `--`   |
+| root  |           [TreeItem](#TreeItem)            |  树结构数据源 | `(必选)` |   `--`   |
 | nodeConfig  |         [NodeConfig](#NodeConfig)          |  节点默认参数配置 | false  |   `--`   |
 | onNodeClick  | (eventData: [NodeClickEventData](#NodeClickEventData))=>void |  节点点击回调 | false  |   `--`   |
 

@@ -13,14 +13,13 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import {BaseTreeGraphProps, HierarchyResult, MindMapData, NodeConfig, ThemeConfig} from "@shuhe/tree-graph";
-import {useEffect, useMemo, useRef} from "react";
+import {BaseTreeGraphProps, HierarchyResult, MindMapData, NodeConfig, ThemeConfig} from "../types";
+import {useEffect, useRef} from "react";
 import {getLayouts} from "../utils/getLayouts";
 import {CellRegister} from "../register/CellRegister";
 import {createCells} from "../utils/createCells";
 import {Cell, Graph, Node} from "@antv/x6";
 import {getChildren, getExpandedChildren} from "../utils/node";
-import {CollapsedRect} from "../nodeTypes/CollapsedRect";
 
 export const useTreeStore = (
   root: MindMapData,
@@ -40,6 +39,7 @@ export const useTreeStore = (
     registry.clear(); // 清除
 
     const layout = getLayouts(root, graph, configs, strategy);
+
     const cells = createCells(layout, registry, configs.themeConfig, strategy);
 
     graph.model.getLastCell()?.removeZIndex(); // 不清除 zIndex 层级会有问题。

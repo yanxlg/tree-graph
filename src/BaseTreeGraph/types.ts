@@ -114,7 +114,7 @@ export type BaseTreeGraphProps = {
   /**
    * @description 树结构数据源
    */
-  treeData: MindMapData;
+  root: MindMapData;
 
   /**
    * 渲染策略，不同的策略
@@ -148,4 +148,43 @@ export type RefMap = {
 export interface IHoverActiveNode {
   onMouseOver: () => void;
   onMouseOut: () => void;
+}
+
+export interface IPopoverNode {
+  getTooltip: () => string | undefined;
+}
+
+
+export type BloodlineEvent = {
+  id: string;
+  type: 'event';
+  name: string; // 事件名称，用来描述事件类型
+  color: string; // 颜色
+  title: string;
+  descriptions?: string[];
+  upstream?: BloodlineEvents;
+  downstream?: BloodlineEvents;
+}
+
+export type BloodlineEvents = Array<{
+  name: string;
+  dispatch: string; // 连线
+  events: Array<BloodlineEvent>
+}>;
+
+export type BloodlineRoot = BloodlineEvent;
+
+export type BloodlineGraphProps = {
+  height?: number;
+  root: BloodlineRoot;
+}
+
+export type TooltipState = {
+  title: string;
+  target: HTMLElement;
+}
+
+export interface ICollapseNode {
+  isCollapsed: () => boolean;
+  toggleCollapsed: () => void;
 }

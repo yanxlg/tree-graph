@@ -89,7 +89,7 @@ const Page = ()=>{
   return (
     <>
       <Button style={{marginBottom: 12}} onClick={()=>setTreeData(data2)}>显示新数据（全部展开）</Button>
-      <BaseTreeGraph height={600} treeData={treeData} onNodeClick={(event)=>{
+      <BaseTreeGraph height={600} root={treeData} onNodeClick={(event)=>{
         const {parents, children, eventArg} = event;
         message.info(`父节点数量：${parents?.length};子节点数量：${children.length};当前节点 id：${eventArg.node.id}`);
       }}/>

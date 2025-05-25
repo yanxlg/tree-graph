@@ -1,5 +1,6 @@
 import {useGraph} from './hooks/useGraph';
 import './nodeTypes';
+import './tools';
 import {BaseTreeGraphProps} from './types';
 import './edgeTypes';
 import './index.less';

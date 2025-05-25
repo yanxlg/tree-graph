@@ -6,7 +6,7 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import {BaseTreeGraphProps, HierarchyResult, ThemeConfig} from "@shuhe/tree-graph";
+import {BaseTreeGraphProps, HierarchyResult, ThemeConfig} from "../types";
 import {CellRegister} from "../register/CellRegister";
 import {Cell, Edge, Node} from "@antv/x6";
 import {getDefaultCollapsed, getNodeVisible} from "./node";
@@ -20,8 +20,8 @@ export function createCells(
   ignoreRoot?: boolean,
   visible = true,
 ) {
-  const {data, children, x, y, parent} = node;
-  const {id, width, height} = data;
+  const {data, children, x, y} = node;
+  const {id, width, height} = data; // TODO  hack event 节点，不同节点需要不同处理方式，内置到节点中
 
   const cells: Cell[] = [];
 
@@ -38,14 +38,18 @@ export function createCells(
       width: width as number,
       height,
       label: data.label,
-      type: data.type,
+      // type: data.type,
       collapsed,
       visible: _visible,
       ellipsis: data.ellipsis,
       data: {
+        primaryColor: themeConfig.primaryColor,
         childCount: data.childCount ?? data.children?.length ?? 0, // 子节点数量
-        ...themeConfig
-      },
+        ...themeConfig,
+        title: data.title,
+        descriptions: data.descriptions,
+        color: data.color
+      }
     });
     registry.addCell({node, cell}); // 节点注册
     cells.push(cell);

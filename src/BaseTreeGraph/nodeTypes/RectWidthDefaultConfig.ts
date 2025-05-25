@@ -15,23 +15,28 @@ export class RectWidthDefaultConfig extends Shape.Rect {
     const {width, height, label, ellipsis} = metadata;
     const ctr = this.constructor as Node.Definition;
     const defaults = ctr.getDefaults() as Node.Defaults;
+    const fontSize = metadata.data?.fontSize ?? 14;
+
+    const isMultiLine = ellipsis === 'multiLine';
 
     const attrs = ellipsis && label ? {
       attrs: {
         label: {
+          ...isMultiLine ? {} : {
+            lineHeight: fontSize,
+          },
+          text: label,
           textWrap: {
-            text: label,
             width: -defaultTextMargin,
-            ...ellipsis==='multiLine'?{
-            }:{
-              height: (metadata.data?.fontSize ?? 14) + 6, // 默认显示一行。
+            ...isMultiLine ? {} : {
+              height: fontSize + 2,
             },
             ellipsis: true,
             breakWord: false,
           }
         }
       }
-    } :{};
+    } : {};
 
     return super.preprocess({
       ...metadata,
@@ -41,16 +46,3 @@ export class RectWidthDefaultConfig extends Shape.Rect {
     }, ignoreIdCheck);
   }
 }
-
-//
-// RectWidthDefaultConfig.config({
-//   propHooks: (metadata)=>{
-//     console.log('dddd', metadata); // label 设置溢出结果
-//     const { label, ...others } = metadata
-//     if (label) {
-//       console.log(label);
-//       ObjectExt.setByPath(others, 'attrs/text/textWrap/text', label);
-//     }
-//     return metadata;
-//   }
-// })

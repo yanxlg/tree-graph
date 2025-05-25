@@ -15,15 +15,23 @@ import {useTreeStore} from "./useTreeStore";
 import {getParents, getPlainChildren} from "../utils/node";
 
 
-
 export function useGraph(graphConfig: BaseTreeGraphProps) {
-  const {onNodeClick, treeData, graph: graphOptions, theme, nodeConfig, width = '100%', height = '100%', strategy} = graphConfig;
+  const {
+    onNodeClick,
+    root,
+    graph: graphOptions,
+    theme,
+    nodeConfig,
+    width = '100%',
+    height = '100%',
+    strategy
+  } = graphConfig;
   const fragmentRef = useRef<HTMLDivElement>(null);
   const themeConfig = useRef(getTheme(theme)).current;
   const clickListener = useLatest(onNodeClick);
 
 
-  const {portals, graph} = useGraphInstance(graphOptions);
+  const {portals, graph, tooltip} = useGraphInstance(graphOptions);
 
   // TODO 需要先 resize, 后执行 zoomToFit
   useEffect(() => {
@@ -38,64 +46,25 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
   }, []);
 
 
-  const {collapseNode, expandNode, registry} = useTreeStore(treeData, strategy, graph, {themeConfig, nodeConfig});
+  const {collapseNode, expandNode, registry} = useTreeStore(root, strategy, graph, {themeConfig, nodeConfig});
 
 
   useEffect(() => {
-    // 定义 filter
-    graph.defineFilter({
-      id: 'topic-hover-shadow',
-      name: 'highlight',
-      args: {
-        width: 2,
-        blur: 3,
-        opacity: 0.2,
-        color: themeConfig.primaryColor
-      },
-    });
-
-    graph.defineFilter({
-      id: 'sub-topic-hover-shadow',
-      name: 'dropShadow',
-      args: {
-        dx: 0,
-        dy: 0,
-        blur: 2,
-        opacity: 0.7,
-        color: themeConfig.primaryColor
-      },
-    });
-
-    graph.on('topic:collapse', ({node}: { node: CollapsedRect }) => {
+    graph.on('node:collapse', ({node}: { node: CollapsedRect }) => {
       const collapsed = node.isCollapsed();
       node.toggleCollapsed();
-      if(collapsed){
-        expandNode(node.id); // 展开节点
-      }else{
-        collapseNode(node.id); // 收起节点
+      if (collapsed) {
+        expandNode(node.id);
+      } else {
+        collapseNode(node.id);
       }
     })
 
-    graph.on('node:mouseover', ({e, node}) => {
-      const target = e.target as SVGElement;
-      const hoverable = target.getAttribute('hoverable');
-      if (hoverable === 'true') {
-        (node as unknown as IHoverActiveNode).onMouseOver?.();
-      }
-    })
-
-    graph.on('node:mouseout', ({e, node}) => {
-      const target = e.target as SVGElement;
-      const hoverable = target.getAttribute('hoverable');
-      if (hoverable === 'true') {
-        (node as unknown as IHoverActiveNode).onMouseOut?.();
-      }
-    })
 
     graph.on('topic:click', (eventArg: NodeView.EventArgs['node:click']) => {
       const {node} = eventArg;
       const id = node.id;
-      const parents =  getParents(registry.getNode(id)!);
+      const parents = getParents(registry.getNode(id)!);
       const children = getPlainChildren(registry.getNode(id)!);
       clickListener.current?.({
         parents: parents,
@@ -121,10 +90,10 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
       <>
         {portals}
         <div ref={fragmentRef} style={{width: width, height: height, position: 'relative'}}/>
-        <NodeTooltip graph={graph}/>
+        <NodeTooltip tooltip={tooltip}/>
       </>
     )
-  }, [portals]);
+  }, [portals, tooltip]);
 
 
   return {

@@ -10,7 +10,7 @@
       "@@/*": [
         ".dumi/tmp/*"
       ],
-      "@shuhe/tree-graph": [
+      "@gx6/tree-graph": [
         "./src"
       ]
     }
