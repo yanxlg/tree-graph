@@ -6,7 +6,7 @@ import {NodeView} from "@antv/x6/src/view/node";
 declare module '@antv/x6' {
   namespace Node {
     interface Definition {
-      getNodeHeight?: (meta: MindMapData) => number;
+      getNodeHeight?: (meta: MindMapData | BloodlineEvent) => number;
     }
   }
 
@@ -162,13 +162,6 @@ export type BaseTreeGraphProps = {
     }) => void;
 };
 
-
-export type RefMap = {
-  [id: string]: {
-    parents: MindMapData[];
-    children?: MindMapData[]
-  }
-};
 
 export type BloodlineEvent = {
   id: string;

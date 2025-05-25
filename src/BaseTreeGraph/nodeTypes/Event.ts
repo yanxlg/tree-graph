@@ -13,7 +13,6 @@ import Defaults = Node.Defaults;
 
 const lineWidth = 6;
 
-
 export class EventNode extends CollapsedRect {
   public static getNodeHeight(eventData: BloodlineEvent) {
     // 根据节点属性，动态计算节点高度，支持根据内容构建 layout
