@@ -6,9 +6,9 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import React, {forwardRef, useEffect, useState} from "react";
-import {Graph} from "@antv/x6";
-import {Tooltip} from "antd";
+import React, {forwardRef, useEffect} from "react";
+import {Tooltip, Popover} from "antd";
+import {TooltipState} from "@gx6/tree-graph";
 
 
 const DynaminTooltip = forwardRef(({tooltip}: {
@@ -19,7 +19,7 @@ const DynaminTooltip = forwardRef(({tooltip}: {
 }, ref) => {
   useEffect(() => {
     if (typeof ref === 'function') {
-      ref(tooltip?.target); // 更新 Tooltip 目标元素
+      ref(tooltip?.target);
     }
   }, [tooltip]);
   return null;
@@ -28,43 +28,10 @@ const DynaminTooltip = forwardRef(({tooltip}: {
 
 const NodeTooltip = (
   {
-    graph
+    tooltip
   }: {
-    graph: Graph;
+    tooltip?: TooltipState;
   }) => {
-  const [tooltip, setTooltip] = useState<{
-    title: string;
-    target: HTMLElement;
-  }>();
-
-  useEffect(() => {
-
-    graph.on('node:mouseover', ({e, node}) => {
-      const target = e.target as HTMLElement;
-      const hoverable = target.getAttribute('hoverable');
-      if (hoverable === 'true') {
-        const nodeRoot = target.parentElement; // node 的根节点
-        const textNode = nodeRoot?.querySelector('text');
-        if (textNode) {
-          const fullText = (node as unknown as { label: string }).label || '';
-          if (textNode.textContent !== fullText) {
-            setTooltip({
-              title: fullText,
-              target,
-            });
-          }
-        }
-      }
-    })
-
-    graph.on('node:mouseout', ({e, node}) => {
-      const target = e.target as SVGElement;
-      const hoverable = target.getAttribute('hoverable');
-      if (hoverable === 'true') {
-        setTooltip(undefined);
-      }
-    })
-  }, []);
 
   return (
     <Tooltip title={tooltip?.title} open={!!tooltip}>

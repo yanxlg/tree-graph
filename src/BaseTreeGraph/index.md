@@ -22,7 +22,7 @@ group: 组件
 | height |             `string \| number`             |  graph 高度   | false  | `'100%'` |
 | graph  |        [GraphConfig](#GraphConfig)         | graph 初始化配置 | false  |   `--`   |
 | theme  |        [ThemeConfig](#ThemeConfig)         |  主题配置 | false  |   `--`   |
-| treeData  |           [TreeItem](#TreeItem)            |  树结构数据源 | `(必选)` |   `--`   |
+| root  |           [TreeItem](#TreeItem)            |  树结构数据源 | `(必选)` |   `--`   |
 | nodeConfig  |         [NodeConfig](#NodeConfig)          |  节点默认参数配置 | false  |   `--`   |
 | onNodeClick  | (eventData: [NodeClickEventData](#NodeClickEventData))=>void |  节点点击回调 | false  |   `--`   |
 
@@ -46,14 +46,14 @@ group: 组件
 
 
 ### TreeItem
-|   属性   |                            类型                            |                   描述                    |    必填    |     默认值     |
-|:------:|:--------------------------------------------------------:|:---------------------------------------:|:--------:|:-----------:|
-| id  |                         `string`                         |                  唯一 id                  |  `(必选)`  |    `--`     |
-| type | `'topic'`\|<br/> `'topic-branch'`\|<br/> `'topic-child'` |                  节点类型                   |  `(必选)`  |    `--`     |
-| label  |                         `string`                         |                 节点显示文案                  |  `(必选)`  | `--` |
-| childCount  |                         `number`                         |      显示的子节点数，不配置会自动计算`children`的长度      |  false   | `--` |
-| expanded  |                        `boolean`                         | 节点展开状态，默认仅显示根节点，其它节点都被折叠，<br/>可通过该属性配置哪些节点展开 |  false   | `--` |
-| children  |               Array<[TreeItem](#TreeItem)>               |                  子节点列表                  |  false   | `--` |
+|   属性   |                            类型                            |                      描述                      |   必填   |     默认值     |
+|:------:|:--------------------------------------------------------:|:--------------------------------------------:|:------:|:-----------:|
+| id  |                         `string`                         |                    唯一 id                     | `(必选)` |    `--`     |
+| type | `'topic'`\|<br/> `'topic-branch'`\|<br/> `'topic-child'` |                     节点类型                     | `(必选)` |    `--`     |
+| label  |                         `string`                         |                    节点显示文案                    | `(必选)` | `--` |
+| childCount  |                         `number`                         |        显示的子节点数，不配置会自动计算`children`的长度         | false  | `--` |
+| collapsed  |                        `boolean`                         | 节点折叠状态，默认仅显示根节点，其它节点都被隐藏，<br/>可通过该属性配置哪些节点展开 |  true  | `--` |
+| children  |               Array<[TreeItem](#TreeItem)>               |                    子节点列表                     | false  | `--` |
 
 
 ### NodeConfig

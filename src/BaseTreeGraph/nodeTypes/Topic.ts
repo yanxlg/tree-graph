@@ -8,21 +8,21 @@
 import {Graph} from "@antv/x6";
 import {CollapsedRect} from "./CollapsedRect";
 import {merge} from "lodash";
-import {IHoverActiveNode} from "../types";
+import {IHoverActiveNode, IPopoverNode} from "../types";
 
-export class TopicNode extends CollapsedRect implements IHoverActiveNode {
+export class TopicNode extends CollapsedRect implements IHoverActiveNode, IPopoverNode {
   static defaults =
     merge({}, CollapsedRect.defaults, {
       attrs: {
         body: {
           rx: 6,
           ry: 6,
-          stroke: '#5F95FF',
+          stroke: '#5F95FF', //  TODO 应该换成主题色
           fill: '#EFF4FF',
           strokeWidth: 1,
           cursor: 'pointer',
           event: 'topic:click',
-          hoverable: true,
+          nodeBody: true,
           class: 'x6-selected-rect'
         },
         label: {
@@ -34,18 +34,37 @@ export class TopicNode extends CollapsedRect implements IHoverActiveNode {
       size: {width: 160, height: 50},
     })
 
-  init() {
-    super.init();
-    // console.log(this.findView(this));
-    // mouse 事件应该绑定在 body 元素上，不应该监听全局的
-  }
-
   onMouseOver() {
-    this.attr('body/filter', 'url(#topic-hover-shadow)');
+    const primaryColor = this.getData().primaryColor;
+    this.attr('body/filter', {
+      name: 'highlight',
+      args: {
+        width: 2,
+        blur: 3,
+        opacity: 0.2,
+        color: primaryColor
+      }
+    })
   }
 
   onMouseOut() {
     this.attr('body/filter', 'none');
+  }
+
+  getTooltip() {
+    const fullLabel = this.label;
+    const view = this.model?.graph.findViewByCell(this);
+    if (view) {
+      // view.get
+      const labelView = view.getMagnetFromEdgeTerminal({
+        cell: this,
+        selector: 'label'
+      });
+      if (fullLabel && labelView.textContent !== fullLabel) {
+        return fullLabel;
+      }
+    }
+    return undefined;
   }
 }
 

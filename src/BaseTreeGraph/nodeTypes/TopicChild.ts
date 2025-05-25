@@ -7,10 +7,10 @@
  */
 import {Graph, Shape} from "@antv/x6";
 import {merge} from "lodash";
-import {IHoverActiveNode} from "../types";
+import {IHoverActiveNode, IPopoverNode} from "../types";
 import {RectWidthDefaultConfig} from "./RectWidthDefaultConfig";
 
-class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode {
+class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode, IPopoverNode {
   static defaults = merge(
     {},
     Shape.Rect.defaults,
@@ -36,7 +36,7 @@ class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode 
           strokeWidth: 0,
           event: 'topic:click',
           cursor: 'pointer',
-          hoverable: true,
+          nodeBody: true
         },
         label: {
           fontSize: 14,
@@ -62,11 +62,37 @@ class TopicChildNode extends RectWidthDefaultConfig implements IHoverActiveNode 
     })
 
   onMouseOver() {
-    this.attr('line/filter', 'url(#sub-topic-hover-shadow)');
+    const primaryColor = this.getData().primaryColor;
+    this.attr('line/filter', {
+      name: 'dropShadow',
+      args: {
+        dx: 0,
+        dy: 0,
+        blur: 2,
+        opacity: 0.7,
+        color: primaryColor
+      },
+    })
   }
 
   onMouseOut() {
     this.attr('line/filter', 'none');
+  }
+
+  getTooltip(){
+    const fullLabel = this.label;
+    const view = this.model?.graph.findViewByCell(this);
+    if (view) {
+      // view.get
+      const labelView = view.getMagnetFromEdgeTerminal({
+        cell: this,
+        selector: 'label'
+      });
+      if (fullLabel && labelView.textContent !== fullLabel) {
+        return fullLabel;
+      }
+    }
+    return undefined;
   }
 }
 

@@ -1,17 +1,23 @@
+
 declare module '@antv/hierarchy' {
 
   type TreeNode<T> = {
-    id?: string;
-    data?: T;
-    name?: string;
-    preH?: number;
-    preV?: number;
-    hgap?: number;
-    vgap?: number;
+    id: string;
+    type: string;
+    data: T;
+    name: string;
+    preH: number;
+    preV: number;
+    hgap: number;
+    vgap: number;
+    x: number;
+    y: number;
     height?: number;
     width?: number | 'auto';
     label?: string;
-    children?: T[];
+    collapsed?: boolean;
+    children?: Array<TreeNode<T>>;
+    [key: string]: any;
   }
 
   interface MindmapLayout<T> extends T {
@@ -25,11 +31,16 @@ declare module '@antv/hierarchy' {
     getPreV?: (node: T) => number;
     getHGap?: (node: T) => number;
     getVGap?: (node: T) => number;
-    getChildren?: (node: T) => Array<T>;
+    getChildren?: (node: T) => Array<T> | undefined;
     getHeight?: (node: T) => number | undefined;
     getWidth?: (node: T) => number | undefined;
     getSide?: () => 'left' | 'right'
   }
 
-  export function mindmap<T extends TreeNode<T>>(root: T, options: Options<T>): Required<T>;
+  export type Node = Omit<TreeNode<any>, 'children'> & {
+    parent?: Node;
+    children?: Node[];
+  }
+
+  export function mindmap<T>(root: Partial<TreeNode<T>>, options: Options<T>): TreeNode<T>;
 }
