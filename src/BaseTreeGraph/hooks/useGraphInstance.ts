@@ -9,10 +9,11 @@
  */
 
 import {Graph} from "@antv/x6";
-import {BaseTreeGraphProps, TooltipState} from "@gx6/tree-graph";
+import {BaseTreeGraphProps, NodeConfig, ThemeConfig, TooltipState} from "@gx6/tree-graph";
 import {useMemo, useState} from "react";
 import {StringExt} from "@antv/x6-common";
 import {usePortal} from "../react-shape";
+import {getLayoutOptions} from "../utils/getLayoutOptions";
 
 function createGraphContainer() {
   const el = document.createElement('div');
@@ -21,8 +22,15 @@ function createGraphContainer() {
 }
 
 export const useGraphInstance = (
-  graphOptions: BaseTreeGraphProps['graph'],
+  config: {
+    graph: BaseTreeGraphProps['graph'];
+    nodeConfig?: NodeConfig;
+    theme: ThemeConfig;
+    strategy: BaseTreeGraphProps['strategy'];
+    layoutOptionsUtil: Exclude<BaseTreeGraphProps['layoutOptionsUtil'], undefined>;
+  },
 ) => {
+  const {graph: graphOptions, nodeConfig, theme, strategy, layoutOptionsUtil} = config;
   const {portals, connect, disconnect} = usePortal();
   const [tooltip, setTooltip] = useState<TooltipState>();
 
@@ -60,15 +68,19 @@ export const useGraphInstance = (
       connect,
       disconnect
     }
+    instance.strategy = strategy;
+    instance.theme = theme;
+    instance.nodeConfig = nodeConfig;
+    instance.layoutOptionsUtil = getLayoutOptions(layoutOptionsUtil);
 
-    instance.showTooltip = (target: HTMLElement, title: string)=>{
+    instance.showTooltip = (target: HTMLElement, title: string) => {
       setTooltip({
         title: title,
         target
       })
     }
 
-    instance.hideTooltip = ()=>{
+    instance.hideTooltip = () => {
       setTooltip(undefined);
     }
 

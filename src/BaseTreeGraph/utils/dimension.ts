@@ -6,9 +6,9 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import {MindMapData, NodeConfig, ThemeConfig} from "../types";
+import {HierarchyNode, MindMapData, NodeConfig, ThemeConfig} from "../types";
 import {getRegisteredNodeClass} from "../react-shape";
-import {Node} from "@antv/x6";
+import {Graph, Node} from "@antv/x6";
 import {measureTextWidth} from "./measureText";
 
 
@@ -24,24 +24,21 @@ function calcAutoWidth(label: string, themeConfig: ThemeConfig) {
 /**
  * 计算节点的宽度
  * @param node
- * @param themeConfig
- * @param nodeConfig
- * @param graphScope
+ * @param graph
  */
 export function getNodeWidth(
-  node: MindMapData,
-  themeConfig: ThemeConfig,
-  nodeConfig?: NodeConfig,
-  graphScope?: string,
+  node: HierarchyNode,
+  graph: Graph,
 ) {
   const {type, label = ''} = node;
-  const ctr = getRegisteredNodeClass(type, graphScope);
+  const {id, theme, nodeConfig} = graph;
+  const ctr = getRegisteredNodeClass(type, id);
   const defaults = ctr?.getDefaults() as Node.Defaults;
   const width = node.width ?? nodeConfig?.width ?? defaults?.size?.width;
 
   // auto 需要有间距
   const widthSize = (width === 'auto' ?
-    calcAutoWidth(label, themeConfig) : width) ?? 0;
+    calcAutoWidth(label, theme) : width) ?? 0;
   const minWidth = node.minWidth ?? nodeConfig?.minWidth ?? widthSize;
   const maxWidth = node.maxWidth ?? nodeConfig?.maxWidth ?? widthSize;
   const absWidth = Math.min(Math.max(widthSize, minWidth), maxWidth);
@@ -52,21 +49,18 @@ export function getNodeWidth(
 /**
  * 计算节点的高度
  * @param node
- * @param themeConfig
- * @param nodeConfig
- * @param graphScope
+ * @param graph
  */
 export function getNodeHeight(
-  node: MindMapData,
-  themeConfig: ThemeConfig,
-  nodeConfig?: NodeConfig,
-  graphScope?: string
+  node: HierarchyNode,
+  graph: Graph,
 ) {
   const {type} = node;
-  const ctr = getRegisteredNodeClass(type, graphScope);
+  const {id, theme, nodeConfig} = graph;
+  const ctr = getRegisteredNodeClass(type, id);
   const defaults = ctr?.getDefaults() as Node.Defaults;
   const getNodeHeight = ctr?.getNodeHeight;
   const absHeight = getNodeHeight ? getNodeHeight.call(ctr, node) : node.height ?? nodeConfig?.height ?? defaults?.size?.height;
   node.height = absHeight;
-  return absHeight;
+  return absHeight || 1;
 }

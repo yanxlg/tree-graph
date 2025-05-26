@@ -13,9 +13,9 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import {BaseTreeGraphProps, HierarchyResult, MindMapData, NodeConfig, ThemeConfig} from "../types";
+import {HierarchyResult, MindMapData} from "../types";
 import {useEffect, useRef} from "react";
-import {getLayouts} from "../utils/getLayouts";
+import {getLayoutInfo} from "../utils/getLayoutInfo";
 import {CellRegister} from "../register/CellRegister";
 import {createCells} from "../utils/createCells";
 import {Cell, Graph, Node} from "@antv/x6";
@@ -23,36 +23,32 @@ import {getChildren, getExpandedChildren} from "../utils/node";
 
 export const useTreeStore = (
   root: MindMapData,
-  strategy: BaseTreeGraphProps['strategy'] = 'cache-all', // 策略配置之后不可改变
   graph: Graph,
-  configs: {
-    nodeConfig?: NodeConfig;
-    themeConfig: ThemeConfig;
-  }
 ) => {
   const $nodeRegistry = useRef(new CellRegister()); // 节点信息存储
-
   const registry = $nodeRegistry.current;
+  const {strategy, theme, nodeConfig} = graph;
 
 
   useEffect(() => {
     registry.clear(); // 清除
 
-    const layout = getLayouts(root, graph, configs, strategy);
-
-    const cells = createCells(layout, registry, configs.themeConfig, strategy);
+    const layout = getLayoutInfo(root, graph);
+    const cells = createCells(layout, registry, graph);
 
     graph.model.getLastCell()?.removeZIndex(); // 不清除 zIndex 层级会有问题。
-
     graph.resetCells(cells);
 
-    graph.zoomToFit({padding: 10, maxScale: 1}); // TODO 需要在 resize之后执行 zoomToFit
+    if (cells.length) {
+      // graph.zoomToFit({padding: 10, maxScale: 1}); // TODO 需要在 resize之后执行 zoomToFit
+      graph.centerCell(cells[0]); // 根节点居中
+    }
   }, [root, strategy]);
 
   const dynamicUpdateCells = () => {
     const newRegistry = new CellRegister();
-    const layout = getLayouts(root, graph, configs, strategy);
-    createCells(layout, newRegistry, configs.themeConfig, strategy);
+    const layout = getLayoutInfo(root, graph);
+    createCells(layout, newRegistry, graph);
     const {addItems, updateItems, removeItems} = registry.diff(newRegistry);
 
     graph.batchUpdate(() => {
@@ -124,7 +120,7 @@ export const useTreeStore = (
       }
       case 'cache-diff': {
         // 增量, 显示 or 创建
-        const cells = createCells(node as HierarchyResult, registry, configs.themeConfig, strategy, true);
+        const cells = createCells(node as HierarchyResult, registry, graph, true);
         graph.batchUpdate(() => {
           const addItems: Cell[] = [];
           cells.forEach(cell => {
@@ -141,7 +137,7 @@ export const useTreeStore = (
         break;
       }
       case 'cache-control': {
-        const cells = createCells(node as HierarchyResult, registry, configs.themeConfig, strategy, true);
+        const cells = createCells(node as HierarchyResult, registry, graph, true);
         graph.batchUpdate(() => {
           graph.addCell(cells);
         });

@@ -13,6 +13,7 @@ const data1: MindMapData = {
   label: '中心主题',
   width: 160,
   height: 50,
+  level: 'link',
   children: [
     {
       id: '1-1',

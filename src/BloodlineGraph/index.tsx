@@ -7,10 +7,12 @@
  */
 import {BloodlineGraphProps} from "@gx6/tree-graph";
 import {useGraph} from "../BaseTreeGraph/hooks/useGraph";
-import "../BaseTreeGraph/nodeTypes/Event";
 
 export default function BloodlineGraph(props: BloodlineGraphProps) {
-  const {GraphView, register, unRegister, getGraph} = useGraph(props);
+  const {GraphView, register, unRegister} = useGraph({
+    ...props,
+    layoutOptionsUtil: 'with-group'
+  });
 
   return GraphView;
 }

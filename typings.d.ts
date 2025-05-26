@@ -1,11 +1,9 @@
-
 declare module '@antv/hierarchy' {
 
   type TreeNode<T> = {
     id: string;
     type: string;
     data: T;
-    name: string;
     preH: number;
     preV: number;
     hgap: number;
@@ -34,7 +32,7 @@ declare module '@antv/hierarchy' {
     getChildren?: (node: T) => Array<T> | undefined;
     getHeight?: (node: T) => number | undefined;
     getWidth?: (node: T) => number | undefined;
-    getSide?: () => 'left' | 'right'
+    getSide?: (node: T, index: number) => 'left' | 'right'
   }
 
   export type Node = Omit<TreeNode<any>, 'children'> & {
@@ -42,5 +40,5 @@ declare module '@antv/hierarchy' {
     children?: Node[];
   }
 
-  export function mindmap<T>(root: Partial<TreeNode<T>>, options: Options<T>): TreeNode<T>;
+  export function mindmap<T>(root: T, options: Options<T>): TreeNode<T>;
 }

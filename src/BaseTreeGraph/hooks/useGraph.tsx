@@ -24,14 +24,20 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
     nodeConfig,
     width = '100%',
     height = '100%',
-    strategy
+    strategy = 'cache-all',
+    layoutOptionsUtil = 'default',
   } = graphConfig;
   const fragmentRef = useRef<HTMLDivElement>(null);
   const themeConfig = useRef(getTheme(theme)).current;
   const clickListener = useLatest(onNodeClick);
 
-
-  const {portals, graph, tooltip} = useGraphInstance(graphOptions);
+  const {portals, graph, tooltip} = useGraphInstance({
+    graph: graphOptions,
+    theme: themeConfig,
+    nodeConfig,
+    strategy,
+    layoutOptionsUtil
+  });
 
   // TODO 需要先 resize, 后执行 zoomToFit
   useEffect(() => {
@@ -46,7 +52,7 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
   }, []);
 
 
-  const {collapseNode, expandNode, registry} = useTreeStore(root, strategy, graph, {themeConfig, nodeConfig});
+  const {collapseNode, expandNode, registry} = useTreeStore(root, graph);
 
 
   useEffect(() => {
@@ -82,8 +88,6 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
     globalUnRegister(shape, graph.id);
   }, []);
 
-  const getGraph = useCallback(() => graph, []);
-
   const GraphView = useMemo(() => {
     return (
       <>
@@ -99,6 +103,6 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
     GraphView,
     register,
     unRegister,
-    getGraph
+    graph
   }
 }

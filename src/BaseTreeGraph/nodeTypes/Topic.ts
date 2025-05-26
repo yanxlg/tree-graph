@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
-import {Graph} from "@antv/x6";
+import {Graph, ObjectExt} from "@antv/x6";
 import {CollapsedRect} from "./CollapsedRect";
 
 export class TopicNode extends CollapsedRect {
@@ -48,7 +48,7 @@ TopicNode.config({
     body: {
       rx: 6,
       ry: 6,
-      stroke: '#5F95FF', //  TODO 应该换成主题色
+      stroke: '#5F95FF',
       fill: '#EFF4FF',
       strokeWidth: 1,
       cursor: 'pointer',
@@ -61,6 +61,13 @@ TopicNode.config({
     },
   },
   size: {width: 160, height: 50},
+  propHooks: (metadata)=>{
+    const {level, ...others} = metadata;
+    if(level === 'link'){
+      ObjectExt.setByPath(others, 'attrs/label/fill', '#1890ff'); // link 样式
+    }
+    return others;
+  }
 })
 
 Graph.registerNode('topic', TopicNode, true);

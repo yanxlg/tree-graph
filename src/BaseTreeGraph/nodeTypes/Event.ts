@@ -34,60 +34,22 @@ export class EventNode extends CollapsedRect {
     }
   }
 
-  static defaults: Defaults = {
-    ...omit(CollapsedRect.defaults, ['markup', 'attrs']),
-    markup: [
-      ...CollapsedRect.getMarkup() as unknown as Array<Markup> || [],
-      {
-        tagName: 'rect',
-        selector: 'line'
-      }
-    ],
-    attrs: {
-      ...omit(CollapsedRect.defaults.attrs, ['text']),
-      body: {
-        refWidth: '100%',
-        refHeight: '100%',
-        rx: 0,
-        ry: 0,
-        fill: 'transparent',
-        cursor: 'pointer',
-        class: 'x6-selected-rect'
-      },
-      line: {
-        strokeWidth: 0,
-        refHeight: '100%',
-        width: 6,
-        rx: 0,
-        ry: 0,
-        'pointer-events': 'none',
-      },
-    },
-    size: {width: 280, height: 32}
-  } as Defaults
-
   init() {
+    super.init();
     // 构建 markup 和 attrs
     const markup = [...this.markup as Array<Markup>];
     const attrs = this.attrs!;
     const data = this.getData() as BloodlineEvent;
     const descriptions = data?.descriptions;
-    const title = data.title;
+    const title = this.label;
     const color = data.color || '#5F95FF';
     const sizeConfig = (this.constructor as typeof EventNode).getSizeConfig(data);
     const titleHeight = sizeConfig.titleFontSize;
-    markup.push({
-      tagName: 'text',
-      selector: 'title',
-    })
-    console.log(sizeConfig.titleFontSize + 5);
-    attrs.title = {
+    attrs.label = {
       refX: 0,
       refX2: sizeConfig.paddingH + lineWidth,
       refY: 0,
       refY2: sizeConfig.paddingV,
-      // refWidth: '100%',
-      // refWidth2: -lineWidth,
       fontSize: sizeConfig.titleFontSize,
       textAnchor: 'start',
       textVerticalAnchor: 'top',
@@ -159,5 +121,36 @@ export class EventNode extends CollapsedRect {
     this.attr('body/filter', 'none');
   }
 }
+
+EventNode.config({
+  markup: [
+    ...Shape.Rect.getMarkup() as Exclude<Markup, string | Markup.JSONMarkup>,
+    {
+      tagName: 'rect',
+      selector: 'line'
+    }
+  ],
+  attrs: {
+    body: {
+      refWidth: '100%',
+      refHeight: '100%',
+      rx: 0,
+      ry: 0,
+      fill: 'transparent',
+      cursor: 'pointer',
+      class: 'x6-selected-rect'
+    },
+    line: {
+      strokeWidth: 0,
+      refHeight: '100%',
+      width: 6,
+      rx: 0,
+      ry: 0,
+      'pointer-events': 'none',
+    },
+  },
+  size: {width: 280, height: 32}
+})
+
 
 Graph.registerNode('event', EventNode as Node.Definition, true);

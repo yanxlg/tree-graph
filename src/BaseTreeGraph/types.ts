@@ -2,13 +2,30 @@ import {Graph, Node, Options} from "@antv/x6";
 import type React from "react";
 import {NodeView} from "@antv/x6/src/view/node";
 
+export type ThemeConfig = {
+  /**
+   * @description 字体大小配置
+   * @default 14
+   */
+  fontSize?: number;
+  /**
+   * @description 字体家族配置
+   * @default "Arial, helvetica, sans-serif"
+   */
+  fontFamily?: string;
 
+  /**
+   * @description 主题色
+   * @default "#5F95FF"
+   */
+  primaryColor?: string;
+}
 
 // 扩展内置属性
 declare module '@antv/x6' {
   namespace Node {
     interface Definition {
-      getNodeHeight?: (meta: MindMapData | BloodlineEvent) => number;
+      getNodeHeight?: (meta: HierarchyNode) => number;
     }
   }
 
@@ -24,14 +41,19 @@ declare module '@antv/x6' {
   interface Graph {
     id?: string;
     portal?: {
-      disconnect: (id: string)=>void;
-      connect: (id: string, portal: React.ReactPortal)=>void;
+      disconnect: (id: string) => void;
+      connect: (id: string, portal: React.ReactPortal) => void;
     }
     /**
      * 扩展 Graph Tooltip api
      */
     showTooltip: (target: HTMLElement, title: string) => void;
     hideTooltip: () => void;
+
+    strategy: BaseTreeGraphProps['strategy'];
+    theme: ThemeConfig; // 主题配置注入
+    nodeConfig?: NodeConfig; // 节点配置注入
+    layoutOptionsUtil: LayoutOptionsUtil;
   }
 }
 
@@ -55,6 +77,21 @@ export type GraphNode = {
   component: NodeRenderComponent;
 }
 
+
+export type HierarchyNode = {
+  id?: string;
+  type: string; // 节点视图类型
+  collapsed?: boolean; // 折叠状态控制
+  label: string;
+  height?: number;
+  width?: number | 'auto'; // 自动计算宽度，仅简单节点支持通过 label 自动计算宽度
+  minWidth?: number;
+  maxWidth?: number;
+  children?: HierarchyNode[];
+  [key: string]: any;
+}
+
+
 export type MindMapData = NodeConfig & {
   id: string; // 需要唯一 id，否则不好增量更新
   type: 'topic' | 'topic-branch' | 'topic-child';
@@ -62,6 +99,7 @@ export type MindMapData = NodeConfig & {
   children?: MindMapData[];
   childCount?: number; // 外部传入的 count数量
   collapsed?: boolean; // 控制折叠状态
+  level?: 'link'; // 显示为link样式
 };
 
 export interface HierarchyResult extends MindMapData {
@@ -79,7 +117,7 @@ export type NodeConfig = {
   /**
    * @description 节点默认宽度，当节点数据中未配置宽度时，使用全局默认宽度，不配置则使用对应节点类型内置的宽度
    */
-  width?: number | 'auto';
+  width?: number | 'auto'; // TODO 并不是所有节点都支持 auto 选项，只有简单的节点才支持 auto 自动计算宽度。根据 label 值进行计算
 
   /**
    * @description 节点高度，当节点数据中未配置宽度时，使用全局默认宽度，不配置则使用对应节点类型内置的宽度
@@ -100,24 +138,14 @@ export type NodeConfig = {
   ellipsis?: boolean | 'multiLine';
 }
 
-export type ThemeConfig = {
-  /**
-   * @description 字体大小配置
-   * @default 14
-   */
-  fontSize?: number;
-  /**
-   * @description 字体家族配置
-   * @default "Arial, helvetica, sans-serif"
-   */
-  fontFamily?: string;
-
-  /**
-   * @description 主题色
-   * @default "#5F95FF"
-   */
-  primaryColor?: string;
-}
+export type LayoutOptionsUtil = {
+  getHeight: (graph: Graph, node: HierarchyNode) => number;
+  getWidth: (graph: Graph, node: HierarchyNode) => number;
+  getHGap: (graph: Graph, node: HierarchyNode) => number;
+  getVGap: (graph: Graph, node: HierarchyNode) => number;
+  getSide: (graph: Graph, node: HierarchyNode, index: number) => 'left' | 'right';
+  getChildren: (graph: Graph, node: HierarchyNode) => HierarchyNode[] | undefined;
+};
 
 
 export type BaseTreeGraphProps = {
@@ -167,6 +195,8 @@ export type BaseTreeGraphProps = {
       children: MindMapData[];
       eventArg: NodeView.EventArgs['node:click']
     }) => void;
+
+  layoutOptionsUtil?: 'default' | 'with-group' | LayoutOptionsUtil;
 };
 
 
@@ -175,16 +205,17 @@ export type BloodlineEvent = {
   type: 'event';
   name: string; // 事件名称，用来描述事件类型
   color: string; // 颜色
-  title: string;
+  label: string;
   descriptions?: string[];
   upstream?: BloodlineEvents;
   downstream?: BloodlineEvents;
 }
 
 export type BloodlineEvents = Array<{
-  name: string;
+  type: 'event-group';
+  label: string;
   dispatch: string; // 连线
-  events: Array<BloodlineEvent>
+  children: Array<BloodlineEvent>
 }>;
 
 export type BloodlineRoot = BloodlineEvent;
