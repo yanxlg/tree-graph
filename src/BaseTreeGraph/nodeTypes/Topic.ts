@@ -34,9 +34,9 @@ export class TopicNode extends CollapsedRect {
       const labelView = view.getMagnetFromEdgeTerminal({
         cell: this,
         selector: 'label'
-      });
+      }) as any;
       if (fullLabel && labelView.textContent !== fullLabel) {
-        return fullLabel;
+        return fullLabel as string;
       }
     }
     return undefined;

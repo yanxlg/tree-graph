@@ -48,8 +48,8 @@ export function createCells(
         primaryColor: theme.primaryColor,
         childCount: data.childCount ?? count ?? 0, // 子节点数量
         ...theme,
-        descriptions: data.descriptions,
-        color: data.color
+        descriptions: (data as any).descriptions,
+        color: (data as any).color
       }
     });
     registry.addCell({node, cell}); // 节点注册
@@ -68,6 +68,7 @@ export function createCells(
     children.forEach((item: HierarchyResult) => {
       const edgeId = `${id}_${item.id}`;
       // 分组和内部不创建 cell
+      // @ts-ignore
       if (item.parent?.data?.type !== 'event-group') {
         const cell = Edge.create({
           id: edgeId,

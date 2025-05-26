@@ -12,7 +12,7 @@ export default function BloodlineGraph(props: BloodlineGraphProps) {
   const {GraphView, register, unRegister} = useGraph({
     ...props,
     layoutOptionsUtil: 'with-group'
-  });
+  } as any);
 
   return GraphView;
 }

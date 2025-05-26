@@ -54,7 +54,7 @@ group: 组件
 | childCount  |                         `number`                         |        显示的子节点数，不配置会自动计算`children`的长度         | false  | `--` |
 | collapsed  |                        `boolean`                         | 节点折叠状态，默认仅显示根节点，其它节点都被隐藏，<br/>可通过该属性配置哪些节点展开 |  true  | `--` |
 | children  |               Array<[TreeItem](#TreeItem)>               |                    子节点列表                     | false  | `--` |
-
+| level | `link` | 节点使用超链接样式显示 | false | false |
 
 ### NodeConfig
 |   属性   |          类型          |                                   描述                                    |  必填   | 默认值  |

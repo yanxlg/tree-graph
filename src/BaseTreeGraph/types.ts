@@ -207,14 +207,16 @@ export type BloodlineEvent = {
   color: string; // 颜色
   label: string;
   descriptions?: string[];
-  upstream?: BloodlineEvents;
-  downstream?: BloodlineEvents;
+  children?: BloodlineEvents;
+  collapsed?: boolean;
 }
 
 export type BloodlineEvents = Array<{
+  id: string;
   type: 'event-group';
   label: string;
   dispatch: string; // 连线
+  collapsed?: boolean;
   children: Array<BloodlineEvent>
 }>;
 

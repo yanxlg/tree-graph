@@ -153,4 +153,4 @@ EventNode.config({
 })
 
 
-Graph.registerNode('event', EventNode as Node.Definition, true);
+Graph.registerNode('event', EventNode as unknown as Node.Definition, true);
