@@ -20,6 +20,7 @@ import {CellRegister} from "../register/CellRegister";
 import {createCells} from "../utils/createCells";
 import {Cell, Graph, Node} from "@antv/x6";
 import {getChildren, getExpandedChildren} from "../utils/node";
+import {useMemoizedFn} from "ahooks";
 
 export const useTreeStore = (
   root: MindMapData,
@@ -40,12 +41,12 @@ export const useTreeStore = (
     graph.resetCells(cells);
 
     if (cells.length) {
-      // graph.zoomToFit({padding: 10, maxScale: 1}); // TODO 需要在 resize之后执行 zoomToFit
-      graph.centerCell(cells[0]); // 根节点居中
+      graph.zoomToFit({padding: 10, maxScale: 1}); // TODO 需要在 resize之后执行 zoomToFit
+      // graph.centerCell(cells[0]); // 根节点居中
     }
   }, [root, strategy]);
 
-  const dynamicUpdateCells = () => {
+  const dynamicUpdateCells = useMemoizedFn(() => {
     const newRegistry = new CellRegister();
     const layout = getLayoutInfo(root, graph);
     createCells(layout, newRegistry, graph);
@@ -67,13 +68,13 @@ export const useTreeStore = (
       }
     });
     registry.replaceWith(newRegistry);
-  }
+  })
 
 
   /**
    * 收起节点
    */
-  const collapseNode = (id: string) => {
+  const collapseNode = useMemoizedFn((id: string) => {
     const node = registry.getNode(id)!;
     node.data.collapsed = true;
     switch (strategy) {
@@ -104,13 +105,13 @@ export const useTreeStore = (
         break;
       }
     }
-  }
+  })
 
   /**
    * 展开节点
    * @param id
    */
-  const expandNode = (id: string) => {
+  const expandNode = useMemoizedFn((id: string) => {
     const node = registry.getNode(id)!;
     node.data.collapsed = false;
     switch (strategy) {
@@ -154,7 +155,7 @@ export const useTreeStore = (
         break;
       }
     }
-  }
+  })
 
 
   return {

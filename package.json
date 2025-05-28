@@ -1,6 +1,6 @@
 {
   "name": "@gx6/tree-graph",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "树结构图组件库",
   "scripts": {
     "start": "npm run dev",
@@ -10,6 +10,7 @@
     "preview": "dumi preview",
     "prepare": "husky install && dumi setup"
   },
+  "files": ["./dist"],
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "typings": "./dist/esm/index.d.ts",

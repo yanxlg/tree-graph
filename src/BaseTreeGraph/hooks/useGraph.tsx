@@ -24,7 +24,7 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
     nodeConfig,
     width = '100%',
     height = '100%',
-    strategy = 'cache-all',
+    strategy = 'dynamic-calc',
     layoutOptionsUtil = 'default',
   } = graphConfig;
   const fragmentRef = useRef<HTMLDivElement>(null);

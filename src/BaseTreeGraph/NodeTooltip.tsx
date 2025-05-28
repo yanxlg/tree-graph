@@ -18,8 +18,13 @@ const DynaminTooltip = forwardRef(({tooltip}: {
   }
 }, ref) => {
   useEffect(() => {
-    if (typeof ref === 'function') {
-      ref(tooltip?.target);
+    if (tooltip && tooltip.target) {
+      const target = tooltip.target;
+      if (typeof ref === 'function') {
+        ref(target);
+      } else if (ref) {
+        ref.current = target;
+      }
     }
   }, [tooltip]);
   return null;
