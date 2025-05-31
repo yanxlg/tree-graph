@@ -13,6 +13,7 @@ import NodeTooltip from "../NodeTooltip";
 import {useGraphInstance} from "./useGraphInstance";
 import {useTreeStore} from "./useTreeStore";
 import {getParents, getPlainChildren} from "../utils/node";
+import NodePopover from "../NodePopover";
 
 
 export function useGraph(graphConfig: BaseTreeGraphProps) {
@@ -26,17 +27,23 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
     height = '100%',
     strategy = 'dynamic-calc',
     layoutOptionsUtil = 'default',
+    layoutType = 'mindmap',
+    showPopover,
+    PopoverComponent,
   } = graphConfig;
   const fragmentRef = useRef<HTMLDivElement>(null);
   const themeConfig = useRef(getTheme(theme)).current;
   const clickListener = useLatest(onNodeClick);
 
-  const {portals, graph, tooltip} = useGraphInstance({
+  const {portals, graph, tooltip, popover} = useGraphInstance({
     graph: graphOptions,
     theme: themeConfig,
     nodeConfig,
     strategy,
-    layoutOptionsUtil
+    layoutOptionsUtil,
+    layoutType,
+    showPopover,
+    PopoverComponent
   });
 
   // TODO 需要先 resize, 后执行 zoomToFit
@@ -94,9 +101,10 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
         {portals}
         <div ref={fragmentRef} style={{width: width, height: height, position: 'relative'}}/>
         <NodeTooltip tooltip={tooltip}/>
+        <NodePopover popover={popover}/>
       </>
     )
-  }, [portals, tooltip]);
+  }, [portals, tooltip, popover]);
 
 
   return {

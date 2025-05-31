@@ -6,7 +6,7 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 import {Node} from '@antv/hierarchy';
-import {HierarchyNode, HierarchyResult, MindMapData} from "@gx6/tree-graph";
+import {HierarchyNode, MindMapData} from "@gx6/tree-graph";
 
 export const getDefaultCollapsed = (data: HierarchyNode) => {
   return data.collapsed ?? true; // 默认是收起状态
@@ -26,7 +26,7 @@ export const getChildren = (node: Node, recursive = true) => {
 }
 
 
-export const getNodeVisible = (node: HierarchyResult, parentVisible: boolean) => {
+export const getNodeVisible = (node: HierarchyNode, parentVisible: boolean) => {
   let visible = true;
   const {parent} = node;
   if (parent && (getDefaultCollapsed(parent.data) || !parentVisible)) {

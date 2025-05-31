@@ -63,7 +63,9 @@ export const useTreeStore = (
         updateItems.forEach(item => {
           const node = graph.getCellById(item.id) as Node;
           const newPosition = (item as Node).getPosition();
-          node.position(newPosition.x, newPosition.y);
+          const size = (item as Node).getSize();
+          node.position(newPosition.x, newPosition.y); // 位置需要同步
+          node.resize(size.width, size.height); // 大小需要同步
         })
       }
     });

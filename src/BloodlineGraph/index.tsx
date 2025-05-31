@@ -8,9 +8,10 @@
 import {BloodlineGraphProps} from "@gx6/tree-graph";
 import {useGraph} from "../BaseTreeGraph/hooks/useGraph";
 
-export default function BloodlineGraph(props: BloodlineGraphProps) {
+export default function BloodlineGraph(props: Exclude<BloodlineGraphProps, 'layoutType'>) {
   const {GraphView, register, unRegister} = useGraph({
     ...props,
+    layoutType: 'compactBox',
     layoutOptionsUtil: 'with-group'
   } as any);
 

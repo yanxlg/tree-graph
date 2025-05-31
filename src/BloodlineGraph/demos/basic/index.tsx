@@ -17,7 +17,27 @@ const data: BloodlineRoot = {
     "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
     "cscxzs"
   ],
-  children: [{
+  downstream: [
+    {
+      id: 'c_1',
+      label: '计划',
+      dispatch: '调用',
+      type: 'event-group',
+      collapsed: false,
+      children: [{
+        id: 'c_2',
+        name: 'event_type_2',
+        color: 'yellow',
+        type: 'event',
+        label: '1111122222222sadsdasdsadasddsadsafasdsada',
+        descriptions: [
+          "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+          "cscxzs"
+        ],
+      }]
+    }
+  ],
+  upstream: [{
     id: '1_1',
     label: '计划',
     dispatch: '调用',
@@ -33,6 +53,25 @@ const data: BloodlineRoot = {
         "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
         "cscxzs"
       ],
+      children: [{
+        id: '1.2.2',
+        label: '计划2',
+        dispatch: '调用',
+        type: 'event-group',
+        children: [
+          {
+            id: '2.4',
+            name: 'event_type_2',
+            color: 'blue',
+            type: 'event',
+            label: '1111122222222sadsdasdsadasddsadsafasdsada',
+            descriptions: [
+              "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+              "cscxzs"
+            ],
+          }
+        ]
+      }]
     },{
       id: '3',
       name: 'event_type_2',
@@ -45,6 +84,117 @@ const data: BloodlineRoot = {
       ],
     },{
       id: '4',
+      name: 'event_type_2',
+      color: 'blue',
+      type: 'event',
+      label: '1111122222222sadsdasdsadasddsadsafasdsada',
+      descriptions: [
+        "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+        "cscxzs"
+      ],
+    }]
+  },{
+    id: '1_1_s',
+    label: '计划',
+    dispatch: '调用',
+    type: 'event-group',
+    collapsed: false,
+    children: [{
+      id: 'fsfadsa2',
+      name: 'event_type_2',
+      color: 'blue',
+      type: 'event',
+      label: '1111122222222sadsdasdsadasddsadsafasdsada',
+      descriptions: [
+        "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+        "cscxzs"
+      ],
+      children: [{
+        id: '1.2dsafsa.2',
+        label: '计划2',
+        dispatch: '调用',
+        type: 'event-group',
+        children: [
+          {
+            id: '2.dsafsa4',
+            name: 'event_type_2',
+            color: 'blue',
+            type: 'event',
+            label: '1111122222222sadsdasdsadasddsadsafasdsada',
+            descriptions: [
+              "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+              "cscxzs"
+            ],
+          }
+        ]
+      },{
+        id: '1.2dsafsasadasfsa.2',
+        label: '计划2',
+        dispatch: '调用',
+        type: 'event-group',
+        children: [
+          {
+            id: '2.dsaddddfsa4',
+            name: 'event_type_2',
+            color: 'blue',
+            type: 'event',
+            label: '1111122222222sadsdasdsadasddsadsafasdsada',
+            descriptions: [
+              "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+              "cscxzs"
+            ],
+          }
+        ]
+      }]
+    },{
+      id: 'dsf3',
+      name: 'event_type_2',
+      color: 'blue',
+      type: 'event',
+      label: '1111122222222sadsdasdsadasddsadsafasdsada',
+      descriptions: [
+        "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+        "cscxzs"
+      ],
+      children: [{
+        id: '1.2dsafsa.2333',
+        label: '计划3',
+        dispatch: '调用',
+        type: 'event-group',
+        children: [
+          {
+            id: '2.dsafsadsa4',
+            name: 'event_type_2',
+            color: 'blue',
+            type: 'event',
+            label: '1111122222222sadsdasdsadasddsadsafasdsada',
+            descriptions: [
+              "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+              "cscxzs"
+            ],
+          }
+        ]
+      },{
+        id: '1.2dsafsasadasfsa.2dasfsa',
+        label: '计划3',
+        dispatch: '调用',
+        type: 'event-group',
+        children: [
+          {
+            id: '2.dsaddddfsa4dasfsa',
+            name: 'event_type_2',
+            color: 'blue',
+            type: 'event',
+            label: '1111122222222sadsdasdsadasddsadsafasdsada',
+            descriptions: [
+              "sadasdsa1111111111122222222sadsdasdsadasddsadsafasdsada11111111",
+              "cscxzs"
+            ],
+          }
+        ]
+      }]
+    },{
+      id: '4223',
       name: 'event_type_2',
       color: 'blue',
       type: 'event',

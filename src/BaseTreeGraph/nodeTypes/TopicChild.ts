@@ -64,6 +64,7 @@ TopicChildNode.config({
       fill: '#262626',
       textVerticalAnchor: 'bottom',
       'pointer-events': 'none',
+      refY2: -3,
     },
     line: {
       refWidth: '100%',
@@ -77,7 +78,7 @@ TopicChildNode.config({
     }
   },
   size: {
-    width: 60,
+    width: 100,
     height: 30
   }
 })

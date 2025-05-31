@@ -26,7 +26,7 @@ const data1: MindMapData = {
         {
           id: '1-1-1',
           type: 'topic-child',
-          label: '子主题1',
+          label: '子主题1_子主题1_',
           width: 60,
           height: 30,
         },

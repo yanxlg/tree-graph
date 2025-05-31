@@ -60,7 +60,7 @@ export function getNodeHeight(
   const ctr = getRegisteredNodeClass(type, id);
   const defaults = ctr?.getDefaults() as Node.Defaults;
   const getNodeHeight = ctr?.getNodeHeight;
-  const absHeight = getNodeHeight ? getNodeHeight.call(ctr, node) : node.height ?? nodeConfig?.height ?? defaults?.size?.height;
+  const absHeight = getNodeHeight ? getNodeHeight.call(ctr, node, graph) : node.height ?? nodeConfig?.height ?? defaults?.size?.height;
   node.height = absHeight;
   return absHeight || 1;
 }

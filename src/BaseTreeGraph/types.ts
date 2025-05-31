@@ -1,4 +1,4 @@
-import {Graph, Node, Options} from "@antv/x6";
+import {Cell, Graph, Node, Options} from "@antv/x6";
 import type React from "react";
 import {NodeView} from "@antv/x6/src/view/node";
 
@@ -21,11 +21,13 @@ export type ThemeConfig = {
   primaryColor?: string;
 }
 
+export type LayoutType = 'compactBox' | 'mindmap';
+
 // 扩展内置属性
 declare module '@antv/x6' {
   namespace Node {
     interface Definition {
-      getNodeHeight?: (meta: HierarchyNode) => number;
+      getNodeHeight?: (meta: HierarchyNode, graph: Graph) => number;
     }
   }
 
@@ -51,9 +53,12 @@ declare module '@antv/x6' {
     hideTooltip: () => void;
 
     strategy: BaseTreeGraphProps['strategy'];
+    layoutType: LayoutType;
     theme: ThemeConfig; // 主题配置注入
     nodeConfig?: NodeConfig; // 节点配置注入
     layoutOptionsUtil: LayoutOptionsUtil;
+    collapse: (node: Cell) => void; // 折叠
+    expand: (node: Cell) => (Promise<void> | void) // 展开，展开支持异步
   }
 }
 
@@ -143,6 +148,8 @@ export type LayoutOptionsUtil = {
   getWidth: (graph: Graph, node: HierarchyNode) => number;
   getHGap: (graph: Graph, node: HierarchyNode) => number;
   getVGap: (graph: Graph, node: HierarchyNode) => number;
+  getPreH: (graph: Graph, node: HierarchyNode) => number;
+  getPreV: (graph: Graph, node: HierarchyNode) => number;
   getSide: (graph: Graph, node: HierarchyNode, index: number) => 'left' | 'right';
   getChildren: (graph: Graph, node: HierarchyNode) => HierarchyNode[] | undefined;
 };
@@ -158,10 +165,17 @@ export type BaseTreeGraphProps = {
    * @description graph 高度
    */
   height?: string | number;
+
+  /**
+   * @description 布局方式
+   * @default 'mindmap'
+   */
+  layoutType?: LayoutType;
   /**
    * @description graph配置
    */
   graph?: {
+    autoResize?: boolean;
     background?: Options.Manual['background'];
     grid?: Options.Manual['grid'];
     panning?: boolean;
@@ -197,6 +211,10 @@ export type BaseTreeGraphProps = {
     }) => void;
 
   layoutOptionsUtil?: 'default' | 'with-group' | LayoutOptionsUtil;
+
+  showPopover?: (node: Cell) => boolean; // 是否显示 popover, 节点 hover时是否显示对应的 popover
+
+  PopoverComponent?: React.ComponentType<{ node: Cell }>; // popover 组件
 };
 
 
@@ -211,16 +229,19 @@ export type BloodlineEvent = {
   collapsed?: boolean;
 }
 
-export type BloodlineEvents = Array<{
-  id: string;
+export type BloodlineGroup = HierarchyNode & {
   type: 'event-group';
-  label: string;
   dispatch: string; // 连线
-  collapsed?: boolean;
-  children: Array<BloodlineEvent>
-}>;
+  children: Array<BloodlineEvent>;
+}
 
-export type BloodlineRoot = BloodlineEvent;
+
+export type BloodlineEvents = Array<BloodlineGroup>;
+
+export type BloodlineRoot = Omit<HierarchyNode, 'children'> & {
+  upstream?: BloodlineGroup[];
+  downstream?: BloodlineGroup[];
+};
 
 export type BloodlineGraphProps = {
   height?: number;
@@ -228,8 +249,15 @@ export type BloodlineGraphProps = {
 }
 
 export type TooltipState = {
-  title: string;
-  target: HTMLElement;
+  show: boolean;
+  title?: string;
+  target?: HTMLElement;
+}
+
+export type PopoverState = {
+  show: boolean;
+  content?: React.ReactNode;
+  target?: HTMLElement;
 }
 
 export interface ICollapseNode {

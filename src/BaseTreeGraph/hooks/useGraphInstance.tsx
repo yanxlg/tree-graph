@@ -9,7 +9,7 @@
  */
 
 import {Graph} from "@antv/x6";
-import {BaseTreeGraphProps, NodeConfig, ThemeConfig, TooltipState} from "@gx6/tree-graph";
+import {BaseTreeGraphProps, LayoutType, NodeConfig, PopoverState, ThemeConfig, TooltipState} from "@gx6/tree-graph";
 import {useMemo, useState} from "react";
 import {StringExt} from "@antv/x6-common";
 import {usePortal} from "../react-shape";
@@ -28,16 +28,30 @@ export const useGraphInstance = (
     theme: ThemeConfig;
     strategy: BaseTreeGraphProps['strategy'];
     layoutOptionsUtil: Exclude<BaseTreeGraphProps['layoutOptionsUtil'], undefined>;
+    layoutType: LayoutType;
+    showPopover: BaseTreeGraphProps['showPopover'];
+    PopoverComponent: BaseTreeGraphProps['PopoverComponent'];
   },
 ) => {
-  const {graph: graphOptions, nodeConfig, theme, strategy, layoutOptionsUtil} = config;
+  const {
+    graph: graphOptions,
+    nodeConfig,
+    theme,
+    strategy,
+    layoutOptionsUtil,
+    layoutType,
+    showPopover,
+    PopoverComponent
+  } = config;
   const {portals, connect, disconnect} = usePortal();
-  const [tooltip, setTooltip] = useState<TooltipState>();
+  const [tooltip, setTooltip] = useState<TooltipState>({show: false});
+  const [popover, setPopover] = useState<PopoverState>({show: false});
 
   const instance = useMemo(() => {
     const id = StringExt.uuid();
     const graphContainer = createGraphContainer();
     const instance = new Graph({
+      autoResize: true, // 自动调整大小
       ...graphOptions,
       // // 画布拖拽
       panning: graphOptions?.panning ?? {
@@ -72,16 +86,18 @@ export const useGraphInstance = (
     instance.theme = theme;
     instance.nodeConfig = nodeConfig;
     instance.layoutOptionsUtil = getLayoutOptions(layoutOptionsUtil);
+    instance.layoutType = layoutType;
 
     instance.showTooltip = (target: HTMLElement, title: string) => {
       setTooltip({
         title: title,
-        target
+        target,
+        show: true
       })
     }
 
     instance.hideTooltip = () => {
-      setTooltip(undefined);
+      setTooltip(state => ({...state, show: false}));
     }
 
     instance.on('node:mouseenter', ({e, node}) => {
@@ -92,13 +108,22 @@ export const useGraphInstance = (
         setTooltip({
           title: tooltip,
           target,
+          show: true
         });
+      }
+      if (showPopover && PopoverComponent && showPopover(node)) {
+        setPopover({
+          show: true,
+          target,
+          content: <PopoverComponent node={node}/>
+        })
       }
     })
 
     instance.on('node:mouseleave', ({node}) => {
       node.onMouseLeave?.();
-      setTooltip(undefined);
+      setTooltip(state => ({...state, show: false}));
+      setPopover(state => ({...state, show: false}));
     })
 
     return instance;
@@ -107,6 +132,7 @@ export const useGraphInstance = (
   return {
     portals,
     graph: instance,
-    tooltip
+    tooltip,
+    popover
   }
 }

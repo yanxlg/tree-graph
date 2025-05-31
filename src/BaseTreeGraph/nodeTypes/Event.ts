@@ -149,7 +149,7 @@ EventNode.config({
       'pointer-events': 'none',
     },
   },
-  size: {width: 280, height: 32}
+  size: {width: 280, height: 32},
 })
 
 

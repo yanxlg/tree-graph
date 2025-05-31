@@ -12,11 +12,13 @@ export class BaseEdge extends Shape.Edge {
   static defaults = merge({}, Shape.Edge.defaults, {
     attrs: {
       line: {
-        targetMarker: '',
+        sourceMarker: null,
+        targetMarker: null,
         stroke: '#A2B1C3',
         strokeWidth: 2,
       }
     },
+    zIndex: -1,
   },{
     shape: 'base-edge'
   });

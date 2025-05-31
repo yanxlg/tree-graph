@@ -41,7 +41,7 @@ export class CellRegister {
     return Array.from(this.cellRef.keys());
   }
 
-  public clear(){
+  public clear() {
     this.cellRef.clear();
   }
 
@@ -64,7 +64,12 @@ export class CellRegister {
         // 更新， 更新需要diff x,y
         const beforeNode = this.getCell(cellId)?.node;
         const afterNode = registry.getCell(cellId)?.node;
-        if(beforeNode && afterNode && (beforeNode.x!==afterNode.x || beforeNode.y!==afterNode.y)) {
+        if (beforeNode && afterNode && (
+          beforeNode.x !== afterNode.x ||
+          beforeNode.y !== afterNode.y ||
+          beforeNode.width !== afterNode.width ||
+          beforeNode.height !== afterNode.height
+        )) {
           updateItems.push(registry.getCell(cellId)!.cell);
         }
       }

@@ -28,13 +28,14 @@ group: 组件
 
 
 ### GraphConfig
-|   属性   |      类型       |           描述           |  必填   |     默认值     |
-|:------:|:-------------:|:----------------------:|:-----:|:-----------:|
+|     属性      |      类型       |           描述           |  必填   |     默认值     |
+|:-----------:|:-------------:|:----------------------:|:-----:|:-----------:|
 | background  |   `string`    |       graph 背景色        | false | `'#F2F7FA'` |
-| grid |   `boolean`   |    graph 开启 grid模式     | false |   `false`   |
-| panning  |   `boolean`   |   graph 是否开启 panning   | false |   `true`    |
-| interacting  | `boolean` | graph 是否开启 interacting | false |   `false`   |
-| virtual  |  `boolean`   | graph 是否开启 virtual 模式  | false |   `true`    |
+|    grid     |   `boolean`   |    graph 开启 grid模式     | false |   `false`   |
+|   panning   |   `boolean`   |   graph 是否开启 panning   | false |   `true`    |
+| interacting | `boolean` | graph 是否开启 interacting | false |   `false`   |
+|   virtual   |  `boolean`   | graph 是否开启 virtual 模式  | false |   `true`    |
+| autoResize  |  `boolean`   |     graph 是否自动调整大小     | false |   `true`    |
 
 
 ### ThemeConfig

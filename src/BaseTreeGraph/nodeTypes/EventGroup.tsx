@@ -7,37 +7,86 @@
  */
 import {Node, Graph} from '@antv/x6'
 import {BloodlineEvent} from "@gx6/tree-graph";
+import {getNodeHeight} from "../utils/dimension";
+import {groupSpace} from "../utils/getLayoutOptions";
+import { getDefaultCollapsed } from '../utils/node';
+import {ObjectExt} from "@antv/x6-common";
+
+
+
+const eventNodeWidth = 320;
+
+const collapsedSize = {
+  width: eventNodeWidth,
+  height: 60
+};
+
+
+// group 需要自动计算内部 child 的位置，不是通过 layout 计算。
 
 export class EventGroup extends Node {
-  private collapsed = false;
-  private expandSize?: { width: number; height: number }
+  private pageSize = 5; // 每页显示的事件数量
 
 
-  public static getNodeHeight(eventData: BloodlineEvent) {
-    return 400; // 计算所有子节点的动态高度，需要分页
+  // group 高度在折叠过程中也会发生改变
+  public static getNodeHeight(eventData: BloodlineEvent, graph: Graph) {
+    const collapsed = getDefaultCollapsed(eventData); // 是否折叠
+    if(collapsed){
+      // 折叠后高度
+      return collapsedSize.height;
+    }
+    const children = eventData.children; // 子节点列表
+    let height = 0;
+    if(children && children.length > 0){
+      // 获取所有子节点的高度总数
+      children.forEach((node, index)=>{
+        height += getNodeHeight(node, graph);
+        if(index > 0){
+          height += groupSpace;
+        }
+      })
+    }
+    height += 80; // title + pagination 高度
+    return height; // 计算所有子节点的动态高度，需要分页
   }
 
-  protected postprocess() {
-    this.toggleCollapse(false)
+  init() {
+    super.init();
+
+    const count = this.getData()?.childCount as number; // 子节点数量
+    if (count && this.visible) {
+      const collapsed = this.isCollapsed();
+      this.render(collapsed);
+    }
+  }
+
+  private render(collapsed: boolean){
+    if (collapsed) {
+      this.attr('buttonSign', {d: 'M 1 5 9 5 M 5 1 5 9'})
+      // this.resize(collapsedSize.width, collapsedSize.height); // 折叠大小
+      // 隐藏 分页组件
+      this.attr('pagination', {display: 'none'});
+    } else {
+      this.attr('buttonSign', {d: 'M 2 5 8 5'});
+      // 显示分页组件
+      this.attr('pagination', {display: 'unset'});
+
+      // // TODO 动态计算高度，不能存储下来。
+      //
+      // if (this.expandSize) {
+      //   this.resize(this.expandSize.width, this.expandSize.height)
+      // }
+    }
   }
 
   isCollapsed() {
-    return this.collapsed
+    return this.store.get('collapsed') ?? true; // 默认是收起
   }
 
-  toggleCollapse(collapsed?: boolean) { // TODO 高度动态变化之后需要更新位置
-    const target = collapsed == null ? !this.collapsed : collapsed
-    if (target) {
-      this.attr('buttonSign', {d: 'M 1 5 9 5 M 5 1 5 9'})
-      this.expandSize = this.getSize()
-      this.resize(100, 32)
-    } else {
-      this.attr('buttonSign', {d: 'M 2 5 8 5'})
-      if (this.expandSize) {
-        this.resize(this.expandSize.width, this.expandSize.height)
-      }
-    }
-    this.collapsed = target
+  toggleCollapsed() {
+    const nextCollapsed = !this.isCollapsed();
+    this.store.set('collapsed', nextCollapsed);
+    this.render(nextCollapsed);
   }
 }
 
@@ -84,7 +133,7 @@ EventGroup.config({
         selector: 'paginationPrev',
       }, {
         tagName: 'text',
-        selector: 'paginationInfo',
+        selector: 'paginationInfo', // 文案使用
         children: [
           {
             tagName: 'tspan',
@@ -126,7 +175,7 @@ EventGroup.config({
       fill: '#f5f5f5',
       stroke: '#ccc',
       cursor: 'pointer',
-      event: 'event:collapse',
+      event: 'node:collapse',
     },
     buttonSign: {
       refX: 3,
@@ -138,7 +187,6 @@ EventGroup.config({
       fill: '#333',
       refX: 15,
       refY: 10,
-      text: '11111'
     },
     count: {
       fontSize: 12,
@@ -146,7 +194,7 @@ EventGroup.config({
       refX: '100%',
       refX2: -55,
       refY: 10,
-      text: '12个'
+      // text: '12个'
     },
     pagination: {
       refY: '100%',
@@ -156,22 +204,18 @@ EventGroup.config({
     paginationInfo: {
       refX: '50%',
       textAnchor: 'middle',
-      textVerticalAnchor: 'middle',
     },
     current: {
-      y: 0,
+      // y: 0,
       text: '1',
-      textVerticalAnchor: 'top',
     },
     sep: {
-      y: 0,
+      // y: 0,
       text: '/',
-      textVerticalAnchor: 'top',
     },
     all: {
-      y: 0,
+      // y: 0,
       text: '3',
-      textVerticalAnchor: 'top',
     },
     paginationPrev: {
       refX: '50%',
@@ -187,8 +231,18 @@ EventGroup.config({
     }
   },
   size: {
-    width: 320,
-    height: 300 // 默认高度
+    width: eventNodeWidth,
+  },
+  zIndex: -1,
+  propHooks: (metadata)=>{
+    const { label, ...others } = metadata
+    if (label) {
+      ObjectExt.setByPath(others, 'attrs/label/text', label)
+    }
+    if(others?.data?.childCount){
+      ObjectExt.setByPath(others, 'attrs/count/text', `${others?.data?.childCount}个`)
+    }
+    return others
   }
 });
 

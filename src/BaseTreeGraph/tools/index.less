@@ -1,0 +1,48 @@
+.collapse-btn {
+  .collapse-icon {
+    display: unset;
+    &.collapse-icon-1 {
+      display: unset;
+    }
+    &.collapse-icon-2 {
+      display: none;
+    }
+
+    .collapse-expanded&{
+      &.collapse-icon-1 {
+        display:  none;
+      }
+      &.collapse-icon-2 {
+        display: unset;
+      }
+    }
+
+    .collapse-spin& {
+      display: none!important;
+    }
+  }
+
+  .collapse-text{
+    display: unset;
+    .collapse-expanded&{
+      display: none;
+    }
+  }
+
+  .loading-icon {
+    display: none;
+    .collapse-spin& {
+      display: unset;
+      animation: loadingCircle 1s infinite linear;
+      transform-origin: 9px 9px;
+      @keyframes loadingCircle {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+}
+
+
+

@@ -41,4 +41,5 @@ declare module '@antv/hierarchy' {
   }
 
   export function mindmap<T>(root: T, options: Options<T>): TreeNode<T>;
+  export function compactBox<T>(root: T, options: Options<T>): TreeNode<T>;
 }

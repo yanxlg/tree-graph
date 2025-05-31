@@ -21,7 +21,6 @@ export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNo
 
   private addCollapseTool() {
     const count = this.getData()?.childCount as number;
-    console.log(count, this.visible);
     if (count && this.visible) {
       const collapsed = this.isCollapsed();
       this.addTools({

@@ -1,17 +1,17 @@
 /*
  * @author: yanxianliang
  * @date: 2025-05-18 15:33
- * @desc: Tooltip 显示完整内容
+ * @desc: Popover 显示节点信息
  *
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
 import React, {forwardRef, useEffect, useMemo, useRef, useState} from "react";
 import {Tooltip, Popover} from "antd";
-import {TooltipState} from "@gx6/tree-graph";
+import {PopoverState, TooltipState} from "@gx6/tree-graph";
 
 
-const DynaminTooltip = forwardRef(({target}: {
+const DynaminPopover = forwardRef(({target}: {
   target?: HTMLElement;
 }, ref) => {
   useEffect(() => {
@@ -27,18 +27,19 @@ const DynaminTooltip = forwardRef(({target}: {
 })
 
 
-const NodeTooltip = (
+const NodePopover = (
   {
-    tooltip
+    popover
   }: {
-    tooltip?: TooltipState;
+    popover?: PopoverState;
   }) => {
-  const {title, show, target} = tooltip || {};
+  const {target, show, content} = popover || {};
+
   return (
-    <Tooltip title={title} open={show}>
-      <DynaminTooltip target={target}/>
-    </Tooltip>
+    <Popover content={content} open={show} placement={'right'}>
+      <DynaminPopover target={target}/>
+    </Popover>
   )
 }
 
-export default NodeTooltip;
+export default NodePopover;
