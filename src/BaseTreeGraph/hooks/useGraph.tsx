@@ -5,21 +5,14 @@ import {
   ReactShapeConfig,
 } from "../react-shape";
 import {BaseTreeGraphProps} from "../types";
-import {useLatest} from 'ahooks';
-import {NodeView} from "@antv/x6/src/view/node";
-import {CollapsedRect} from "../nodeTypes/CollapsedRect";
 import {getTheme} from "../utils/theme";
 import NodeTooltip from "../NodeTooltip";
 import {useGraphInstance} from "./useGraphInstance";
-import {useTreeStore} from "./useTreeStore";
-import {getParents, getPlainChildren} from "../utils/node";
 import NodePopover from "../NodePopover";
 
 
 export function useGraph(graphConfig: BaseTreeGraphProps) {
   const {
-    onNodeClick,
-    root,
     graph: graphOptions,
     theme,
     nodeConfig,
@@ -33,7 +26,6 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
   } = graphConfig;
   const fragmentRef = useRef<HTMLDivElement>(null);
   const themeConfig = useRef(getTheme(theme)).current;
-  const clickListener = useLatest(onNodeClick);
 
   const {portals, graph, tooltip, popover} = useGraphInstance({
     graph: graphOptions,
@@ -56,34 +48,6 @@ export function useGraph(graphConfig: BaseTreeGraphProps) {
     return () => {
       graph.dispose(true);
     }
-  }, []);
-
-
-  const {collapseNode, expandNode, registry} = useTreeStore(root, graph);
-
-
-  useEffect(() => {
-    graph.on('node:collapse', ({node}: { node: CollapsedRect }) => {
-      const collapsed = node.isCollapsed();
-      node.toggleCollapsed();
-      if (collapsed) {
-        expandNode(node.id);
-      } else {
-        collapseNode(node.id);
-      }
-    })
-
-    graph.on('node:click', (eventArg: NodeView.EventArgs['node:click']) => {
-      const {node} = eventArg;
-      const id = node.id;
-      const parents = getParents(registry.getNode(id)!);
-      const children = getPlainChildren(registry.getNode(id)!);
-      clickListener.current?.({
-        parents: parents,
-        children: children,
-        eventArg,
-      });
-    });
   }, []);
 
 

@@ -30,7 +30,6 @@ export class TopicNode extends CollapsedRect {
     const fullLabel = this.label;
     const view = this.model?.graph.findViewByCell(this);
     if (view) {
-      // view.get
       const labelView = view.getMagnetFromEdgeTerminal({
         cell: this,
         selector: 'label'

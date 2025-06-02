@@ -19,13 +19,11 @@ export function createCells(
   graph: Graph,
   ignoreRoot?: boolean,
   visible = true,
-  group?: Cell
 ) {
   const {strategy, theme} = graph;
   const {data, children, x, y} = node;
   const {id, width, height, type, label, ellipsis, level, childCount} = data; // TODO  hack event 节点，不同节点需要不同处理方式，内置到节点中
   const cells: Cell[] = [];
-  console.log(width);
 
   const collapsed = getDefaultCollapsed(data);
 
@@ -33,36 +31,32 @@ export function createCells(
 
   const count = data.children?.length;
 
-  const cell = Node.create({
-    id: id,
-    shape: type,
-    x,
-    y,
-    width: width as number,
-    height: height, // group 节点高度需要特殊处理
-    label: label,
-    collapsed,
-    visible: _visible,
-    ellipsis: ellipsis,
-    level: level, // 显示样式控制
-    data: {
-      primaryColor: theme.primaryColor,
-      childCount: childCount ?? count ?? 0, // 子节点数量
-      ...theme,
-      descriptions: (data as any).descriptions,
-      color: (data as any).color
-    }
-  });
-
   if (!ignoreRoot) { // 不同的节点类型需要定义不同的属性处理逻辑
+    const cell = Node.create({
+      id: id,
+      shape: type,
+      x,
+      y,
+      width: width as number,
+      height: height, // group 节点高度需要特殊处理
+      label: label,
+      collapsed,
+      visible: _visible,
+      ellipsis: ellipsis,
+      level: level, // 显示样式控制
+      data: {
+        primaryColor: theme.primaryColor,
+        childCount: childCount ?? count ?? 0, // 子节点数量
+        ...theme,
+        descriptions: (data as any).descriptions,
+        color: (data as any).color
+      }
+    });
+
     registry.addCell({node, cell}); // 节点注册
     cells.push(cell);
-    if(group){
-      group.addChild(cell);
-    }
   }
 
-  const _group = type === 'event-group' ? cell : undefined; // 分组节点
 
   if (
     (
@@ -89,7 +83,7 @@ export function createCells(
         cells.push(cell);
       }
 
-      cells.push(...createCells(item, registry, graph, false, _visible, _group));
+      cells.push(...createCells(item, registry, graph, false, _visible));
     })
   }
 

@@ -1,6 +1,9 @@
 import {Cell, Graph, Node, Options} from "@antv/x6";
 import type React from "react";
 import {NodeView} from "@antv/x6/src/view/node";
+import {Dom} from "@antv/x6-common";
+import {CellView} from "@antv/x6/src/view/cell";
+import {ToolsView} from "@antv/x6/src/view/tool";
 
 export type ThemeConfig = {
   /**
@@ -57,8 +60,14 @@ declare module '@antv/x6' {
     theme: ThemeConfig; // 主题配置注入
     nodeConfig?: NodeConfig; // 节点配置注入
     layoutOptionsUtil: LayoutOptionsUtil;
-    collapse: (node: Cell) => void; // 折叠
-    expand: (node: Cell) => (Promise<void> | void) // 展开，展开支持异步
+    onCollapse: (args: {
+      e: Dom.MouseDownEvent;
+      view: CellView,
+      cell: Cell,
+      btn: {
+        setLoading: (loading: boolean) => void;
+      },
+    }) => void;
   }
 }
 
@@ -210,7 +219,7 @@ export type BaseTreeGraphProps = {
       eventArg: NodeView.EventArgs['node:click']
     }) => void;
 
-  layoutOptionsUtil?: 'default' | 'with-group' | LayoutOptionsUtil;
+  layoutOptionsUtil?: 'default' | LayoutOptionsUtil;
 
   showPopover?: (node: Cell) => boolean; // 是否显示 popover, 节点 hover时是否显示对应的 popover
 

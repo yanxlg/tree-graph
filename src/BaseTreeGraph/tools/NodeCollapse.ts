@@ -9,7 +9,6 @@ import {Cell, Graph, ObjectExt} from "@antv/x6";
 import {Dom} from '@antv/x6-common';
 import {Button} from '@antv/x6/es/registry/tool/button';
 import './index.less';
-import {ToolsView} from "@antv/x6/src/view/tool";
 import {CellView} from "@antv/x6/src/view/cell";
 
 type NodeCollapseButtonOptions = Button.Options & {
@@ -22,6 +21,7 @@ type NodeCollapseButtonOptions = Button.Options & {
  */
 class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
   private loading: boolean = false; // loading状态
+  private collapsed: boolean = true;
   public static defaults = {
     ...Button.Remove.defaults,
     name: 'collapse-btn',
@@ -30,11 +30,13 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
         tagName: 'text',
         attrs: {
           class: 'collapse-text',
-          refX: 26,
-          refY: 0,
+          // refX2: 26,
+          // refY: 0,
+          x: 20,
+          y: 13,
           fontSize: 12,
           fill: '#333',
-          transform: 'matrix(1,0,0,1,20,13)',
+          // transform: 'matrix(1,0,0,1,20,13)',
           'pointer-events': 'none',
         }
       },
@@ -100,16 +102,44 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
       cell: Cell,
       btn: NodeCollapseButton,
     }){
-      const btn = args.btn;
-      btn.loading = true; // 设置 loading状态
-      btn.update();
+      const {btn} = args;
+      const graph = btn.graph as unknown as Graph;
+      graph.onCollapse?.(args);
+      btn?.options?.onCollapse?.(args);
 
+      // btn.loading = true; // 设置 loading状态
+      // btn.update();
+      // 展开、折叠、加载状态控制
       // this.graph.trigger('node:collapse', {node: this.cell})
     }
   };
 
+  /**
+   * 更新折叠状态
+   * @param collapsed
+   */
+  public setCollapsed(collapsed: boolean){
+    this.collapsed = collapsed;
+    this.update();
+  }
+
+  public isCollapsed(): boolean {
+    return this.collapsed;
+  }
+
+  public setLoading(loading: boolean){
+    this.loading = loading;
+    this.update();
+  }
+
   protected getOptions(options: Partial<NodeCollapseButtonOptions>): NodeCollapseButtonOptions {
     const _options = super.getOptions(options);
+    this.collapsed = _options.collapsed;
+    const rtl = _options.rtl;
+    if(rtl){
+      ObjectExt.setByPath(_options, 'markup/0/attrs/text-anchor', 'end');
+      ObjectExt.setByPath(_options, 'markup/0/attrs/x', -2);
+    }
     const count = _options.count || 0;
     ObjectExt.setByPath(_options, 'markup/0/textContent', count); // 数量显示
     return _options;
@@ -122,8 +152,7 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
     } else {
       Dom.removeClass(this.container,'collapse-spin');
     }
-    const collapsed = this.options.collapsed;
-    if (!collapsed) {
+    if (!this.collapsed) {
       Dom.addClass(this.container,'collapse-expanded');
     } else {
       Dom.removeClass(this.container,'collapse-expanded');

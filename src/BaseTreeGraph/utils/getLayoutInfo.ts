@@ -9,18 +9,18 @@ export function getLayoutInfo(
 ) {
   const {layoutOptionsUtil} = graph;
   const layoutType = graph.layoutType;
-  root.isRoot = true; // 标记根节点
+  // root.isRoot = true; // 标记根节点
   // root 需要处理 左右分隔
-  if ('downstream' in root || 'upstream' in root) {
-    const {downstream = [], upstream = []} = root;
-    root.children = [
-      ...root.children || [],
-      ...downstream.map((child: any) => ({...child, layoutSide: 'left'})),
-      ...upstream || []
-    ]
-    delete root.downstream;
-    delete root.upstream;
-  }
+  // if ('downstream' in root || 'upstream' in root) {
+  //   const {downstream = [], upstream = []} = root;
+  //   root.children = [
+  //     ...root.children || [],
+  //     ...downstream.map((child: any) => ({...child, layoutSide: 'left'})),
+  //     ...upstream || []
+  //   ]
+  //   delete root.downstream;
+  //   delete root.upstream;
+  // }
 
   return Hierarchy[layoutType](root, {
     direction: 'H',

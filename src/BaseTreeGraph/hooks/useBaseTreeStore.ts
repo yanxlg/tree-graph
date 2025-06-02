@@ -14,7 +14,7 @@
  */
 
 import {HierarchyResult, MindMapData} from "../types";
-import {useEffect, useRef} from "react";
+import {useEffect, useMemo, useRef} from "react";
 import {getLayoutInfo} from "../utils/getLayoutInfo";
 import {CellRegister} from "../register/CellRegister";
 import {createCells} from "../utils/createCells";
@@ -22,33 +22,34 @@ import {Cell, Graph, Node} from "@antv/x6";
 import {getChildren, getExpandedChildren} from "../utils/node";
 import {useMemoizedFn} from "ahooks";
 
-export const useTreeStore = (
-  root: MindMapData,
+export const useBaseTreeStore = (
+  root: MindMapData | undefined,
   graph: Graph,
 ) => {
   const $nodeRegistry = useRef(new CellRegister()); // 节点信息存储
   const registry = $nodeRegistry.current;
-  const {strategy, theme, nodeConfig} = graph;
+  const {strategy} = graph;
 
 
   useEffect(() => {
     registry.clear(); // 清除
-
-    const layout = getLayoutInfo(root, graph);
-    const cells = createCells(layout, registry, graph);
-
-    graph.model.getLastCell()?.removeZIndex(); // 不清除 zIndex 层级会有问题。
-    graph.resetCells(cells);
-
-    if (cells.length) {
-      graph.zoomToFit({padding: 10, maxScale: 1}); // TODO 需要在 resize之后执行 zoomToFit
-      // graph.centerCell(cells[0]); // 根节点居中
+    if (root) {
+      const layout = getLayoutInfo(root, graph);
+      const cells = createCells(layout, registry, graph);
+      graph.model.getLastCell()?.removeZIndex();
+      graph.resetCells(cells);
+      if (cells.length) {
+        graph.zoomToFit({padding: 10, maxScale: 1});
+      }
+    } else {
+      graph.model.getLastCell()?.removeZIndex();
+      graph.resetCells([]);
     }
   }, [root, strategy]);
 
   const dynamicUpdateCells = useMemoizedFn(() => {
     const newRegistry = new CellRegister();
-    const layout = getLayoutInfo(root, graph);
+    const layout = getLayoutInfo(root!, graph);
     createCells(layout, newRegistry, graph);
     const {addItems, updateItems, removeItems} = registry.diff(newRegistry);
 

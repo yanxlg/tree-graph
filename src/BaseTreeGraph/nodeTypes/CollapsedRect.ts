@@ -11,6 +11,23 @@ import {Cell} from '@antv/x6';
 import {RectWidthDefaultConfig} from "./RectWidthDefaultConfig";
 import {ICollapseNode, ThemeConfig} from "../types";
 
+/**
+ * 折叠器，支持多种模式，默认模式为 children 折叠：children + childrenCount
+ *
+ *
+ *
+ * upstream：上游, 仅支持一个展开
+ * downstream：下游
+ *
+ * upstream: {
+ *   count: 1;
+ *   state: 'loading' | 'collapsed' | 'expanded' // 加载中，折叠，展开
+ * }
+ *
+ * downstream：{ // event 可能有多个
+ *
+ * }
+ */
 export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNode {
 
   init() {
