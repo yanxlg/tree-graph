@@ -1,6 +1,6 @@
 {
   "name": "@gx6/tree-graph",
-  "version": "0.0.10-alpha.1",
+  "version": "0.0.10-alpha.2",
   "description": "树结构图组件库",
   "scripts": {
     "start": "npm run dev",

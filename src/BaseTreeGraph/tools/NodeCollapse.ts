@@ -105,12 +105,6 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
       const {btn} = args;
       const graph = btn.graph as unknown as Graph;
       graph.onCollapse?.(args);
-      btn?.options?.onCollapse?.(args);
-
-      // btn.loading = true; // 设置 loading状态
-      // btn.update();
-      // 展开、折叠、加载状态控制
-      // this.graph.trigger('node:collapse', {node: this.cell})
     }
   };
 
@@ -135,11 +129,6 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
   protected getOptions(options: Partial<NodeCollapseButtonOptions>): NodeCollapseButtonOptions {
     const _options = super.getOptions(options);
     this.collapsed = _options.collapsed;
-    const rtl = _options.rtl;
-    if(rtl){
-      ObjectExt.setByPath(_options, 'markup/0/attrs/text-anchor', 'end');
-      ObjectExt.setByPath(_options, 'markup/0/attrs/x', -2);
-    }
     const count = _options.count || 0;
     ObjectExt.setByPath(_options, 'markup/0/textContent', count); // 数量显示
     return _options;
