@@ -20,8 +20,9 @@ export const Upstream = (
     depth: number;
     event: EventData;
   }) => {
-  return event.upstream &&
+  return !event.upstream ? null :
     <Connector
+      node={event}
       handleType={'source'}
       handleKey={getHandleKey(event, 'input')}
       position={Position.Left}

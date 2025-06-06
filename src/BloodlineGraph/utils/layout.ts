@@ -11,23 +11,6 @@ import {NodeType} from "../types";
 
 
 export const initialNodes = [
-  {
-    id: '0',
-    type: 'event',
-    data: {
-      id: '0',
-      depth: 0,
-      title: '12121321321321',
-      type: '策略',
-      upstream: {
-        count: 20
-      },
-      downstream: [{
-        version: '1.0',
-        count: 4
-      }]
-    },
-  },
 ] as NodeType[];
 
 export const initialEdges = [];

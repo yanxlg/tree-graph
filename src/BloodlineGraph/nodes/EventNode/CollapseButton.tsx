@@ -10,43 +10,40 @@ import {useCollapseStyles} from "./styles";
 import {CollapseButtonProps} from "../../types";
 import PlusOutlined from '@ant-design/icons/PlusOutlined';
 import MinusOutlined from '@ant-design/icons/MinusOutlined';
-import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
 import {useMemoizedFn} from "ahooks";
 import {useAppendChildren} from "../../hooks/useAppendChildren";
 import {Space} from "antd";
 import {useHandleState, useSetHandleState} from "../../atoms/handle";
 import {useCleanWithDepth} from "../../hooks/useCleanWithDepth";
 import {useGraphProps} from "../../providers/ConfigProvider";
+import LoadingOutlined from "@ant-design/icons/lib/icons/LoadingOutlined";
 
 
 export function CollapseButton(props: CollapseButtonProps) {
-  const {position, handleKey, nextDepth, relation} = props;
+  const {position, handleKey, nextDepth, relation, node} = props;
   const {styles, cx} = useCollapseStyles();
+  const {getRelation} = useGraphProps();
 
   const handleState = useHandleState(handleKey);
   const updateHandleState = useSetHandleState(handleKey);
 
-  const {loading = false, collapsed = true, items} = handleState || {};
-  const {count,} = relation;
+  const {loading = false, collapsed = true, items, hasRelations} = handleState || {};
+  const {count} = relation;
 
   const append = useAppendChildren(nextDepth, handleKey);
 
   const clean = useCleanWithDepth(nextDepth);
 
-  const {getDownstream} = useGraphProps();
-
-
+  // TODO 需要优化
   const onClick = useMemoizedFn(() => {
     if (loading) {
       return;
     }
-    console.log(handleState, nextDepth,'---');
     if (collapsed) {
-      // 当前展开，同级其它的隐藏，子节点都隐藏
-      // 先修改状态
-      if (items) { // TODO 没有生效
+      if (items) {
         clean();
         updateHandleState({
+          hasRelations: true,
           loading: false,
           collapsed: false,
           nextDepth: nextDepth,
@@ -55,24 +52,29 @@ export function CollapseButton(props: CollapseButtonProps) {
         append(items as any);
       } else {
         updateHandleState({
+          hasRelations: true,
           loading: true,
           collapsed: true,
           nextDepth: nextDepth,
           items: items as any
         });
         clean();
-        getDownstream(nextDepth).then((items) => {
+        getRelation(nextDepth, position === 'right' ? 'down' : 'up', node, relation).then((items) => {
+          const hasRelations = items.length > 0;
+          relation.count = items.length;
           updateHandleState({
             loading: false,
             collapsed: false,
             nextDepth: nextDepth,
-            items
+            items,
+            hasRelations
           });
-          append(items  as any);
+          append(items as any);
         });
       }
     } else {
       updateHandleState({
+        hasRelations: true,
         loading: false,
         collapsed: true,
         nextDepth: nextDepth,
@@ -82,8 +84,15 @@ export function CollapseButton(props: CollapseButtonProps) {
     }
   });
 
+  if (hasRelations === false) {
+    return null;
+  }
+
   return (
-    <Space size={2} className={cx(styles.collapse, styles[position])}>
+    <Space
+      size={2}
+      className={cx(styles.collapse, styles[position])}
+    >
       <div
         className={cx(styles.icon, {
           [styles.loading]: loading
@@ -92,9 +101,7 @@ export function CollapseButton(props: CollapseButtonProps) {
       >
         {loading ? <LoadingOutlined/> : collapsed ? <PlusOutlined/> : <MinusOutlined/>}
       </div>
-      {
-        collapsed && <div className={styles.count}>{count}</div>
-      }
+      <div className={styles.count}>{count}</div>
     </Space>
   )
 }

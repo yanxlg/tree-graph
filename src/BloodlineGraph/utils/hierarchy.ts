@@ -6,9 +6,10 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 import Hierarchy from '@antv/hierarchy';
-import {NodeType} from "../types";
+import {DepthToolbarData, EventGroupNodeType, NodeType} from "../types";
 import {Node, Edge} from "@xyflow/react";
 import {EVENT_GROUP_NODE_WIDTH, EVENT_NODE_WIDTH} from "../constants";
+import {generateUUID} from "./createEventNode";
 
 function getNodeWidth(node: Node) {
   switch (node.type) {
@@ -26,11 +27,11 @@ function getNodeHeight(node: Node) {
   }
   switch (node.type) {
     case 'event':
-      return 40;
+      return 68;
     case 'event-group':
-      return 40;
+      return 80;
     default:
-      return 40;
+      return 68;
   }
 }
 
@@ -61,6 +62,9 @@ function getNodeTree(nodes: NodeType[], edges: Edge[]) {
   }
 }
 
+function countAllGroupItems(groups: any[]) {
+  return groups.reduce((prev, node) => prev + node.data.data.totalCount || 0, 0);
+}
 
 export const mindmapNodes = (nodes: NodeType[], edges: Edge[]) => {
   // 构建 tree
@@ -88,13 +92,44 @@ export const mindmapNodes = (nodes: NodeType[], edges: Edge[]) => {
       return nodeIds.map(id => nodeMap.get(id)!);
     }
   })
-  let layoutNodes: NodeType[] = [];
-  layoutResult.BFTraverse((node:  any) => {
+  let layoutNodes: Array<NodeType | Node<DepthToolbarData>> = [];
+  layoutResult.BFTraverse((node: any) => {
+    // TODO 需要自动创建toolbar 节点。
     const {x, y, data} = node;
     layoutNodes.push({
       ...data,
       position: {x, y}
     })
+
+    if (node.children?.length) {
+      const children = node.children;
+      // 根据 depth 分组
+      const groupByDepth: Record<string, any[]> = {};
+      children.forEach((child: any) => {
+        const depth = child.data.data.depth;
+        if (!groupByDepth[depth]) {
+          groupByDepth[depth] = [];
+        }
+        groupByDepth[depth].push(child);
+      });
+
+      Object.keys(groupByDepth).forEach((depth) => {
+        const subChildren = groupByDepth[depth];
+        const firstNode = subChildren[0];
+        layoutNodes.push({
+          id: `toolbar_depth_${depth}`,
+          type: 'toolbar',
+          data: {
+            depth: firstNode.data.data.depth,
+            count: countAllGroupItems(subChildren), // 需要计算总数
+          },
+          position: {
+            x: firstNode.x,
+            y: firstNode.y - 30,
+          }
+        })
+      })
+    }
   })
   return layoutNodes;
 }

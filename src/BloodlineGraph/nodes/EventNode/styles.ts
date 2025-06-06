@@ -12,28 +12,30 @@ import {toRGBA} from "../../utils/toRGBA";
 import {EVENT_NODE_WIDTH} from "../../constants";
 
 const borderWidth = 2;
-const lineWidth = 6;
+const lineWidth = 15;
 
 
 export const useStyles = createStyles(({css}, props: { color?: string; type: string }) => {
   const themeColor = props.color || codeToColor(props.type);
-  const bgColor = toRGBA(themeColor, 0.1);
+  const bgColor = toRGBA(themeColor, 0.4);
   return {
+    box: css`
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    `,
     event: css`
       width: ${EVENT_NODE_WIDTH}px;
       box-sizing: border-box;
       background-color: ${bgColor};
-      &:before {
-        box-sizing: border-box;
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        border: ${borderWidth}px solid ${themeColor};
-      }
+      position: relative;
+      min-height: 68px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
       &:after {
         box-sizing: border-box;
@@ -49,27 +51,34 @@ export const useStyles = createStyles(({css}, props: { color?: string; type: str
       }
     `,
     title: css`
-      padding: 12px 12px;
-      font-size: 16px;
-      height: 16px;
-      line-height: 16px;
-      color: #262626;
+      padding: 5px 5px 5px ${lineWidth+5}px;
+      font-size: 14px;
+      color: #000;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      box-sizing: content-box!important;
     `,
     eventVersion: css`
       position: relative;
-      color: #bfbfbf;
+      color: #000;
       font-size: 12px;
       height: 12px;
       line-height: 12px;
-      padding: 12px 12px;
-      margin-top: -12px;
+      padding: 5px 5px 5px ${lineWidth+5}px;
+      box-sizing: content-box!important;
     `,
     inGroup: css`
       position: relative;
     `
+  }
+})
+
+export const useVersionStyle = createStyles(({css})=>{
+  return {
+    danger: css`
+      color: #ff4d4f!important;
+    `,
   }
 })
 
@@ -97,10 +106,10 @@ export const useCollapseStyles = createStyles(({css}) => ({
   `,
   icon: {
     display: 'flex',
-    width: 12,
-    height: 12,
-    borderRadius: 12,
-    border: '1px solid #d9d9d9',
+    width: 14,
+    height: 14,
+    borderRadius: 2,
+    border: '1px solid rgba(5, 5, 5, 0.06)',
     backgroundColor: '#fff',
     fontSize: 10,
     alignItems: 'center',
@@ -118,5 +127,10 @@ export const useCollapseStyles = createStyles(({css}) => ({
 export const useConnectorStyles = createStyles(({css}) => ({
   handle: css`
     visibility: hidden;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    border: none;
   `
 }))

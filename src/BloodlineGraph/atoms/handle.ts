@@ -19,12 +19,7 @@ export const useHandleState = (handleKey: string) => {
 export const useSetHandleState = (handleKey: string) => {
   const [handleStore, setHandleStore] = useAtom(handleStoreAtom);
 
-  return (state: {
-    loading: boolean;
-    collapsed: boolean;
-    nextDepth: number;
-    items: any[]
-  }) => {
+  return (state: HandleStoreMap[string]) => {
     // 其它所有的状态都需要重置
     const newHandleStore: HandleStoreMap = {};
     for (const key in handleStore) {
@@ -49,6 +44,33 @@ export const useSetHandleState = (handleKey: string) => {
       }
     }
     newHandleStore[handleKey] = state;
+    setHandleStore(newHandleStore);
+  }
+}
+
+
+export const useCollapseWithDepth = ()=>{
+  const [handleStore, setHandleStore] = useAtom(handleStoreAtom);
+  return (depth: number)=>{
+    const newHandleStore: HandleStoreMap = {};
+    for (const key in handleStore) {
+      const beforeState = handleStore[key];
+      if (depth > 0 && beforeState.nextDepth >= depth) {
+        newHandleStore[key] = {
+          ...beforeState,
+          loading: false,
+          collapsed: true,
+        };
+      } else if (depth < 0 && beforeState.nextDepth <= depth) {
+        newHandleStore[key] = {
+          ...beforeState,
+          loading: false,
+          collapsed: true,
+        };
+      } else {
+        newHandleStore[key] = beforeState;
+      }
+    }
     setHandleStore(newHandleStore);
   }
 }

@@ -21,8 +21,8 @@ function EdgeLabel({transform, label}: { transform: string; label: string }) {
       style={{
         position: 'absolute',
         // background: 'rgba(255, 255, 255, 0.75)',
-        color: '#ff5050',
-        fontSize: 12,
+        // color: '#ff5050',
+        fontSize: 10,
         fontWeight: 700,
         transform,
       }}
@@ -33,8 +33,18 @@ function EdgeLabel({transform, label}: { transform: string; label: string }) {
   );
 }
 
+
+const getEdgeFill = (edgeType?: string) => {
+  switch (edgeType) {
+    case 'danger':
+      return '#ff4d4f';
+    default:
+      return undefined;
+  }
+}
+
 const CustomEdge: FC<
-  EdgeProps<Edge<{ label: string; depth: number }>>
+  EdgeProps<Edge<{ edgeLabel?: string; depth: number; edgeType?: string }>>
 > = (
   {
     id,
@@ -44,7 +54,6 @@ const CustomEdge: FC<
     targetY,
     sourcePosition,
     targetPosition,
-    label,
     data
   }) => {
   const [edgePath] = getSmoothStepPath({
@@ -56,15 +65,17 @@ const CustomEdge: FC<
     targetPosition,
   });
   const depth = data?.depth ?? 0;
+  const edgeLabel = data?.edgeLabel;
+  const edgeType = data?.edgeType;
 
   return (
     <>
-      <BaseEdge id={id} path={edgePath}/>
+      <BaseEdge id={id} path={edgePath} style={{stroke: getEdgeFill(edgeType)}}/>
       <EdgeLabelRenderer>
-        {label && (
+        {edgeLabel && (
           <EdgeLabel
-            transform={`translate(${depth < 0 ? '100%' : '-100%'}, -100%) translate(${targetX}px,${targetY}px)`}
-            label={String(label)}
+            transform={`translate(${depth < 0 ? '0%' : '-100%'}, -100%) translate(${targetX}px,${targetY}px)`}
+            label={edgeLabel}
           />
         )}
       </EdgeLabelRenderer>

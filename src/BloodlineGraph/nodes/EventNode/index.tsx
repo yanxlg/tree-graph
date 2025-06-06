@@ -12,8 +12,10 @@ import {isEqual} from 'lodash';
 import {useMeasure} from "../../hooks/useMeasure";
 import {Upstream} from "./Upstream";
 import {Downstream} from "./Downstream";
+import {Popover} from 'antd';
+import {useGraphProps} from "../../providers/ConfigProvider";
 
-export const EventNode = React.memo((props:{
+export const EventNode = React.memo((props: {
   id: string;
   data: EventData;
   measure?: boolean;
@@ -23,11 +25,14 @@ export const EventNode = React.memo((props:{
   const {title, color, type, depth} = data;
   const {styles, cx} = useStyles({color, type});
   const ref = useMeasure(id, measure); // 在 group 中，不需要
-
+  const {PopoverComponent} = useGraphProps();
   return (
-    <div ref={ref} className={cx(styles.event,{
+    <div ref={ref} className={cx(styles.event, {
       [styles.inGroup]: inGroup
     })}>
+      <Popover styles={{body: {padding: 0}}} placement={'right'} content={<PopoverComponent id={id} title={title}/>}>
+        <div className={styles.box}/>
+      </Popover>
       <Upstream event={data} depth={depth}/>
       <div className={styles.title}>
         {title}

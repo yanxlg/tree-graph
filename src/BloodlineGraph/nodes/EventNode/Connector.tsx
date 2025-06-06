@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
-import {EventRelation} from "../../types";
+import {EventData, EventRelation} from "../../types";
 import {Handle, Position} from "@xyflow/react";
 import {CollapseButton} from "./CollapseButton";
 import React from "react";
@@ -17,23 +17,26 @@ export const Connector = (
     relation,
     position,
     handleKey,
-    handleType
+    handleType,
+    node
   }: {
     nextDepth: number;
     relation: EventRelation;
     position: 'left' | 'right';
     handleKey: string;
-    handleType: 'source' | 'target'
+    handleType: 'source' | 'target';
+    node: EventData;
   }) => {
   const {styles} = useConnectorStyles();
-  const count = relation.count;
-  if (!count || count <= 0) {
+  const count = relation.count; // 需要同步更新到 relation 信息中
+  if (count === 0) {
     return null;
   }
   return (
     <>
       <Handle className={styles.handle} type={handleType} position={position as Position} id={handleKey}/>
       <CollapseButton
+        node={node}
         nextDepth={nextDepth}
         handleKey={handleKey}
         position={position}

@@ -23,17 +23,14 @@ function randomDataType() {
 }
 
 function getRandomNode(depth: number) {
-  const id = randomId();
+  const type = randomDataType()
   return {
-    id: id,
-    type: 'event-group',
-    data: {
-      id,
-      depth,
-      title: randomTitle(),
-      type: randomDataType(),
-      dispatch: '调用'
-    },
+    depth,
+    title: randomTitle(),
+    type: type,
+    typeLabel: type,
+    edgeLabel: '调用',
+    totalCount: 5
   } as unknown as EventGroupData;
 }
 
@@ -43,10 +40,12 @@ function getRandomList(depth: number, count: number = 1) {
 }
 
 function getRandomChildren() {
+  const type = randomDataType()
   return {
     id: randomId(),
     title: randomTitle(),
-    type: randomDataType(),
+    type: type,
+    typeLabel: type,
     downstream: [{
       version: '1.0',
       count: 4
@@ -69,17 +68,38 @@ async function getUpstream(depth: number) {
 }
 
 async function getChildren() {
-  await new Promise(resolve => setTimeout(resolve, 4000));
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  const list = Array.from({length: 3}, () => getRandomChildren());
+  console.log(list);
   return {
     total: 10,
-    list: Array.from({length: 3}, () => getRandomChildren())
+    list: list
   };
 }
 
+const root = {
+  id: '0',
+  depth: 0,
+  title: '12121321321321',
+  type: '策略',
+  typeLabel: '策略',
+  upstream: {
+    count: 20
+  },
+  downstream: [{
+    version: '1.0',
+    count: 4,
+    items: getRandomList(1, 5)
+  }]
+}
 
 const Page = () => {
   return (
-    <Bloodline getChildren={getChildren} getDownstream={getDownstream} getUpstream={getUpstream}/>
+    <div style={{position: 'relative', height: 800}}>
+      <Bloodline getRelation={async (nextDepth)=>{
+        return getDownstream(nextDepth);
+      }} PopoverComponent={()=><div>11111</div>} root={root} getChildren={getChildren}/>
+    </div>
   )
 }
 

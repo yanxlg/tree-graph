@@ -6,6 +6,6 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-export const EVENT_NODE_WIDTH = 200;
+export const EVENT_NODE_WIDTH = 280;
 
-export const EVENT_GROUP_NODE_WIDTH = 260;
+export const EVENT_GROUP_NODE_WIDTH = 300;

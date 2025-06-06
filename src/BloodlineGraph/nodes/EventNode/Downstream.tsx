@@ -11,6 +11,7 @@ import {Position} from "@xyflow/react";
 import React from "react";
 import {Connector} from "./Connector";
 import {getHandleKey} from "../../utils/keys";
+import {useVersionStyle} from "./styles";
 
 export const Downstream = (
   {
@@ -23,6 +24,7 @@ export const Downstream = (
     event: EventData;
   }) => {
   const downstream = event.downstream;
+  const {styles, cx} = useVersionStyle();
 
   const nextDepth = depth < 0 ? depth - 1 : depth + 1;
 
@@ -34,28 +36,38 @@ export const Downstream = (
 
   // 只有 1 个版本，
   if (downstream.length === 1) {
-    const version = downstream[0].version;
+    const version = downstream[0].version || '-';
+    const status = downstream[0].status || '-';
+    const displayType = downstream[0].displayType;
     return (
       <>
         <Connector
+          node={event}
           handleType={'source'}
           nextDepth={nextDepth}
           relation={downstream[0]}
           position={position}
           handleKey={getHandleKey(event, 'output', version)}
         />
-        <div className={versionClassName}>
-          版本说明：{version}
+        <div className={cx(versionClassName, {
+          [styles.danger]: displayType === 'danger'
+        })}>
+          Version：{version}({status})
         </div>
       </>
     )
   }
   return downstream.map((_downstream, index) => {
-    const version = _downstream.version;
+    const version = _downstream.version || '-';
+    const status = _downstream.status || '-';
+    const displayType = _downstream.displayType;
     return (
-      <div key={version} className={versionClassName}>
-        版本说明：{version}
+      <div key={version} className={cx(versionClassName, {
+        [styles.danger]: displayType === 'danger'
+      })}>
+        Version：{version}({status})
         <Connector
+          node={event}
           handleType={'source'}
           nextDepth={nextDepth}
           relation={_downstream}

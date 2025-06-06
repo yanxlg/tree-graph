@@ -6,15 +6,16 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 import {useNodeId} from "@xyflow/react";
-import {EdgeType, NodeType} from "../types";
+import {EdgeType, EventGroupData, EventGroupNodeType} from "../types";
 import {useSetAtom} from "jotai";
 import {cellsAtom} from "../atoms/cells";
+import {createEventGroupNode} from "../utils/createEventNode";
 
 
 function getNewEdges(
   sourceId: string,
   depth: number,
-  children: NodeType[],
+  children: EventGroupNodeType[],
   sourceHandle: string // 链接桩 id
 ) {
   const newEdges: EdgeType[] = [];
@@ -27,9 +28,10 @@ function getNewEdges(
       sourceHandle,
       targetHandle: 'input',
       type: 'smoothstep',
-      label: node.data.dispatch,
       data: {
         depth,
+        edgeLabel: node.data.edgeLabel,
+        edgeType: node.data.edgeType
       }
     }
     newEdges.push(edge);
@@ -44,11 +46,12 @@ export const useAppendChildren = (
 ) => {
   const setCells = useSetAtom(cellsAtom);
   const id = useNodeId()!; // 来源节点 id
-  return (children: NodeType[]) => {
+  return (children: EventGroupData[]) => {
     setCells(({nodes, edges}) => {
-      const appendEdges = getNewEdges(id, depth, children, sourceHandle);
+      const groupNodes = children.map(child=>createEventGroupNode(child));
+      const appendEdges = getNewEdges(id, depth, groupNodes, sourceHandle);
       return {
-        nodes: [...nodes, ...children],
+        nodes: [...nodes, ...groupNodes],
         edges: [...edges, ...appendEdges],
       }
     })
