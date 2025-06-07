@@ -47,6 +47,8 @@ function getNodeTree(nodes: NodeType[], edges: Edge[]) {
   const relationMap = new Map<string, string[]>();
   for (let i = 0; i < edges.length; i++) {
     const edge = edges[i];
+    edge.zIndex = edge.data?.edgeType ? 1 : 0; // 如果边高亮，提升优先级
+
     const {source, target} = edge; // source 是父级
     if (relationMap.has(source)) {
       relationMap.get(source)!.push(target);
@@ -98,7 +100,8 @@ export const mindmapNodes = (nodes: NodeType[], edges: Edge[]) => {
     const {x, y, data} = node;
     layoutNodes.push({
       ...data,
-      position: {x, y}
+      position: {x, y},
+      zIndex: 10 // 节点默认 zIndex
     })
 
     if (node.children?.length) {

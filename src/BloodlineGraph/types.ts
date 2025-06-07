@@ -22,6 +22,25 @@ export type EventRelation = {
   count?: number;
 }
 
+export type DownStreamItem =  {
+  /**
+   * 版本
+   */
+  version: string;
+  /**
+   * 状态
+   */
+  status: string;
+  /**
+   * 显示类型
+   */
+  displayType?: string;
+  /**
+   * key，未设置会通过版本生成
+   */
+  key?: string
+}
+
 export type EventData = {
   id: string;
   depth: number;
@@ -42,7 +61,7 @@ export type EventData = {
   /**
    * 版本列表
    */
-  downstream?: Array<EventRelation & { version: string; status: string; displayType?: string}>;
+  downstream?: Array<EventRelation & DownStreamItem>;
   /**
    * 颜色配置
    */

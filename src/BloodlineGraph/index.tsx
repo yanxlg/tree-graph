@@ -65,6 +65,8 @@ function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boole
   return (
     <div className={styles.graph}>
       <ReactFlow
+        preventScrolling={false}
+        panOnScroll={false}
         zoomOnScroll={false}
         nodesDraggable={false}
         proOptions={proOptions}

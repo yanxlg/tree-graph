@@ -36,18 +36,17 @@ export const Downstream = (
 
   // 只有 1 个版本，
   if (downstream.length === 1) {
-    const version = downstream[0].version || '-';
-    const status = downstream[0].status || '-';
-    const displayType = downstream[0].displayType;
+    const _downstream = downstream[0];
+    const {version = '-', status = '-',displayType} = _downstream;
     return (
       <>
         <Connector
           node={event}
           handleType={'source'}
           nextDepth={nextDepth}
-          relation={downstream[0]}
+          relation={_downstream}
           position={position}
-          handleKey={getHandleKey(event, 'output', version)}
+          handleKey={getHandleKey(event, 'output', _downstream)}
         />
         <div className={cx(versionClassName, {
           [styles.danger]: displayType === 'danger'
@@ -58,13 +57,13 @@ export const Downstream = (
     )
   }
   return downstream.map((_downstream, index) => {
-    const version = _downstream.version || '-';
-    const status = _downstream.status || '-';
-    const displayType = _downstream.displayType;
+    const {version = '-', status = '-',displayType} = _downstream;
     return (
-      <div key={version} className={cx(versionClassName, {
-        [styles.danger]: displayType === 'danger'
-      })}>
+      <div
+        key={index}
+        className={cx(versionClassName, {
+          [styles.danger]: displayType === 'danger'
+        })}>
         Version：{version}({status})
         <Connector
           node={event}
@@ -72,7 +71,7 @@ export const Downstream = (
           nextDepth={nextDepth}
           relation={_downstream}
           position={position}
-          handleKey={getHandleKey(event, 'output', version)}
+          handleKey={getHandleKey(event, 'output', _downstream)}
         />
       </div>
     )
