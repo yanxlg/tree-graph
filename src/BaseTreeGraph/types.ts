@@ -271,5 +271,4 @@ export type PopoverState = {
 
 export interface ICollapseNode {
   isCollapsed: () => boolean;
-  toggleCollapsed: () => void;
 }

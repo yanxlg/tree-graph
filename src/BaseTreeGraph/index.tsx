@@ -10,6 +10,7 @@ import {CollapsedRect} from "./nodeTypes/CollapsedRect";
 import {NodeView} from "@antv/x6/src/view/node";
 import {getParents, getPlainChildren} from "./utils/node";
 import {useLatest} from "ahooks";
+import {NodeCollapseButton} from "./tools/NodeCollapse";
 
 
 export default function BaseTreeGraph(props: BaseTreeGraphProps) {
@@ -20,10 +21,12 @@ export default function BaseTreeGraph(props: BaseTreeGraphProps) {
 
   useEffect(() => {
     // collapse 事件监听
-    graph.onCollapse = ({cell})=>{
+    graph.onCollapse = ({cell, btn})=>{
       const node = cell as CollapsedRect;
-      const collapsed = node.isCollapsed();
-      node.toggleCollapsed();
+      const tool = btn as NodeCollapseButton;
+      const collapsed = tool.isCollapsed();
+      tool.setCollapsed(!collapsed);
+      node.setCollapsed(!collapsed);
       if (collapsed) {
         expandNode(node.id);
       } else {

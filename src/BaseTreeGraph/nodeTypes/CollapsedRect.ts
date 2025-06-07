@@ -16,17 +16,6 @@ import {ICollapseNode, ThemeConfig} from "../types";
  *
  *
  *
- * upstream：上游, 仅支持一个展开
- * downstream：下游
- *
- * upstream: {
- *   count: 1;
- *   state: 'loading' | 'collapsed' | 'expanded' // 加载中，折叠，展开
- * }
- *
- * downstream：{ // event 可能有多个
- *
- * }
  */
 export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNode {
 
@@ -38,7 +27,8 @@ export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNo
 
   private addCollapseTool() {
     const count = this.getData()?.childCount as number;
-    if (count && this.visible) {
+    const visible = this.visible;
+    if (count && visible) {
       const collapsed = this.isCollapsed();
       this.addTools({
         name: 'collapse-btn',
@@ -56,7 +46,6 @@ export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNo
     fontFamily && this.attr('label/fontFamily', fontFamily);
     if (primaryColor) {
       this.attr('body/stroke', primaryColor);
-      this.attr('collapseIcon/stroke', primaryColor);
     }
   }
 
@@ -65,27 +54,17 @@ export class CollapsedRect extends RectWidthDefaultConfig implements ICollapseNo
     if (visible) {
       this.addCollapseTool();
     } else {
-      this.removeTools({silent: false})
+      this.removeTool('collapse-btn', {silent: false});
     }
     return this;
   }
 
+  public setCollapsed(collapsed: boolean){
+    this.store.set('collapsed', collapsed);
+  }
 
   public isCollapsed() {
     return this.store.get('collapsed') ?? true; // 默认是收起
-  }
-
-  public toggleCollapsed() {
-    const nextCollapsed = !this.isCollapsed();
-    this.store.set('collapsed', nextCollapsed);
-    const count = this.getData()?.childCount as number;
-    this.setTools({
-      name: 'collapse-btn',
-      args: {
-        count,
-        collapsed: nextCollapsed
-      },
-    })
   }
 }
 

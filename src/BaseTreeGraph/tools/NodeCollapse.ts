@@ -16,12 +16,13 @@ type NodeCollapseButtonOptions = Button.Options & {
   collapsed: boolean;
 };
 
+
 /**
  * 需要支持上游下游
  */
-class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
+export class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions>{
   private loading: boolean = false; // loading状态
-  private collapsed: boolean = true;
+  // private collapsed: boolean; // 会自动被赋值为undefined
   public static defaults = {
     ...Button.Remove.defaults,
     name: 'collapse-btn',
@@ -113,12 +114,14 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
    * @param collapsed
    */
   public setCollapsed(collapsed: boolean){
+    // @ts-ignore
     this.collapsed = collapsed;
     this.update();
   }
 
   public isCollapsed(): boolean {
-    return this.collapsed;
+    // @ts-ignore
+    return this.collapsed ?? true;
   }
 
   public setLoading(loading: boolean){
@@ -126,8 +129,9 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
     this.update();
   }
 
-  protected getOptions(options: Partial<NodeCollapseButtonOptions>): NodeCollapseButtonOptions {
+  protected getOptions(options: Partial<NodeCollapseButtonOptions>): NodeCollapseButtonOptions{
     const _options = super.getOptions(options);
+    // @ts-ignore
     this.collapsed = _options.collapsed;
     const count = _options.count || 0;
     ObjectExt.setByPath(_options, 'markup/0/textContent', count); // 数量显示
@@ -141,7 +145,7 @@ class NodeCollapseButton extends Button.Remove<any, NodeCollapseButtonOptions> {
     } else {
       Dom.removeClass(this.container,'collapse-spin');
     }
-    if (!this.collapsed) {
+    if (!this.isCollapsed()) {
       Dom.addClass(this.container,'collapse-expanded');
     } else {
       Dom.removeClass(this.container,'collapse-expanded');
