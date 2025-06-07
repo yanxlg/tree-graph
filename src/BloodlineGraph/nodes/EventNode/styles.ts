@@ -122,15 +122,3 @@ export const useCollapseStyles = createStyles(({css}) => ({
     color: '#333'
   }
 }))
-
-
-export const useConnectorStyles = createStyles(({css}) => ({
-  handle: css`
-    visibility: hidden;
-    width: 0;
-    height: 0;
-    min-width: 0;
-    min-height: 0;
-    border: none;
-  `
-}))

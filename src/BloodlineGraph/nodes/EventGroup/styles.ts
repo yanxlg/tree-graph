@@ -8,17 +8,12 @@
 
 import {createStyles} from 'antd-style';
 import {codeToColor} from "../../utils/codeToColor";
-import {toRGBA} from "../../utils/toRGBA";
 import {EVENT_GROUP_NODE_WIDTH, EVENT_NODE_WIDTH} from "../../constants";
 
 export const useStyles = createStyles(({token, css, prefixCls}, props: { color?: string; type: string }) => {
   const themeColor = props.color || codeToColor(props.type);
-  const bgColor = toRGBA(themeColor, 0.1);
 
   return {
-    handle: css`
-      visibility: hidden;
-    `,
     group: css`
       border: 1px solid ${themeColor};
       width: ${EVENT_GROUP_NODE_WIDTH}px;

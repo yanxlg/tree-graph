@@ -7,7 +7,7 @@
  */
 
 import React, {useEffect, useState} from "react";
-import {Handle, NodeProps, Position, useUpdateNodeInternals} from "@xyflow/react";
+import {NodeProps, Position, useUpdateNodeInternals} from "@xyflow/react";
 import {EventGroupNodeType} from "../../types";
 import {isEqual} from "lodash";
 import {useStyles} from "./styles";
@@ -21,6 +21,7 @@ import {useGraphProps} from "../../providers/ConfigProvider";
 import {useCleanWithDepth} from "../../hooks/useCleanWithDepth";
 import {useCollapseWithDepth} from "../../atoms/handle";
 import {useInstanceRegister} from "../../providers/NodeInstanceProvider";
+import Handle from "../../components/Handle";
 
 export const EventGroupNode = React.memo((props: NodeProps<EventGroupNodeType>) => {
   const {data, id} = props;
@@ -95,7 +96,6 @@ export const EventGroupNode = React.memo((props: NodeProps<EventGroupNodeType>) 
       expanded: expanded
     })}>
       <Handle
-        className={styles.handle}
         type="target"
         position={depth > 0 ? Position.Left : Position.Right}
         id={'input'}

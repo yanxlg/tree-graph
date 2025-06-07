@@ -12,6 +12,7 @@ import {
   BaseEdge,
   type Edge,
   type EdgeProps,
+  SmoothStepEdge
 } from '@xyflow/react';
 
 // this is a little helper component to render the actual edge label
@@ -44,37 +45,27 @@ const getEdgeFill = (edgeType?: string) => {
 }
 
 const CustomEdge: FC<
-  EdgeProps<Edge<{ edgeLabel?: string; depth: number; edgeType?: string }>>
+  EdgeProps<Edge<{ edgeLabel?: string; edgeType?: string }>>
 > = (
-  {
-    id,
+  props) => {
+  const {
     sourceX,
-    sourceY,
     targetX,
     targetY,
-    sourcePosition,
-    targetPosition,
     data
-  }) => {
-  const [edgePath] = getSmoothStepPath({
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  });
-  const depth = data?.depth ?? 0;
+  } = props;
   const edgeLabel = data?.edgeLabel;
   const edgeType = data?.edgeType;
 
+  const stroke = getEdgeFill(edgeType);
+
   return (
     <>
-      <BaseEdge id={id} path={edgePath} style={{stroke: getEdgeFill(edgeType)}}/>
+      <SmoothStepEdge {...props} style={{stroke, zIndex: edgeType ? 10 : undefined}}/>
       <EdgeLabelRenderer>
         {edgeLabel && (
           <EdgeLabel
-            transform={`translate(${depth < 0 ? '0%' : '-100%'}, -100%) translate(${targetX}px,${targetY}px)`}
+            transform={`translate(${targetX < sourceX ? '0%' : '-100%'}, -100%) translate(${targetX + (targetX < sourceX ? 5 : -5)}px,${targetY}px)`}
             label={edgeLabel}
           />
         )}
