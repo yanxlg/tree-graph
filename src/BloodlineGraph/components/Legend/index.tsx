@@ -8,15 +8,14 @@
 
 
 import {useStyles} from "./styles";
-import {useAtomValue} from "jotai";
-import {nodeAtom} from "../../atoms/cells";
 import {useMemo} from "react";
 import {codeToColor} from "../../utils/codeToColor";
 import {Space} from "antd";
+import {useNodesManager} from "../../providers/NodesManagerProvider";
 
 export const Legend = () => {
   const {styles} = useStyles();
-  const nodes = useAtomValue(nodeAtom);
+  const {nodes} = useNodesManager();
   const legendList = useMemo(() => {
     const typeMap = new Map<string, {
       type: string;

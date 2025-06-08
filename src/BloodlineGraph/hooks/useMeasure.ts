@@ -7,15 +7,15 @@
  */
 
 import {useEffect, useRef} from "react";
-import {useSetAtom} from "jotai";
-import {nodeAtom} from "../atoms/cells";
+import {useNodesManager} from "../providers/NodesManagerProvider";
 
 export const useMeasure = (id: string, measure: boolean)=>{
   const ref = useRef<HTMLDivElement>(null);
-  const setNodes = useSetAtom(nodeAtom);
+  const {setNodes} = useNodesManager();
 
   useEffect(() => {
     if (ref.current && measure) {
+      // TODO 这个性能有点低，都需要遍历，未来会存在性能瓶颈
       const resizeObserver = new ResizeObserver((entries) => {
         // 获取节点的新尺寸
         const { width, height } = entries[0].contentRect;

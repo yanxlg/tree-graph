@@ -41,9 +41,6 @@ importers:
       '@antv/x6-plugin-transform':
         specifier: 2.1.8
         version: 2.1.8(@antv/x6@2.18.1)
-      '@dagrejs/dagre':
-        specifier: ^1.1.4
-        version: 1.1.4
       '@xyflow/react':
         specifier: ^12.6.4
         version: 12.6.4(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -53,12 +50,12 @@ importers:
       antd-style:
         specifier: ^3.7.1
         version: 3.7.1(@types/react@19.1.5)(antd@5.25.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      classcat:
+        specifier: ^5.0.5
+        version: 5.0.5
       jotai:
         specifier: ^2.12.5
         version: 2.12.5(@types/react@19.1.5)(react@19.1.0)
-      jotai-optics:
-        specifier: 0.4.0
-        version: 0.4.0(jotai@2.12.5(@types/react@19.1.5)(react@19.1.0))(optics-ts@2.4.1)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -567,13 +564,6 @@ packages:
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       postcss-selector-parser: ^6.0.10
-
-  '@dagrejs/dagre@1.1.4':
-    resolution: {integrity: sha512-QUTc54Cg/wvmlEUxB+uvoPVKFazM1H18kVHBQNmK2NbrDR5ihOCR6CXLnDSZzMcSQKJtabPUWridBOlJM3WkDg==}
-
-  '@dagrejs/graphlib@2.2.4':
-    resolution: {integrity: sha512-mepCf/e9+SKYy1d02/UkvSy6+6MoyXhVxP8lLDfA7BPE1X1d4dR0sZznmbM8/XVJ1GPM+Svnx7Xj6ZweByWUkw==}
-    engines: {node: '>17.0.0'}
 
   '@emotion/babel-plugin@11.13.5':
     resolution: {integrity: sha512-pxHCpT2ex+0q+HH91/zsdHkw/lXd468DIN2zvfvLtPKLLMo6gQj7oLObq8PhkrxOZb/gGCq03S3Z7PDhS8pduQ==}
@@ -4348,12 +4338,6 @@ packages:
   jju@1.4.0:
     resolution: {integrity: sha512-8wb9Yw966OSxApiCt0K3yNJL8pnNeIv+OEq2YMidz4FKP6nonSRoOXc80iXY4JaN2FC11B9qsNmDsm+ZOfMROA==}
 
-  jotai-optics@0.4.0:
-    resolution: {integrity: sha512-osbEt9AgS55hC4YTZDew2urXKZkaiLmLqkTS/wfW5/l0ib8bmmQ7kBXSFaosV6jDDWSp00IipITcJARFHdp42g==}
-    peerDependencies:
-      jotai: '>=2.0.0'
-      optics-ts: '>=2.0.0'
-
   jotai@2.12.5:
     resolution: {integrity: sha512-G8m32HW3lSmcz/4mbqx0hgJIQ0ekndKWiYP7kWVKi0p6saLXdSoye+FZiOFyonnd7Q482LCzm8sMDl7Ar1NWDw==}
     engines: {node: '>=12.20.0'}
@@ -5143,9 +5127,6 @@ packages:
   open@9.1.0:
     resolution: {integrity: sha512-OS+QTnw1/4vrf+9hh1jc1jnYjzSG4ttTBB8UxOwAnInG3Uo4ssetzC1ihqaIHjLJnA5GGlRl6QlZXOTQhRBUvg==}
     engines: {node: '>=14.16'}
-
-  optics-ts@2.4.1:
-    resolution: {integrity: sha512-HaYzMHvC80r7U/LqAd4hQyopDezC60PO2qF5GuIwALut2cl5rK1VWHsqTp0oqoJJWjiv6uXKqsO+Q2OO0C3MmQ==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -7846,12 +7827,6 @@ snapshots:
   '@csstools/selector-specificity@2.2.0(postcss-selector-parser@6.1.2)':
     dependencies:
       postcss-selector-parser: 6.1.2
-
-  '@dagrejs/dagre@1.1.4':
-    dependencies:
-      '@dagrejs/graphlib': 2.2.4
-
-  '@dagrejs/graphlib@2.2.4': {}
 
   '@emotion/babel-plugin@11.13.5':
     dependencies:
@@ -12518,11 +12493,6 @@ snapshots:
 
   jju@1.4.0: {}
 
-  jotai-optics@0.4.0(jotai@2.12.5(@types/react@19.1.5)(react@19.1.0))(optics-ts@2.4.1):
-    dependencies:
-      jotai: 2.12.5(@types/react@19.1.5)(react@19.1.0)
-      optics-ts: 2.4.1
-
   jotai@2.12.5(@types/react@19.1.5)(react@19.1.0):
     optionalDependencies:
       '@types/react': 19.1.5
@@ -13536,8 +13506,6 @@ snapshots:
       define-lazy-prop: 3.0.0
       is-inside-container: 1.0.0
       is-wsl: 2.2.0
-
-  optics-ts@2.4.1: {}
 
   optionator@0.9.4:
     dependencies:

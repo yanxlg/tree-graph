@@ -13,10 +13,12 @@ import MinusOutlined from '@ant-design/icons/MinusOutlined';
 import {useMemoizedFn} from "ahooks";
 import {useAppendChildren} from "../../hooks/useAppendChildren";
 import {Space} from "antd";
-import {useHandleState, useSetHandleState} from "../../atoms/handle";
 import {useCleanWithDepth} from "../../hooks/useCleanWithDepth";
 import {useGraphProps} from "../../providers/ConfigProvider";
 import LoadingOutlined from "@ant-design/icons/lib/icons/LoadingOutlined";
+import {useHandleStore} from "../../hooks/useHandleStore";
+
+
 
 
 export function CollapseButton(props: CollapseButtonProps) {
@@ -24,10 +26,11 @@ export function CollapseButton(props: CollapseButtonProps) {
   const {styles, cx} = useCollapseStyles();
   const {getRelation} = useGraphProps();
 
-  const handleState = useHandleState(handleKey);
-  const updateHandleState = useSetHandleState(handleKey);
+  const {state, resetCollapsedWithDepth, mergeState, getCollapseState} = useHandleStore(handleKey);
 
-  const {loading = false, collapsed = true, items, hasRelations} = handleState || {};
+
+
+  const {loading = false, collapsed = true, items, hasRelations} = state || {};
   const {count} = relation;
 
   const append = useAppendChildren(nextDepth, handleKey);
@@ -41,45 +44,43 @@ export function CollapseButton(props: CollapseButtonProps) {
     }
     if (collapsed) {
       if (items) {
-        clean();
-        updateHandleState({
-          hasRelations: true,
-          loading: false,
-          collapsed: false,
-          nextDepth: nextDepth,
-          items
-        });
+        clean(); // 清除后续节点
+        resetCollapsedWithDepth(nextDepth); // 重置同级展开状态
+        mergeState({
+          collapsed: false
+        })
         append(items as any);
       } else {
-        updateHandleState({
-          hasRelations: true,
+        mergeState({
           loading: true,
-          collapsed: true,
-          nextDepth: nextDepth,
-          items: items as any
-        });
+          collapsed: false
+        })
         clean();
+        resetCollapsedWithDepth(nextDepth); // 重置同级展开状态
         getRelation(nextDepth, position === 'right' ? 'down' : 'up', node, relation).then((items) => {
           const hasRelations = items.length > 0;
           relation.count = items.length;
-          updateHandleState({
+          if(!getCollapseState()){
+            append(items as any); // 如果已经关闭，则不显示对应节点
+          }
+          mergeState({
             loading: false,
-            collapsed: false,
-            nextDepth: nextDepth,
             items,
             hasRelations
-          });
-          append(items as any);
+          })
         });
       }
     } else {
-      updateHandleState({
-        hasRelations: true,
-        loading: false,
-        collapsed: true,
-        nextDepth: nextDepth,
-        items: items as any
-      });
+      mergeState({
+        collapsed: false
+      })
+      // updateHandleState({
+      //   hasRelations: true,
+      //   loading: false,
+      //   collapsed: true,
+      //   nextDepth: nextDepth,
+      //   items: items as any
+      // });
       clean();
     }
   });

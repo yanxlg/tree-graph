@@ -6,41 +6,30 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {NodeProps, Position, useUpdateNodeInternals} from "@xyflow/react";
 import {EventGroupNodeType} from "../../types";
 import {isEqual} from "lodash";
 import {useStyles} from "./styles";
 import ArrowsAltOutlined from '@ant-design/icons/ArrowsAltOutlined';
 import ShrinkOutlined from '@ant-design/icons/ShrinkOutlined';
-import {Pagination, Spin, Space} from 'antd';
+import {Pagination, Space, Spin} from 'antd';
 import {useMemoizedFn, usePagination, useUpdateEffect} from "ahooks";
 import {EventNode} from "../EventNode";
 import {useMeasure} from "../../hooks/useMeasure";
 import {useGraphProps} from "../../providers/ConfigProvider";
 import {useCleanWithDepth} from "../../hooks/useCleanWithDepth";
-import {useCollapseWithDepth} from "../../atoms/handle";
-import {useInstanceRegister} from "../../providers/NodeInstanceProvider";
 import Handle from "../../components/Handle";
+import useReactive from "../../hooks/useReactive";
+import {useCollapseWithDepth} from "../../hooks/useHandleStore";
 
 export const EventGroupNode = React.memo((props: NodeProps<EventGroupNodeType>) => {
   const {data, id} = props;
   const {title, depth, color, type, totalCount} = data;
   const {styles, cx} = useStyles({color, type});
-  const [expanded, setExpanded] = useState(false);
   const {getChildren} = useGraphProps();
-  const {setInstance, removeInstance} = useInstanceRegister();
-
-
-  useEffect(() => {
-    const instance = {
-      setExpanded,
-    };
-    setInstance(depth, instance);
-    return () => {
-      removeInstance(depth, instance);
-    }
-  }, []);
+  const store = useReactive(data.$store);
+  const expanded = store.expanded;
 
   const {loading, data: pageData, pagination, run} = usePagination(async (params) => {
     const current = params.current;
@@ -55,18 +44,17 @@ export const EventGroupNode = React.memo((props: NodeProps<EventGroupNodeType>) 
   const clean = useCleanWithDepth(nextDepth);
   const {total = 0, list = []} = pageData || {};
 
-  const collapseDepth = useCollapseWithDepth();
+  const collapseDepth = useCollapseWithDepth(depth);
   const updateNodeInternals = useUpdateNodeInternals();
 
   const onToggleCollapse = useMemoizedFn(() => {
-    const nextExpanded = !expanded;
-    setExpanded(nextExpanded);
+    store.expanded = !expanded;
   });
 
   useUpdateEffect(() => {
     if (!expanded) {
       clean(); // 后续的全部收起来，折叠状态也需要变化
-      collapseDepth(depth);
+      collapseDepth();
     }
     if (expanded) {
       if (!pageData) {
@@ -85,7 +73,7 @@ export const EventGroupNode = React.memo((props: NodeProps<EventGroupNodeType>) 
 
   const onPaginationChange = useMemoizedFn((current: number, pageSize: number) => {
     clean(); // 后续的全部收起来，折叠状态也需要变化
-    collapseDepth(depth);
+    collapseDepth();
     pagination.onChange(current, pageSize);
   });
 

@@ -67,6 +67,18 @@ export type EventData = {
    */
   color?: string;
 
+  $store: {
+    expanded: boolean;
+    handleMap: {
+      [handleKey: string]: {
+        loading?: boolean;
+        collapsed?: boolean;
+        items?: Array<EventGroupData>;
+        hasRelations?: boolean;
+      }
+    }
+  };
+
   [key: string]: any;
 }
 
@@ -97,6 +109,18 @@ export type EventGroupData = {
    */
   edgeType?: 'danger';
 
+  $store: {
+    expanded: boolean;
+    handleMap: {
+      [handleKey: string]: {
+        loading?: boolean;
+        collapsed?: boolean;
+        items?: Array<EventGroupData>;
+        hasRelations?: boolean;
+      }
+    }
+  };
+
   [key: string]: any;
 }
 
@@ -105,7 +129,9 @@ export type EventNodeType = Node<EventData>
 
 export type EventGroupNodeType = Node<EventGroupData>
 
-export type NodeType = EventNodeType | EventGroupNodeType;
+export type NodeType = (EventNodeType | EventGroupNodeType) & {
+  edge?: EdgeType;
+};
 
 export type EdgeType = Edge<{
   depth: number;

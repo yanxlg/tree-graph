@@ -36,12 +36,16 @@ function getNodeHeight(node: Node) {
 }
 
 
-function getNodeTree(nodes: NodeType[], edges: Edge[]) {
+function getNodeTree(nodes: NodeType[]) {
+  const edges:Edge[]= [];
   const nodeMap = new Map<string, NodeType>();
   let root: NodeType = nodes[0];
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
     nodeMap.set(node.id, node);
+    if(node.edge){
+      edges.push(node.edge);
+    }
   }
 
   const relationMap = new Map<string, string[]>();
@@ -60,7 +64,8 @@ function getNodeTree(nodes: NodeType[], edges: Edge[]) {
   return {
     root,
     relationMap,
-    nodeMap
+    nodeMap,
+    edges
   }
 }
 
@@ -68,9 +73,9 @@ function countAllGroupItems(groups: any[]) {
   return groups.reduce((prev, node) => prev + node.data.data.totalCount || 0, 0);
 }
 
-export const mindmapNodes = (nodes: NodeType[], edges: Edge[]) => {
+export const mindmapNodes = (nodes: NodeType[]) => {
   // 构建 tree
-  const {root, relationMap, nodeMap} = getNodeTree(nodes, edges);
+  const {root, relationMap, nodeMap, edges} = getNodeTree(nodes);
   const layoutResult = Hierarchy.compactBox(root, {
     direction: 'H',
     getHeight(node) {
@@ -133,6 +138,6 @@ export const mindmapNodes = (nodes: NodeType[], edges: Edge[]) => {
         })
       })
     }
-  })
-  return layoutNodes;
+  });
+  return {nodes: layoutNodes, edges};
 }

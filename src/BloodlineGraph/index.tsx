@@ -11,7 +11,6 @@ import {
   Controls,
   ReactFlow,
 } from '@xyflow/react';
-import {Provider, useAtomValue, useSetAtom} from 'jotai';
 
 import '@xyflow/react/dist/style.css';
 import {EventNode} from "./nodes/EventNode";
@@ -19,14 +18,13 @@ import {EventGroupNode} from "./nodes/EventGroup";
 import {layoutElements} from "./utils/layout";
 import {useEffect, useMemo} from "react";
 import {EventData, GraphProps} from "./types";
-import {cellsAtom, nodeAtom} from "./atoms/cells";
 import CustomEdge from "./nodes/Edge";
 import {ConfigProvider} from "./providers/ConfigProvider";
 import {createEventNode} from "./utils/createEventNode";
 import {Legend} from "./components/Legend";
 import DepthToolNode from "./nodes/DepthToolNode";
-import {NodeInstanceProvider} from "./providers/NodeInstanceProvider";
 import {useStyles} from "./styles";
+import {NodesManagerProvider, useNodesManager} from "./providers/NodesManagerProvider";
 
 const nodeTypes = {
   event: EventNode,
@@ -42,8 +40,7 @@ const fitViewOptions = {padding: 2, minZoom: 1, maxZoom: 1};
 const proOptions = {hideAttribution: true};
 
 function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boolean }) {
-  const {nodes, edges} = useAtomValue(cellsAtom);
-  const setNodes = useSetAtom(nodeAtom);
+  const {nodes, setNodes} = useNodesManager();
 
   const {styles} = useStyles();
 
@@ -57,10 +54,10 @@ function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boole
 
   const {nodes: _nodes, edges: _edges} = useMemo(() => {
     if (nodes.length === 0) {
-      return {nodes, edges};
+      return {nodes, edges: []};
     }
-    return layoutElements(nodes, edges);
-  }, [nodes, edges]);
+    return layoutElements(nodes);
+  }, [nodes]);
 
   return (
     <div className={styles.graph}>
@@ -79,7 +76,7 @@ function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boole
         onlyRenderVisibleElements={false}
       >
         {showLegend && <Legend/>}
-        <Background bgColor="#F2F7FAFF" variant={BackgroundVariant.Dots} />
+        <Background bgColor="#F2F7FAFF" variant={BackgroundVariant.Dots}/>
         <Controls style={{zIndex: 200}} position={'top-right'} showInteractive={false}/>
       </ReactFlow>
     </div>
@@ -90,11 +87,9 @@ function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boole
 export default (props: GraphProps) => {
   return (
     <ConfigProvider config={props}>
-      <NodeInstanceProvider>
-        <Provider>
-          <Graph root={props.root} showLegend={props.showLegend}/>
-        </Provider>
-      </NodeInstanceProvider>
+      <NodesManagerProvider>
+        <Graph root={props.root} showLegend={props.showLegend}/>
+      </NodesManagerProvider>
     </ConfigProvider>
   )
 }

@@ -5,34 +5,14 @@
  *
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
-import React, {type FC} from 'react';
+import React, {type FC, memo} from 'react';
 import {
   getSmoothStepPath,
-  EdgeLabelRenderer,
   BaseEdge,
   type Edge,
   type EdgeProps,
-  SmoothStepEdge
 } from '@xyflow/react';
-
-// this is a little helper component to render the actual edge label
-function EdgeLabel({transform, label}: { transform: string; label: string }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        // background: 'rgba(255, 255, 255, 0.75)',
-        // color: '#ff5050',
-        fontSize: 10,
-        fontWeight: 700,
-        transform,
-      }}
-      className="nodrag nopan"
-    >
-      {label}
-    </div>
-  );
-}
+import EdgeText from '../components/EdgeText';
 
 
 const getEdgeFill = (edgeType?: string) => {
@@ -52,8 +32,32 @@ const CustomEdge: FC<
     sourceX,
     targetX,
     targetY,
-    data
+    data,
+    sourceY,
+    sourcePosition,
+    targetPosition,
+    pathOptions,
+    id,
+    interactionWidth,
+    markerStart,
+    markerEnd,
+    style,
+    labelBgBorderRadius,
+    labelBgPadding,
+    labelBgStyle,
   } = props;
+
+  const [path] = getSmoothStepPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+    borderRadius: pathOptions?.borderRadius,
+    offset: pathOptions?.offset,
+  });
+
   const edgeLabel = data?.edgeLabel;
   const edgeType = data?.edgeType;
 
@@ -61,17 +65,36 @@ const CustomEdge: FC<
 
   return (
     <>
-      <SmoothStepEdge {...props} style={{stroke, zIndex: edgeType ? 10 : undefined}}/>
-      <EdgeLabelRenderer>
-        {edgeLabel && (
-          <EdgeLabel
-            transform={`translate(${targetX < sourceX ? '0%' : '-100%'}, -100%) translate(${targetX + (targetX < sourceX ? 5 : -5)}px,${targetY}px)`}
-            label={edgeLabel}
-          />
-        )}
-      </EdgeLabelRenderer>
+      <BaseEdge
+        path={path}
+        id={id}
+        interactionWidth={interactionWidth}
+        markerStart={markerStart}
+        markerEnd={markerEnd}
+        style={
+          {
+            ...style,
+            stroke,
+            zIndex: edgeType ? 10 : undefined
+          }
+        }
+      />
+      <EdgeText
+        labelBgBorderRadius={labelBgBorderRadius}
+        labelBgPadding={labelBgPadding}
+        labelBgStyle={labelBgStyle}
+        labelShowBg={false}
+        labelStyle={{
+          textAnchor: targetX < sourceX ? 'start' : 'end',
+          dominantBaseline: 'ideographic',
+          fontSize: 12,
+        }}
+        label={edgeLabel}
+        x={targetX + (targetX < sourceX ? 5 : -5)}
+        y={targetY - 5}
+      />
     </>
   );
 };
 
-export default CustomEdge;
+export default memo(CustomEdge);

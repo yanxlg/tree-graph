@@ -7,6 +7,7 @@
  */
 
 import {EventData, EventNodeType, EventGroupData, EventGroupNodeType} from "../types";
+import {createObserver} from "../hooks/useReactive";
 
 export function generateUUID() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -22,7 +23,12 @@ export const createEventNode = (nodeData: EventData) => {
   return {
     id: nodeData.id,
     type: 'event',
-    data: nodeData,
+    data: {
+      ...nodeData,
+      $store: createObserver({
+        handleMap: {}
+      })
+    },
   } as EventNodeType
 }
 
@@ -34,6 +40,10 @@ export const createEventGroupNode = (nodeData: EventGroupData) => {
     data: {
       ...nodeData,
       id,
+      $store: createObserver({
+        expanded: false,
+        handleMap: {}
+      })
     }
   } as unknown as EventGroupNodeType
 }

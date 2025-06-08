@@ -6,9 +6,8 @@
  * Copyright (c) 2025 by yanxianliang, All Rights Reserved.
  */
 
-import {NodeType, EdgeType} from "../types";
-import {useSetAtom} from "jotai";
-import {cellsAtom} from "../atoms/cells";
+import {NodeType} from "../types";
+import {useNodesManager} from "../providers/NodesManagerProvider";
 
 
 function filterNodesByDepth(nodes: Array<NodeType>, nextDepth: number) {
@@ -28,33 +27,11 @@ function filterNodesByDepth(nodes: Array<NodeType>, nextDepth: number) {
   return newNodes;
 }
 
-function filterEdgesByDepth(edges: EdgeType[], nextDepth: number) {
-  let newEdges: EdgeType[] = [];
-  for (let i = 0; i < edges.length; i++) {
-    const node = edges[i];
-    if (nextDepth > 0) {
-      if (node.data!.depth < nextDepth) {
-        newEdges.push(node);
-      }
-    } else {
-      if (node.data!.depth > nextDepth) {
-        newEdges.push(node);
-      }
-    }
-  }
-  return newEdges;
-}
-
-export const useCleanWithDepth = (nextDepth: number)=>{
-  const setCells = useSetAtom(cellsAtom);
-  return ()=>{
-    setCells(({nodes, edges})=>{
-      const _nodes = filterNodesByDepth(nodes as NodeType[], nextDepth);
-      const _edges = filterEdgesByDepth(edges as EdgeType[], nextDepth);
-      return {
-        nodes: _nodes,
-        edges: _edges
-      }
+export const useCleanWithDepth = (nextDepth: number) => {
+  const {setNodes} = useNodesManager();
+  return () => {
+    setNodes((nodes) => {
+      return filterNodesByDepth(nodes as NodeType[], nextDepth)
     });
   }
 }

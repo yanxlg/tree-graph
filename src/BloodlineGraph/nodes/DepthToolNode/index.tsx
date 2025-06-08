@@ -11,12 +11,11 @@ import {DepthToolbarData} from "../../types";
 import QuestionCircleOutlined from '@ant-design/icons/QuestionCircleOutlined';
 import {Tooltip, Button} from "antd";
 import {useStyles} from "./styles";
-import {useInstanceRegister} from "../../providers/NodeInstanceProvider";
 import {useCallback, memo} from "react";
 import {isEqual} from 'lodash';
+import {useNodesManager} from "../../providers/NodesManagerProvider";
 
 function numberToChinese(num: number): string {
-  const units = ['', '十', '百', '千'];
   const chars = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
   const absNum = Math.abs(num);
 
@@ -36,27 +35,25 @@ const ToolbarNode = memo((props: NodeProps<Node<DepthToolbarData>>) => {
   const {data} = props;
   const {depth, count} = data || {};
   const {styles} = useStyles();
-  const {instanceMap} = useInstanceRegister();
+  const {getNodes} = useNodesManager();
 
   const onExpandAll = useCallback(() => {
-    const instanceSet = instanceMap.get(depth);
-    if (instanceSet) {
-      instanceSet.forEach(instance => {
-        if (instance && instance.setExpanded) {
-          instance.setExpanded(true);
-        }
-      })
+    const nodes = getNodes(); // 找到当前层级的
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if(node?.data?.depth === depth && node?.data?.$store){
+        node.data.$store.expanded= true;
+      }
     }
   }, [])
 
   const onCollapseAll = useCallback(() => {
-    const instanceSet = instanceMap.get(depth);
-    if (instanceSet) {
-      instanceSet.forEach(instance => {
-        if (instance && instance.setExpanded) {
-          instance.setExpanded(false);
-        }
-      })
+    const nodes = getNodes(); // 找到当前层级的
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if(node?.data?.depth === depth && node?.data?.$store){
+        node.data.$store.expanded= false;
+      }
     }
   }, [])
 
