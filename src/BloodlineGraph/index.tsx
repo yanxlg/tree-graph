@@ -8,7 +8,6 @@
 import {
   Background,
   BackgroundVariant,
-  Controls,
   ReactFlow,
 } from '@xyflow/react';
 
@@ -16,7 +15,7 @@ import '@xyflow/react/dist/style.css';
 import {EventNode} from "./nodes/EventNode";
 import {EventGroupNode} from "./nodes/EventGroup";
 import {layoutElements} from "./utils/layout";
-import {useEffect, useMemo} from "react";
+import {useEffect, useMemo, useRef} from "react";
 import {EventData, GraphProps} from "./types";
 import CustomEdge from "./nodes/Edge";
 import {ConfigProvider} from "./providers/ConfigProvider";
@@ -25,6 +24,7 @@ import {Legend} from "./components/Legend";
 import DepthToolNode from "./nodes/DepthToolNode";
 import {useStyles} from "./styles";
 import {NodesManagerProvider, useNodesManager} from "./providers/NodesManagerProvider";
+import Controls from './components/Controls';
 
 const nodeTypes = {
   event: EventNode,
@@ -41,6 +41,7 @@ const proOptions = {hideAttribution: true};
 
 function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boolean }) {
   const {nodes, setNodes} = useNodesManager();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const {styles} = useStyles();
 
@@ -60,7 +61,7 @@ function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boole
   }, [nodes]);
 
   return (
-    <div className={styles.graph}>
+    <div className={styles.graph} ref={containerRef}>
       <ReactFlow
         preventScrolling={false}
         panOnScroll={false}
@@ -77,7 +78,7 @@ function Graph({root, showLegend = true}: { root?: EventData; showLegend?: boole
       >
         {showLegend && <Legend/>}
         <Background bgColor="#F2F7FAFF" variant={BackgroundVariant.Dots}/>
-        <Controls style={{zIndex: 200}} position={'top-right'} showInteractive={false}/>
+        <Controls containerRef={containerRef} fitViewOptions={fitViewOptions} position={'top-right'} showInteractive={false}/>
       </ReactFlow>
     </div>
   )

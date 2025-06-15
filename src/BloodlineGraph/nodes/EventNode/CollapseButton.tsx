@@ -17,8 +17,7 @@ import {useCleanWithDepth} from "../../hooks/useCleanWithDepth";
 import {useGraphProps} from "../../providers/ConfigProvider";
 import LoadingOutlined from "@ant-design/icons/lib/icons/LoadingOutlined";
 import {useHandleStore} from "../../hooks/useHandleStore";
-
-
+import {countCollapseItems} from "../../utils/countRelations";
 
 
 export function CollapseButton(props: CollapseButtonProps) {
@@ -59,20 +58,21 @@ export function CollapseButton(props: CollapseButtonProps) {
         resetCollapsedWithDepth(nextDepth); // 重置同级展开状态
         getRelation(nextDepth, position === 'right' ? 'down' : 'up', node, relation).then((items) => {
           const hasRelations = items.length > 0;
-          relation.count = items.length;
+          relation.count = countCollapseItems(items); // count 需要计算所有总数
+
           if(!getCollapseState()){
             append(items as any); // 如果已经关闭，则不显示对应节点
           }
           mergeState({
             loading: false,
-            items,
+            items: items,
             hasRelations
           })
         });
       }
     } else {
       mergeState({
-        collapsed: false
+        collapsed: true
       })
       // updateHandleState({
       //   hasRelations: true,

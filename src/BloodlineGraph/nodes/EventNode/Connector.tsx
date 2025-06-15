@@ -28,7 +28,8 @@ export const Connector = (
     node: EventData;
   }) => {
   const count = relation.count; // 需要同步更新到 relation 信息中
-  if (count === 0) {
+  const hasChildren = relation.hasChildren;
+  if (count === 0 || hasChildren === false) {
     return null;
   }
   return (

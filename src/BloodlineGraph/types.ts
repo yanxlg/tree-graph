@@ -20,13 +20,19 @@ export type HandleStoreMap = {
 
 export type EventRelation = {
   count?: number;
+  hasChildren?: boolean; // hasChildren === false 则不显示下游展开
 }
 
-export type DownStreamItem =  {
+export type DownStreamItem = {
+  code: string;
   /**
    * 版本
    */
   version: string;
+  /**
+   * 小版本号
+   */
+  miniVersion?: string;
   /**
    * 状态
    */
@@ -39,6 +45,7 @@ export type DownStreamItem =  {
    * key，未设置会通过版本生成
    */
   key?: string
+  id?: string;
 }
 
 export type EventData = {
@@ -73,7 +80,7 @@ export type EventData = {
       [handleKey: string]: {
         loading?: boolean;
         collapsed?: boolean;
-        items?: Array<EventGroupData>;
+        items?: Array<Omit<EventGroupData, '$store'>>;
         hasRelations?: boolean;
       }
     }
@@ -153,12 +160,12 @@ export type DepthToolbarData = {
 
 
 export type GraphProps = {
-  PopoverComponent: React.ComponentType<{ id: string; title: string }>;
+  PopoverComponent: React.ComponentType<{ id?: string; title: string; code: string }>;
   root?: EventData;
   showLegend?: boolean;
-  getRelation: (nextDepth: number, direction: 'down' | 'up', from: EventData, child: EventRelation) => Promise<EventGroupData[]>,
+  getRelation: (nextDepth: number, direction: 'down' | 'up', from: EventData, child: EventRelation) => Promise<Array<Omit<EventGroupData, '$store'>>>,
   getChildren: (data: EventGroupData, pageSize: number, pageNum: number) => Promise<{
     total: number;
-    list: EventData[]
+    list: Array<Omit<EventData, '$store'>>
   }>
 }

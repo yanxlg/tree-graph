@@ -10,6 +10,7 @@ import {DepthToolbarData, EventGroupNodeType, NodeType} from "../types";
 import {Node, Edge} from "@xyflow/react";
 import {EVENT_GROUP_NODE_WIDTH, EVENT_NODE_WIDTH} from "../constants";
 import {generateUUID} from "./createEventNode";
+import {countAllGroupItems} from "./countRelations";
 
 function getNodeWidth(node: Node) {
   switch (node.type) {
@@ -69,9 +70,6 @@ function getNodeTree(nodes: NodeType[]) {
   }
 }
 
-function countAllGroupItems(groups: any[]) {
-  return groups.reduce((prev, node) => prev + node.data.data.totalCount || 0, 0);
-}
 
 export const mindmapNodes = (nodes: NodeType[]) => {
   // 构建 tree

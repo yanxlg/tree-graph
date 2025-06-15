@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import {Bloodline} from '@gx6/tree-graph';
+import {BloodlineGraph} from '@gx6/tree-graph';
 import {EventData, EventGroupData} from "../../types";
 
 
@@ -47,10 +47,17 @@ function getRandomChildren() {
     type: type,
     typeLabel: type,
     downstream: [{
-      version: '1.0',
+      version: '1',
+      miniVersion: '4',
       count: 4
     }, {
-      version: '1.1',
+      version: '1',
+      count: 4
+    }, {
+      version: '3',
+      count: 4
+    }, {
+      key: 'dsadsa',
       count: 4
     }]
   } as EventData;
@@ -96,7 +103,7 @@ const root = {
 const Page = () => {
   return (
     <div style={{position: 'relative', height: 800}}>
-      <Bloodline getRelation={async (nextDepth)=>{
+      <BloodlineGraph getRelation={async (nextDepth)=>{
         return getDownstream(nextDepth);
       }} PopoverComponent={()=><div>11111</div>} root={root} getChildren={getChildren}/>
     </div>

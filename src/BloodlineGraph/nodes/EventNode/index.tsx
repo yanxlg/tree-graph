@@ -25,19 +25,16 @@ export const EventNode = React.memo((props: {
   const {title, color, type, depth} = data;
   const {styles, cx} = useStyles({color, type});
   const ref = useMeasure(id, measure); // 在 group 中，不需要
-  const {PopoverComponent} = useGraphProps();
+
   return (
     <div ref={ref} className={cx(styles.event, {
       [styles.inGroup]: inGroup
     })}>
-      <Popover styles={{body: {padding: 0}}} placement={'right'} content={<PopoverComponent id={id} title={title}/>}>
-        <div className={styles.box}/>
-      </Popover>
       <Upstream event={data} depth={depth}/>
       <div className={styles.title}>
         {title}
       </div>
-      <Downstream event={data} depth={depth} versionClassName={styles.eventVersion}/>
+      <Downstream title={title} event={data} depth={depth} versionClassName={styles.eventVersion}/>
     </div>
   )
 }, (prevProps, nextProps) => isEqual(prevProps.data, nextProps.data));

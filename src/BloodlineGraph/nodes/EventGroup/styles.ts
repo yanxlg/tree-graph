@@ -59,7 +59,7 @@ export const useStyles = createStyles(({token, css, prefixCls}, props: { color?:
       cursor: pointer;
     `,
     content: css`
-      padding: 10px ${(EVENT_GROUP_NODE_WIDTH - EVENT_NODE_WIDTH) / 2}px;
+      padding: 10px ${(EVENT_GROUP_NODE_WIDTH - EVENT_NODE_WIDTH - 2) / 2}px; // 有 border
     `,
     hide: css`
       //visibility: hidden;

@@ -12,7 +12,7 @@ import {
   type Edge,
   type EdgeProps,
 } from '@xyflow/react';
-import EdgeText from '../components/EdgeText';
+// import EdgeText from '../components/EdgeText';
 
 
 const getEdgeFill = (edgeType?: string) => {
@@ -42,9 +42,9 @@ const CustomEdge: FC<
     markerStart,
     markerEnd,
     style,
-    labelBgBorderRadius,
-    labelBgPadding,
-    labelBgStyle,
+    // labelBgBorderRadius,
+    // labelBgPadding,
+    // labelBgStyle,
   } = props;
 
   const [path] = getSmoothStepPath({
@@ -58,7 +58,7 @@ const CustomEdge: FC<
     offset: pathOptions?.offset,
   });
 
-  const edgeLabel = data?.edgeLabel;
+  // const edgeLabel = data?.edgeLabel;
   const edgeType = data?.edgeType;
 
   const stroke = getEdgeFill(edgeType);
@@ -79,20 +79,20 @@ const CustomEdge: FC<
           }
         }
       />
-      <EdgeText
-        labelBgBorderRadius={labelBgBorderRadius}
-        labelBgPadding={labelBgPadding}
-        labelBgStyle={labelBgStyle}
-        labelShowBg={false}
-        labelStyle={{
-          textAnchor: targetX < sourceX ? 'start' : 'end',
-          dominantBaseline: 'ideographic',
-          fontSize: 12,
-        }}
-        label={edgeLabel}
-        x={targetX + (targetX < sourceX ? 5 : -5)}
-        y={targetY - 5}
-      />
+      {/*<EdgeText*/}
+      {/*  labelBgBorderRadius={labelBgBorderRadius}*/}
+      {/*  labelBgPadding={labelBgPadding}*/}
+      {/*  labelBgStyle={labelBgStyle}*/}
+      {/*  labelShowBg={false}*/}
+      {/*  labelStyle={{*/}
+      {/*    textAnchor: targetX < sourceX ? 'start' : 'end',*/}
+      {/*    dominantBaseline: 'ideographic',*/}
+      {/*    fontSize: 12,*/}
+      {/*  }}*/}
+      {/*  label={edgeLabel}*/}
+      {/*  x={targetX + (targetX < sourceX ? 5 : -5)}*/}
+      {/*  y={targetY - 5}*/}
+      {/*/>*/}
     </>
   );
 };

@@ -12,19 +12,38 @@ import React from "react";
 import {Connector} from "./Connector";
 import {getHandleKey} from "../../utils/keys";
 import {useVersionStyle} from "./styles";
+import {getVersion, isEmpty} from "../../utils/getVersion";
+import {createStyles} from "antd-style";
+import {Popover} from "antd";
+import {useGraphProps} from "../../providers/ConfigProvider";
+
+export const useStyles = createStyles(({css}) => {
+  return {
+    version: css`
+      border: 1px dashed #BBBBBB;
+      padding: 8px 8px;
+      margin-right: 6px;
+    `
+  }
+})
+
 
 export const Downstream = (
   {
     depth,
     versionClassName,
-    event
+    event,
+    title
   }: {
     depth: number;
     versionClassName: string;
     event: EventData;
+    title: string;
   }) => {
   const downstream = event.downstream;
   const {styles, cx} = useVersionStyle();
+  const {styles: downloadStreamStyles} = useStyles();
+  const {PopoverComponent} = useGraphProps();
 
   const nextDepth = depth < 0 ? depth - 1 : depth + 1;
 
@@ -34,10 +53,10 @@ export const Downstream = (
     return null;
   }
 
-  // 只有 1 个版本，
+  // 只有 1 个版本
   if (downstream.length === 1) {
     const _downstream = downstream[0];
-    const {version = '-', status = '-',displayType} = _downstream;
+    const {version, miniVersion, status = '-', displayType, code, id} = _downstream;
     return (
       <>
         <Connector
@@ -48,23 +67,52 @@ export const Downstream = (
           position={position}
           handleKey={getHandleKey(event, 'output', _downstream)}
         />
-        <div className={cx(versionClassName, {
-          [styles.danger]: displayType === 'danger'
-        })}>
-          Version：{version}({status})
-        </div>
+        <Popover
+          styles={{body: {padding: 0}}}
+          placement={'right'}
+          content={<PopoverComponent id={id} title={title} code={code}/>}
+        >
+          <div className={cx(versionClassName, {
+            [styles.danger]: displayType === 'danger'
+          })}>
+            <div>
+              版本号：{getVersion(version)}({status})
+            </div>
+            {!isEmpty(miniVersion) && (
+              <div>
+                内部版本号：{miniVersion}
+              </div>
+            )}
+          </div>
+        </Popover>
       </>
     )
   }
   return downstream.map((_downstream, index) => {
-    const {version = '-', status = '-',displayType} = _downstream;
+    const {version, miniVersion, status = '-', displayType, code, id} = _downstream;
     return (
+
       <div
-        key={index}
         className={cx(versionClassName, {
           [styles.danger]: displayType === 'danger'
         })}>
-        Version：{version}({status})
+        <Popover
+          key={index}
+          styles={{body: {padding: 0}}}
+          placement={'right'}
+          content={<PopoverComponent id={id} title={title} code={code}/>}
+        >
+          <div className={downloadStreamStyles.version}>
+            <div>
+              版本号：{getVersion(version)}({status})
+            </div>
+            {!isEmpty(miniVersion) && (
+              <div>
+                内部版本号：{miniVersion}
+              </div>
+            )}
+          </div>
+        </Popover>
         <Connector
           node={event}
           handleType={'source'}

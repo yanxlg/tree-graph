@@ -19,14 +19,6 @@ export const useStyles = createStyles(({css}, props: { color?: string; type: str
   const themeColor = props.color || codeToColor(props.type);
   const bgColor = toRGBA(themeColor, 0.4);
   return {
-    box: css`
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: 2;
-    `,
     event: css`
       width: ${EVENT_NODE_WIDTH}px;
       box-sizing: border-box;
@@ -36,6 +28,7 @@ export const useStyles = createStyles(({css}, props: { color?: string; type: str
       display: flex;
       flex-direction: column;
       justify-content: center;
+      //padding-left: ${lineWidth}px;
 
       &:after {
         box-sizing: border-box;
@@ -51,22 +44,21 @@ export const useStyles = createStyles(({css}, props: { color?: string; type: str
       }
     `,
     title: css`
-      padding: 5px 5px 5px ${lineWidth+5}px;
+      padding: 5px 6px 5px 21px;
       font-size: 14px;
       color: #000;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      box-sizing: content-box!important;
+      box-sizing: border-box!important;
     `,
     eventVersion: css`
       position: relative;
       color: #000;
       font-size: 12px;
-      height: 12px;
-      line-height: 12px;
-      padding: 5px 5px 5px ${lineWidth+5}px;
-      box-sizing: content-box!important;
+      line-height: 18px;
+      padding: 5px 0 5px 21px;
+      box-sizing: border-box!important;
     `,
     inGroup: css`
       position: relative;

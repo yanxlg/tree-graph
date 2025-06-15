@@ -8,7 +8,7 @@
 
 import React from "react";
 import {NodeProps, Position, useUpdateNodeInternals} from "@xyflow/react";
-import {EventGroupNodeType} from "../../types";
+import {EventData, EventGroupNodeType} from "../../types";
 import {isEqual} from "lodash";
 import {useStyles} from "./styles";
 import ArrowsAltOutlined from '@ant-design/icons/ArrowsAltOutlined';
@@ -112,7 +112,7 @@ export const EventGroupNode = React.memo((props: NodeProps<EventGroupNodeType>) 
                   data={{
                     ...event,
                     depth,
-                  }}
+                  } as EventData}
                 />
               ))
             }
